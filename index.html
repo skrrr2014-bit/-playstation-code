@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#111318">
+<title>مولد 12 خانة</title>
+<style>
+body{margin:0;min-height:100vh;background:#0b0d11;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
+.card{width:min(520px,100%);background:#151922;border:1px solid #2b3140;border-radius:24px;padding:24px}
+h1{margin:0 0 8px}.sub{color:#aeb6c5;line-height:1.6}
+.out{direction:ltr;text-align:center;background:#0b0d11;border:1px solid #303746;border-radius:16px;padding:18px 8px;font-size:25px;font-weight:700;letter-spacing:2px;word-break:break-all}
+.row{display:flex;gap:10px;margin-top:14px}button{border:0;border-radius:14px;padding:15px;font-size:17px;font-weight:700;cursor:pointer;flex:1}
+.gen{background:#fff;color:#111}.copy{background:#273044;color:#fff}.ps{width:100%;margin-top:12px;background:#2767ff;color:#fff}
+.note{font-size:12px;color:#7f8899;text-align:center;margin-top:14px}
+</style>
+</head>
+<body>
+<main class="card">
+<h1>مولد نص عشوائي من 12 خانة</h1>
+<p class="sub">يولد حروفًا إنجليزية وأرقامًا عشوائية للنسخ. هذه سلاسل تجريبية وليست رموزًا حقيقية أو قابلة للاسترداد في PlayStation Store.</p>
+<div id="out" class="out">A7K2M9Q4X8LP</div>
+<div class="row"><button class="gen" onclick="generate()">توليد جديد</button><button class="copy" onclick="copyCode()">نسخ</button></div>
+<button class="ps" onclick="location.href='https://apps.apple.com/sa/app/playstation-app/id410896080'">فتح PlayStation</button>
+<div id="status" class="note">جاهز</div>
+</main>
+<script>
+const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+function generate(){let s="",a=new Uint32Array(12);crypto.getRandomValues(a);for(let i=0;i<12;i++)s+=chars[a[i]%chars.length];document.getElementById("out").textContent=s;document.getElementById("status").textContent="تم التوليد";}
+async function copyCode(){let t=document.getElementById("out").textContent;try{await navigator.clipboard.writeText(t)}catch(e){let x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();document.execCommand("copy");x.remove()}document.getElementById("status").textContent="تم النسخ ✓";}
+</script>
+</body>
+</html>
