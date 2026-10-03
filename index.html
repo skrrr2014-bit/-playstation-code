@@ -1,163 +1,635 @@
-# ============================================
-# TikTok 3-Character Username Checker
-# يعمل على Google Colab
-# ============================================
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-import requests
-import random
-import string
-import time
-import re
+<title>TikTok Username Checker</title>
 
-# عدد الثلاثيات التي تريد فحصها
-NUMBER_TO_CHECK = 100
+<style>
+*{
+ box-sizing:border-box;
+}
 
-# ثانيتان بين كل طلب
-DELAY = 2
+body{
+ margin:0;
+ background:#09090b;
+ color:#fff;
+ font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
 
-# حروف + أرقام
-CHARACTERS = string.ascii_lowercase + string.digits
+.app{
+ width:92%;
+ max-width:650px;
+ margin:25px auto;
+}
+
+.card{
+ background:#151518;
+ border:1px solid #29292e;
+ border-radius:18px;
+ padding:18px;
+}
+
+h1{
+ text-align:center;
+ margin-bottom:5px;
+}
+
+p{
+ text-align:center;
+ color:#999;
+}
+
+label{
+ display:block;
+ margin-top:12px;
+ color:#ccc;
+}
+
+select,
+input{
+ width:100%;
+ padding:13px;
+ margin:7px 0 12px;
+ border-radius:11px;
+ border:1px solid #333;
+ background:#0d0d10;
+ color:#fff;
+ font-size:16px;
+ outline:none;
+}
+
+.grid{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+}
+
+button{
+ border:0;
+ border-radius:11px;
+ padding:13px;
+ font-weight:bold;
+ font-size:15px;
+ cursor:pointer;
+}
+
+.start{
+ background:#fff;
+ color:#000;
+}
+
+.copy{
+ background:#29292f;
+ color:#fff;
+}
+
+.stop{
+ background:#542020;
+ color:#fff;
+ width:100%;
+ margin-top:9px;
+}
+
+#status{
+ text-align:center;
+ margin:15px 0;
+ color:#aaa;
+}
+
+.item{
+ display:flex;
+ justify-content:space-between;
+ align-items:center;
+ gap:8px;
+ background:#101014;
+ border:1px solid #29292e;
+ border-radius:10px;
+ padding:11px;
+ margin:7px 0;
+}
+
+.green{
+ color:#70ff90;
+}
+
+.yellow{
+ color:#ffe16b;
+}
+
+.red{
+ color:#ff7070;
+}
+
+.gray{
+ color:#aaa;
+}
+
+.item a{
+ color:#fff;
+ text-decoration:none;
+ background:#222;
+ padding:5px 8px;
+ border-radius:6px;
+ font-size:12px;
+}
+
+.small{
+ text-align:center;
+ color:#777;
+ font-size:12px;
+ margin-top:15px;
+ line-height:1.7;
+}
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+<h1>🔎 TikTok Checker</h1>
+
+<p>
+توليد وفحص ثلاثيات ورباعيات تلقائياً
+</p>
+
+<div class="card">
+
+<label>الطول</label>
+
+<select id="length">
+ <option value="3">ثلاثي</option>
+ <option value="4">رباعي</option>
+ <option value="both">ثلاثي + رباعي</option>
+</select>
+
+<label>عدد المحاولات</label>
+
+<input
+ id="amount"
+ type="number"
+ value="20"
+ min="1"
+ max="100"
+>
+
+<div class="grid">
+
+<button
+ class="start"
+ id="startBtn"
+ onclick="start()">
+ ▶️ بدء
+</button>
+
+<button
+ class="copy"
+ onclick="copyResults()">
+ 📋 نسخ النتائج
+</button>
+
+</div>
+
+<button
+ class="stop"
+ onclick="stop()">
+ ⛔ إيقاف
+</button>
+
+<div id="status">
+ جاهز
+</div>
+
+<div id="results"></div>
+
+<div class="small">
+⚠️ "غير موجود" يعني أن صفحة الحساب لم تظهر في نتيجة الفحص.
+لا يعني ضماناً أن TikTok يسمح بحجز الاسم.
+</div>
+
+</div>
+</div>
+
+<script>
+
+const chars =
+"abcdefghijklmnopqrstuvwxyz0123456789";
+
+let running = false;
+let stopped = false;
+
+let checked = new Set();
+
+let possibleUsers = [];
 
 
-def generate_username():
-    return ''.join(random.choices(CHARACTERS, k=3))
+// ==============================
+// توليد يوزر عشوائي
+// ==============================
+
+function randomUsername(){
+
+ let type =
+ document.getElementById("length").value;
+
+ let length;
+
+ if(type === "both"){
+
+   length =
+   Math.random() < 0.5 ? 3 : 4;
+
+ }else{
+
+   length = Number(type);
+
+ }
+
+ let username = "";
+
+ for(let i = 0; i < length; i++){
+
+   username +=
+   chars[Math.floor(Math.random() * chars.length)];
+
+ }
+
+ return username;
+}
 
 
-def check_username(username):
+// ==============================
+// انتظار
+// ==============================
 
-    url = f"https://www.tiktok.com/@{username}"
+function delay(ms){
 
-    headers = {
-        "User-Agent": (
-            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
-            "AppleWebKit/605.1.15 "
-            "(KHTML, like Gecko) "
-            "Version/17.0 Mobile/15E148 Safari/604.1"
-        ),
-        "Accept-Language": "en-US,en;q=0.9"
-    }
+ return new Promise(
+   resolve => setTimeout(resolve,ms)
+ );
 
-    try:
-        response = requests.get(
-            url,
-            headers=headers,
-            timeout=15,
-            allow_redirects=True
-        )
-
-        text = response.text.lower()
-
-        # TikTok رفض/حدد الطلبات
-        if response.status_code in (403, 429):
-            return "BLOCKED"
-
-        # بعض صفحات TikTok ترجع 404
-        if response.status_code == 404:
-            return "NOT_FOUND"
-
-        # محاولة التعرف على صفحة الحساب غير الموجودة
-        not_found_phrases = [
-            "couldn't find this account",
-            "couldn’t find this account",
-            "account doesn't exist",
-            "account does not exist"
-        ]
-
-        if any(x in text for x in not_found_phrases):
-            return "NOT_FOUND"
-
-        # إذا ظهرت صفحة حساب عادية
-        if response.status_code == 200:
-            return "FOUND_OR_UNKNOWN"
-
-        return f"UNKNOWN_{response.status_code}"
-
-    except requests.exceptions.Timeout:
-        return "TIMEOUT"
-
-    except requests.exceptions.RequestException:
-        return "ERROR"
+}
 
 
-# ============================================
-# بدء الفحص
-# ============================================
+// ==============================
+// فحص الصفحة
+// ==============================
 
-checked = set()
-possible = []
+async function inspect(username){
 
-print("=" * 50)
-print(" TikTok 3-Character Username Checker")
-print("=" * 50)
-print()
+ const tiktokURL =
+ "https://www.tiktok.com/@" + username;
 
-for number in range(1, NUMBER_TO_CHECK + 1):
+ const proxyURL =
+ "https://api.allorigins.win/raw?url=" +
+ encodeURIComponent(tiktokURL);
 
-    # منع التكرار
-    while True:
-        username = generate_username()
+ try{
 
-        if username not in checked:
-            checked.add(username)
-            break
+   const response =
+   await fetch(proxyURL,{
+     method:"GET"
+   });
 
-    print(
-        f"[{number}/{NUMBER_TO_CHECK}] "
-        f"@{username} -> ",
-        end="",
-        flush=True
-    )
+   if(!response.ok){
 
-    result = check_username(username)
+     return "manual";
 
-    print(result)
+   }
 
-    if result == "NOT_FOUND":
-        print(f"⭐ مرشح يحتاج تحقق: @{username}")
-        possible.append(username)
+   const text =
+   await response.text();
 
-    # إذا TikTok بدأ يمنع الطلبات، نوقف
-    if result == "BLOCKED":
-        print()
-        print("⚠️ TikTok حدّد الطلبات.")
-        print("تم إيقاف الفحص بدل محاولة تجاوز الحماية.")
-        break
-
-    time.sleep(DELAY)
+   const lower =
+   text.toLowerCase();
 
 
-# ============================================
-# عرض النتائج
-# ============================================
+   // إشارات واضحة للحساب غير الموجود
+   const notFoundSignals = [
 
-print()
-print("=" * 50)
-print("النتائج")
-print("=" * 50)
+     "couldn't find this account",
 
-if possible:
+     "couldn’t find this account",
 
-    for username in possible:
-        print("@" + username)
+     "this account doesn't exist",
 
-    # حفظ النتائج
-    with open(
-        "possible_usernames.txt",
-        "w",
-        encoding="utf-8"
-    ) as file:
+     "this account does not exist",
 
-        for username in possible:
-            file.write("@" + username + "\n")
+     "account not found"
 
-    print()
-    print("تم حفظ النتائج في:")
-    print("possible_usernames.txt")
+   ];
 
-else:
 
-    print("لم يظهر أي ثلاثي كـ NOT_FOUND.")
+   for(const signal of notFoundSignals){
 
-print()
-print("مهم: NOT_FOUND لا يعني أن اليوزر متاح للحجز 100%.")
-print("التأكيد النهائي يكون من داخل TikTok.")
+     if(lower.includes(signal)){
+
+       return "notfound";
+
+     }
+
+   }
+
+
+   // إذا ظهر اسم الحساب داخل البيانات
+   if(
+     lower.includes('"uniqueid":"' + username.toLowerCase() + '"') ||
+     lower.includes('"unique_id":"' + username.toLowerCase() + '"')
+   ){
+
+     return "found";
+
+   }
+
+
+   /*
+     لا نخمن.
+     إذا لم نستطع تحديد الحالة،
+     نرجع manual بدل أن نقول متاح.
+   */
+
+   return "manual";
+
+ }catch(error){
+
+   return "manual";
+
+ }
+
+}
+
+
+// ==============================
+// إضافة النتيجة
+// ==============================
+
+function addResult(username,status){
+
+ const results =
+ document.getElementById("results");
+
+ const item =
+ document.createElement("div");
+
+ item.className = "item";
+
+
+ const name =
+ document.createElement("span");
+
+ name.textContent =
+ "@" + username;
+
+
+ const state =
+ document.createElement("span");
+
+
+ const link =
+ document.createElement("a");
+
+ link.href =
+ "https://www.tiktok.com/@" +
+ encodeURIComponent(username);
+
+ link.target = "_blank";
+
+ link.textContent = "فتح";
+
+
+ if(status === "notfound"){
+
+   state.className = "green";
+
+   state.textContent =
+   "غير موجود 🔎";
+
+   possibleUsers.push(username);
+
+ }else if(status === "found"){
+
+   state.className = "red";
+
+   state.textContent =
+   "موجود ❌";
+
+ }else{
+
+   state.className = "yellow";
+
+   state.textContent =
+   "تعذر الفحص ⚠️";
+
+ }
+
+
+ item.appendChild(name);
+
+ item.appendChild(state);
+
+ item.appendChild(link);
+
+ results.prepend(item);
+
+}
+
+
+// ==============================
+// بدء الفحص
+// ==============================
+
+async function start(){
+
+ if(running){
+
+   return;
+
+ }
+
+ running = true;
+
+ stopped = false;
+
+ checked.clear();
+
+ possibleUsers = [];
+
+
+ document.getElementById(
+   "results"
+ ).innerHTML = "";
+
+
+ const amount =
+ Math.min(
+   100,
+   Math.max(
+     1,
+     Number(
+       document.getElementById("amount").value
+     ) || 20
+   )
+ );
+
+
+ for(let i = 1; i <= amount; i++){
+
+   if(stopped){
+
+     break;
+
+   }
+
+
+   let username;
+
+
+   do{
+
+     username =
+     randomUsername();
+
+   }while(
+     checked.has(username)
+   );
+
+
+   checked.add(username);
+
+
+   document.getElementById(
+     "status"
+   ).textContent =
+   `جاري الفحص ${i} / ${amount} — @${username}`;
+
+
+   const status =
+   await inspect(username);
+
+
+   addResult(
+     username,
+     status
+   );
+
+
+   /*
+     انتظار بسيط بين الفحوص
+   */
+
+   await delay(1500);
+
+ }
+
+
+ running = false;
+
+
+ if(stopped){
+
+   document.getElementById(
+     "status"
+   ).textContent =
+   "تم الإيقاف ⛔";
+
+ }else{
+
+   document.getElementById(
+     "status"
+   ).textContent =
+   `انتهى الفحص ✓ — المرشحون: ${possibleUsers.length}`;
+
+ }
+
+}
+
+
+// ==============================
+// إيقاف
+// ==============================
+
+function stop(){
+
+ stopped = true;
+
+ running = false;
+
+ document.getElementById(
+   "status"
+ ).textContent =
+ "تم الإيقاف ⛔";
+
+}
+
+
+// ==============================
+// نسخ النتائج
+// ==============================
+
+async function copyResults(){
+
+ if(
+   possibleUsers.length === 0
+ ){
+
+   document.getElementById(
+     "status"
+   ).textContent =
+   "لا توجد نتائج غير موجودة لنسخها";
+
+   return;
+
+ }
+
+
+ const text =
+ possibleUsers
+ .map(
+   username => "@" + username
+ )
+ .join("\n");
+
+
+ try{
+
+   await navigator.clipboard.writeText(
+     text
+   );
+
+ }catch{
+
+   const area =
+   document.createElement(
+     "textarea"
+   );
+
+   area.value = text;
+
+   document.body.appendChild(
+     area
+   );
+
+   area.select();
+
+   document.execCommand(
+     "copy"
+   );
+
+   area.remove();
+
+ }
+
+
+ document.getElementById(
+   "status"
+ ).textContent =
+ "تم نسخ المرشحين ✓";
+
+}
+
+</script>
+
+</body>
+</html>
