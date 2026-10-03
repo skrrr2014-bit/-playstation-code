@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RwL Plus</title>
+<title>RwL Store Checker</title>
 
 <style>
+
 * {
   box-sizing: border-box;
 }
@@ -14,88 +16,104 @@
 body {
   margin: 0;
   min-height: 100vh;
-  overflow: hidden;
+  padding: 20px;
 
   display: flex;
   justify-content: center;
   align-items: center;
 
-  background: #020205;
+  background:
+    radial-gradient(circle at 15% 20%, rgba(55,90,255,.20), transparent 35%),
+    radial-gradient(circle at 85% 80%, rgba(145,40,220,.20), transparent 35%),
+    #020205;
 
   font-family: Arial, sans-serif;
   color: white;
 }
 
-/* =========================
-   الخلفية المتحركة
-========================= */
+/* خلفية */
 
-body::before,
+body::before {
+  content: "";
+  position: fixed;
+
+  width: 420px;
+  height: 420px;
+
+  border-radius: 50%;
+
+  background: rgba(50,90,255,.18);
+
+  filter: blur(100px);
+
+  top: -180px;
+  left: -150px;
+
+  animation: glow1 8s infinite alternate;
+}
+
 body::after {
   content: "";
   position: fixed;
 
-  width: 500px;
-  height: 500px;
+  width: 420px;
+  height: 420px;
 
   border-radius: 50%;
 
+  background: rgba(150,40,220,.16);
+
   filter: blur(100px);
 
-  opacity: .25;
+  right: -150px;
+  bottom: -180px;
 
-  animation: moveGlow 8s infinite alternate ease-in-out;
+  animation: glow2 9s infinite alternate;
 }
 
-body::before {
-  background: #3d5afe;
-  top: -220px;
-  left: -180px;
-}
-
-body::after {
-  background: #8e24aa;
-  bottom: -250px;
-  right: -200px;
-
-  animation-delay: 2s;
-}
-
-@keyframes moveGlow {
-
-  0% {
-    transform: translate(0,0) scale(1);
+@keyframes glow1 {
+  from {
+    transform: translate(0,0);
   }
 
-  50% {
-    transform: translate(80px,40px) scale(1.2);
-  }
-
-  100% {
-    transform: translate(-30px,100px) scale(.9);
+  to {
+    transform: translate(120px,80px);
   }
 }
 
+@keyframes glow2 {
+  from {
+    transform: translate(0,0);
+  }
 
-/* =========================
-   نجوم متحركة
-========================= */
+  to {
+    transform: translate(-100px,-70px);
+  }
+}
+
+/* النجوم */
 
 .stars {
   position: fixed;
   inset: 0;
 
+  pointer-events: none;
+
   background-image:
-    radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1px);
+    radial-gradient(
+      circle,
+      rgba(255,255,255,.7) 1px,
+      transparent 1px
+    );
 
   background-size: 55px 55px;
 
-  opacity: .15;
+  opacity: .12;
 
-  animation: starsMove 15s linear infinite;
+  animation: stars 15s linear infinite;
 }
 
-@keyframes starsMove {
+@keyframes stars {
 
   from {
     transform: translateY(0);
@@ -104,60 +122,57 @@ body::after {
   to {
     transform: translateY(55px);
   }
+
 }
 
-
-/* =========================
-   الغلاف الرئيسي
-========================= */
+/* البطاقة */
 
 .card {
   position: relative;
   z-index: 2;
 
-  width: 310px;
+  width: min(100%, 370px);
 
-  padding: 25px;
-
-  text-align: center;
+  padding: 28px;
 
   border-radius: 28px;
 
   background:
     linear-gradient(
       145deg,
-      rgba(35,35,45,.95),
-      rgba(8,8,12,.96)
+      rgba(32,32,42,.97),
+      rgba(7,7,11,.98)
     );
 
   border: 1px solid rgba(255,255,255,.13);
 
   box-shadow:
     0 30px 90px rgba(0,0,0,.8),
-    inset 0 1px 0 rgba(255,255,255,.1);
+    inset 0 1px 0 rgba(255,255,255,.08);
 
   backdrop-filter: blur(20px);
 
-  animation: cardFloat 5s ease-in-out infinite;
+  animation: floating 5s ease-in-out infinite;
 }
 
-@keyframes cardFloat {
+@keyframes floating {
 
   0%,100% {
     transform: translateY(0);
   }
 
   50% {
-    transform: translateY(-7px);
+    transform: translateY(-6px);
   }
+
 }
 
-
-/* =========================
-   RwL
-========================= */
+/* RwL */
 
 .brand {
+
+  text-align: center;
+
   font-size: 48px;
 
   font-weight: 900;
@@ -167,11 +182,11 @@ body::after {
   background:
     linear-gradient(
       90deg,
-      #ffffff,
-      #8ab4ff,
-      #ffffff,
+      #fff,
+      #80aaff,
+      #fff,
       #c58cff,
-      #ffffff
+      #fff
     );
 
   background-size: 300%;
@@ -180,162 +195,135 @@ body::after {
   -webkit-text-fill-color: transparent;
 
   animation: shine 4s linear infinite;
-
-  text-shadow:
-    0 0 35px rgba(110,150,255,.3);
 }
 
 @keyframes shine {
 
-  0% {
+  from {
     background-position: 0%;
   }
 
-  100% {
+  to {
     background-position: 300%;
   }
+
 }
 
+/* العنوان */
 
-/* =========================
-   PLUS
-========================= */
+.subtitle {
 
-.plus {
-  display: inline-flex;
+  text-align: center;
 
-  align-items: center;
+  color: #888;
 
-  gap: 8px;
+  font-size: 10px;
 
-  margin-top: 5px;
-  margin-bottom: 20px;
+  letter-spacing: 3px;
 
-  font-size: 11px;
-
-  letter-spacing: 2px;
-
-  color: #ddd;
+  margin-top: 4px;
+  margin-bottom: 23px;
 }
 
-.plus-icon {
-  width: 25px;
-  height: 25px;
+/* عنوان الإدخال */
 
-  display: flex;
-  align-items: center;
-  justify-content: center;
+.label {
 
-  border-radius: 7px;
+  display: block;
 
-  background:
-    linear-gradient(
-      135deg,
-      #fff,
-      #aaa
-    );
+  color: #bbb;
 
-  color: #111;
+  font-size: 12px;
 
-  font-size: 20px;
-
-  font-weight: 900;
-
-  animation: plusPulse 2s infinite;
+  margin-bottom: 8px;
 }
 
-@keyframes plusPulse {
+/* الإدخال */
 
-  0%,100% {
-    box-shadow: 0 0 5px rgba(255,255,255,.1);
-  }
+#codeInput {
 
-  50% {
-    box-shadow: 0 0 25px rgba(255,255,255,.35);
-  }
-}
+  width: 100%;
+  height: 54px;
 
-
-/* =========================
-   صندوق الكود
-========================= */
-
-.code-box {
-  position: relative;
-
-  padding: 16px 8px;
+  padding: 0 14px;
 
   border-radius: 14px;
 
+  border: 1px solid #34343e;
+
+  outline: none;
+
   background: #030305;
 
-  border: 1px solid #30303a;
+  color: white;
 
-  overflow: hidden;
+  text-align: center;
 
-  margin-bottom: 10px;
-}
-
-.code-box::before {
-  content: "";
-
-  position: absolute;
-
-  top: 0;
-  left: -100%;
-
-  width: 100%;
-  height: 2px;
-
-  background:
-    linear-gradient(
-      90deg,
-      transparent,
-      #fff,
-      transparent
-    );
-
-  animation: scan 3s infinite;
-}
-
-@keyframes scan {
-
-  0% {
-    left: -100%;
-  }
-
-  50%,100% {
-    left: 100%;
-  }
-}
-
-#code {
   direction: ltr;
 
-  font-size: 17px;
+  font-size: 16px;
 
   font-weight: bold;
 
   letter-spacing: 2px;
 
-  white-space: nowrap;
+  transition: .25s;
 }
 
+#codeInput:focus {
 
-/* =========================
-   الأزرار
-========================= */
+  border-color: #637cff;
+
+  box-shadow:
+    0 0 22px rgba(80,110,255,.20);
+}
+
+/* النتيجة */
+
+.status {
+
+  min-height: 58px;
+
+  display: flex;
+
+  align-items: center;
+
+  justify-content: center;
+
+  text-align: center;
+
+  margin-top: 12px;
+
+  padding: 12px;
+
+  border-radius: 14px;
+
+  background: #08080c;
+
+  border: 1px solid #25252d;
+
+  color: #999;
+
+  font-size: 12px;
+
+  line-height: 1.6;
+}
+
+/* الأزرار */
 
 button {
+
   width: 100%;
 
-  border: 0;
+  min-height: 47px;
 
-  border-radius: 11px;
+  margin-top: 9px;
 
   padding: 11px;
 
-  margin-top: 7px;
+  border: 0;
+
+  border-radius: 12px;
 
   font-size: 14px;
 
@@ -343,147 +331,193 @@ button {
 
   cursor: pointer;
 
-  transition: .25s;
-}
-
-button:hover {
-  transform: translateY(-2px);
+  transition: .2s;
 }
 
 button:active {
   transform: scale(.96);
 }
 
+/* فحص */
 
-/* توليد */
+.check {
 
-.generate {
   background:
     linear-gradient(
       90deg,
-      #ffffff,
-      #d9e4ff,
-      #ffffff
+      #fff,
+      #dce6ff,
+      #fff
     );
 
-  color: #080808;
-
-  box-shadow:
-    0 8px 25px rgba(255,255,255,.12);
+  color: #050507;
 }
-
 
 /* نسخ */
 
 .copy {
+
   background: #292930;
 
   color: white;
-
-  border: 1px solid #3d3d46;
 }
 
+/* الاسترداد */
 
-/* موقع PlayStation */
+.redeem {
 
-.website {
   background:
     linear-gradient(
       90deg,
-      #075cff,
-      #5126d8
+      #00bfff,
+      #4169ff
     );
 
   color: white;
 
   box-shadow:
-    0 8px 30px rgba(45,80,255,.25);
+    0 8px 28px rgba(40,100,255,.22);
 }
 
+/* مسح */
 
-/* =========================
-   أسفل البطاقة
-========================= */
+.clear {
 
-.footer {
-  margin-top: 15px;
+  background: transparent;
+
+  border: 1px solid #30303a;
+
+  color: #999;
+}
+
+/* المعلومة */
+
+.info {
+
+  margin-top: 17px;
+
+  padding-top: 14px;
+
+  border-top: 1px solid rgba(255,255,255,.08);
+
+  text-align: center;
 
   font-size: 9px;
 
-  color: #777;
+  line-height: 1.8;
+
+  color: #666;
+}
+
+.footer {
+
+  margin-top: 12px;
+
+  text-align: center;
+
+  font-size: 8px;
+
+  color: #555;
 
   letter-spacing: 3px;
 }
+
 </style>
 </head>
 
 
 <body>
 
-<!-- خلفية متحركة -->
 <div class="stars"></div>
 
 
 <div class="card">
 
-  <!-- RwL -->
   <div class="brand">
     RwL
   </div>
 
+  <div class="subtitle">
+    PLAYSTATION STORE CHECKER
+  </div>
 
-  <!-- Plus -->
-  <div class="plus">
 
-    <span class="plus-icon">+</span>
+  <label class="label">
+    أدخل رمز PlayStation Store
+  </label>
 
-    PLAYSTATION PLUS
+
+  <input
+    id="codeInput"
+    type="text"
+    maxlength="12"
+    autocomplete="off"
+    autocapitalize="characters"
+    spellcheck="false"
+    placeholder="XXXXXXXXXXXX"
+  >
+
+
+  <div
+    id="status"
+    class="status"
+    aria-live="polite">
+
+    بانتظار إدخال الرمز
 
   </div>
 
 
-  <!-- الكود -->
-  <div class="code-box">
-
-    <div id="code">
-      اضغط توليد
-    </div>
-
-  </div>
-
-
-  <!-- توليد -->
   <button
-    class="generate"
-    onclick="generateCode()">
+    class="check"
+    type="button"
+    onclick="checkCode()">
 
-    توليد كود
+    فحص الرمز
 
   </button>
 
 
-  <!-- نسخ -->
   <button
     class="copy"
+    type="button"
     onclick="copyCode()">
 
-    نسخ
+    نسخ الرمز
 
   </button>
 
 
-  <!-- موقع PlayStation -->
   <button
-    class="website"
-    onclick="openPlayStationWebsite()">
+    class="redeem"
+    type="button"
+    onclick="openRedeem()">
 
-    موقع PlayStation
+    التحقق الرسمي من PlayStation
 
   </button>
+
+
+  <button
+    class="clear"
+    type="button"
+    onclick="clearCode()">
+
+    مسح
+
+  </button>
+
+
+  <div class="info">
+
+    الفحص الأولي يتم داخل الأداة فقط.<br>
+    لمعرفة صلاحية الرمز فعليًا استخدم التحقق الرسمي.
+
+  </div>
 
 
   <div class="footer">
-    RwL • PLUS • 12 CHARACTERS
+    RwL • STORE • CHECKER
   </div>
 
 </div>
@@ -492,28 +526,105 @@ button:active {
 <script>
 
 /* =========================
-   توليد 12 خانة
-   A-Z + 0-9 فقط
+   عناصر الصفحة
 ========================= */
 
-function generateCode() {
+const input =
+  document.getElementById("codeInput");
 
-  const characters =
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+const status =
+  document.getElementById("status");
 
-  let code = "";
 
-  for (let i = 0; i < 12; i++) {
+/* =========================
+   تنظيف الإدخال
+========================= */
 
-    code += characters.charAt(
-      Math.floor(
-        Math.random() * characters.length
-      )
+input.addEventListener(
+  "input",
+  function () {
+
+    let value =
+      input.value
+        .toUpperCase()
+        .replace(/[^A-Z0-9]/g, "");
+
+    input.value = value;
+
+  }
+);
+
+
+/* =========================
+   فحص الرمز
+========================= */
+
+function checkCode() {
+
+  const code =
+    input.value.trim();
+
+
+  if (code.length === 0) {
+
+    setStatus(
+      "اكتب الرمز أولًا.",
+      "#ffcc66"
     );
+
+    return;
   }
 
-  document.getElementById("code")
-    .textContent = code;
+
+  if (code.length !== 12) {
+
+    setStatus(
+      "✕ الرمز يجب أن يتكون من 12 خانة.",
+      "#ff7777"
+    );
+
+    return;
+  }
+
+
+  const valid =
+    /^[A-Z0-9]{12}$/.test(code);
+
+
+  if (!valid) {
+
+    setStatus(
+      "✕ صيغة الرمز غير صحيحة.",
+      "#ff7777"
+    );
+
+    return;
+  }
+
+
+  setStatus(
+    "✓ صيغة الرمز صحيحة.\n\nالصلاحية الفعلية تحتاج التحقق من PlayStation.",
+    "#8cffb0"
+  );
+
+}
+
+
+/* =========================
+   تغيير الحالة
+========================= */
+
+function setStatus(
+  message,
+  color
+) {
+
+  status.textContent =
+    message;
+
+  status.style.color =
+    color;
+
 }
 
 
@@ -524,38 +635,146 @@ function generateCode() {
 function copyCode() {
 
   const code =
-    document.getElementById("code")
-      .textContent;
+    input.value.trim();
 
-  if (code === "اضغط توليد") {
+
+  if (!code) {
+
+    setStatus(
+      "لا يوجد رمز لنسخه.",
+      "#ffcc66"
+    );
+
     return;
   }
 
-  navigator.clipboard
-    .writeText(code)
-    .then(() => {
 
-      alert("تم نسخ الكود ✅");
+  if (
+    navigator.clipboard &&
+    window.isSecureContext
+  ) {
 
-    })
-    .catch(() => {
+    navigator.clipboard
+      .writeText(code)
+      .then(function () {
 
-      alert("تعذر نسخ الكود");
+        setStatus(
+          "✓ تم نسخ الرمز.",
+          "#8cffb0"
+        );
 
-    });
+      })
+      .catch(function () {
+
+        fallbackCopy(code);
+
+      });
+
+  } else {
+
+    fallbackCopy(code);
+
+  }
+
 }
 
 
 /* =========================
-   فتح موقع PlayStation
+   نسخ احتياطي
 ========================= */
 
-function openPlayStationWebsite() {
+function fallbackCopy(code) {
 
-  window.location.href =
-    "https://www.playstation.com/";
+  const textarea =
+    document.createElement("textarea");
+
+  textarea.value = code;
+
+  textarea.style.position =
+    "fixed";
+
+  textarea.style.opacity =
+    "0";
+
+  document.body.appendChild(
+    textarea
+  );
+
+  textarea.select();
+
+  try {
+
+    document.execCommand("copy");
+
+    setStatus(
+      "✓ تم نسخ الرمز.",
+      "#8cffb0"
+    );
+
+  } catch (error) {
+
+    setStatus(
+      "تعذر النسخ تلقائيًا.",
+      "#ff7777"
+    );
+
+  }
+
+  document.body.removeChild(
+    textarea
+  );
 
 }
+
+
+/* =========================
+   فتح PlayStation
+========================= */
+
+function openRedeem() {
+
+  window.open(
+    "https://store.playstation.com/",
+    "_blank"
+  );
+
+}
+
+
+/* =========================
+   مسح
+========================= */
+
+function clearCode() {
+
+  input.value = "";
+
+  setStatus(
+    "بانتظار إدخال الرمز",
+    "#999"
+  );
+
+  input.focus();
+
+}
+
+
+/* =========================
+   Enter
+========================= */
+
+input.addEventListener(
+  "keydown",
+  function(event) {
+
+    if (event.key === "Enter") {
+
+      checkCode();
+
+    }
+
+  }
+);
 
 </script>
 
