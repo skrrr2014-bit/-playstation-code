@@ -1,50 +1,33 @@
 import requests
+import random
+import string
 import time
-import re
-from pathlib import Path
 
-# ==============================
-# TikTok Username Auto Checker
-# ==============================
+# =========================
+# الإعدادات
+# =========================
 
-INPUT_FILE = "usernames.txt"
-OUTPUT_FILE = "results.txt"
+NUMBER_TO_CHECK = 100
+DELAY = 2
 
-DELAY = 2  # ثانيتان بين كل فحص
-
-
-def clean_username(username):
-    username = username.strip()
-
-    username = re.sub(
-        r"^https?://(www\.)?tiktok\.com/@?",
-        "",
-        username,
-        flags=re.I
-    )
-
-    username = username.lstrip("@")
-    username = username.split("?")[0]
-    username = username.split("/")[0]
-
-    return username.strip()
+# ثلاثيات فقط: حروف + أرقام
+CHARS = string.ascii_lowercase + string.digits
 
 
-def valid_username(username):
-    return bool(
-        re.fullmatch(r"[A-Za-z0-9._]{2,24}", username)
-    )
+def generate_username():
+    return ''.join(random.choices(CHARS, k=3))
 
 
 def check_username(username):
+
     url = f"https://www.tiktok.com/@{username}"
 
     headers = {
         "User-Agent": (
-            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
-            "AppleWebKit/537.36 "
+            "Mozilla/5.0 (iPhone; CPU iPhone OS 17_0 like Mac OS X) "
+            "AppleWebKit/605.1.15 "
             "(KHTML, like Gecko) "
-            "Chrome/140.0 Safari/537.36"
+            "Version/17.0 Mobile/15E148 Safari/604.1"
         )
     }
 
@@ -56,20 +39,19 @@ def check_username(username):
             allow_redirects=True
         )
 
-        # هذه مجرد إشارة لحالة الصفحة
         if response.status_code == 404:
             return "NOT FOUND"
 
         if response.status_code == 200:
             return "FOUND"
 
-        if response.status_code in (403, 429):
+        if response.status_code == 429:
             return "RATE LIMITED"
 
-        return f"UNKNOWN ({response.status_code})"
+        if response.status_code == 403:
+            return "BLOCKED"
 
-    except requests.exceptions.Timeout:
-        return "TIMEOUT"
+        return f"UNKNOWN ({response.status_code})"
 
     except requests.exceptions.RequestException:
         return "ERROR"
@@ -77,73 +59,54 @@ def check_username(username):
 
 def main():
 
-    input_path = Path(INPUT_FILE)
-
-    if not input_path.exists():
-        print(f"لم يتم العثور على ملف {INPUT_FILE}")
-        print("أنشئ ملفًا بهذا الاسم وضع كل يوزر في سطر.")
-        return
-
-    raw = input_path.read_text(
-        encoding="utf-8",
-        errors="ignore"
-    )
-
-    usernames = []
-
-    for line in raw.splitlines():
-
-        username = clean_username(line)
-
-        if username and username not in usernames:
-            usernames.append(username)
-
-    if not usernames:
-        print("القائمة فارغة.")
-        return
-
-    print("=" * 50)
-    print("TikTok Username Auto Checker")
-    print("=" * 50)
-    print(f"عدد اليوزرات: {len(usernames)}")
-    print()
-
+    checked = set()
     results = []
 
-    for number, username in enumerate(usernames, 1):
+    print("=" * 45)
+    print(" TikTok Random 3-Letter Username Checker")
+    print("=" * 45)
+    print()
+
+    while len(checked) < NUMBER_TO_CHECK:
+
+        username = generate_username()
+
+        if username in checked:
+            continue
+
+        checked.add(username)
 
         print(
-            f"[{number}/{len(usernames)}] "
-            f"@{username}",
-            end=" -> ",
+            f"[{len(checked)}/{NUMBER_TO_CHECK}] "
+            f"@{username} -> ",
+            end="",
             flush=True
         )
 
-        if not valid_username(username):
-            status = "INVALID"
-        else:
-            status = check_username(username)
+        status = check_username(username)
 
         print(status)
 
-        results.append(
-            f"@{username} | {status}"
-        )
+        if status == "NOT FOUND":
+            print(f"⭐ مرشح غير موجود: @{username}")
+            results.append(username)
 
-        # تأخير بين الطلبات
-        if number < len(usernames):
-            time.sleep(DELAY)
+        if status == "RATE LIMITED":
+            print("تم الوصول إلى حد الطلبات. أوقف الفحص مؤقتًا.")
+            break
 
-    Path(OUTPUT_FILE).write_text(
-        "\n".join(results),
-        encoding="utf-8"
-    )
+        time.sleep(DELAY)
+
+    with open("possible_usernames.txt", "w", encoding="utf-8") as f:
+        for username in results:
+            f.write("@" + username + "\n")
 
     print()
-    print("=" * 50)
-    print(f"انتهى الفحص.")
-    print(f"النتائج محفوظة في: {OUTPUT_FILE}")
-    print("=" * 50)
+    print("=" * 45)
+    print("انتهى الفحص")
+    print(f"تم العثور على {len(results)} مرشح غير موجود.")
+    print("النتائج محفوظة في possible_usernames.txt")
+    print("=" * 45)
 
 
 if __name__ == "__main__":
