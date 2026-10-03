@@ -3,191 +3,166 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>TikTok Username Scanner</title>
+<title>TikTok Username Generator</title>
 
 <style>
 *{box-sizing:border-box}
 
 body{
- margin:0;
- min-height:100vh;
- background:#050507;
- color:#fff;
- font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  margin:0;
+  min-height:100vh;
+  background:#050507;
+  color:#fff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
 }
 
 .cover{
- position:relative;
- height:260px;
- overflow:hidden;
- display:flex;
- align-items:center;
- justify-content:center;
- text-align:center;
- background:
- radial-gradient(circle at 20% 20%,#ff005522,transparent 35%),
- radial-gradient(circle at 80% 30%,#00f2ea22,transparent 35%),
- linear-gradient(135deg,#111,#050507);
- border-bottom:1px solid #29292e;
-}
-
-.cover:before{
- content:"";
- position:absolute;
- width:240px;
- height:240px;
- border:1px solid #ffffff18;
- border-radius:50%;
- box-shadow:0 0 80px #ffffff0d;
-}
-
-.coverContent{
- position:relative;
- z-index:2;
-}
-
-.logo{
- font-size:58px;
- margin-bottom:5px;
+  height:250px;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  background:
+    radial-gradient(circle at 20% 30%,#ff005522,transparent 35%),
+    radial-gradient(circle at 80% 40%,#00f2ea22,transparent 35%),
+    linear-gradient(135deg,#15151a,#050507);
+  border-bottom:1px solid #29292e;
 }
 
 .cover h1{
- margin:0;
- font-size:29px;
+  margin:0;
+  font-size:30px;
 }
 
 .cover p{
- color:#aaa;
- margin:8px 0;
+  color:#aaa;
+}
+
+.logo{
+  font-size:60px;
 }
 
 .app{
- width:92%;
- max-width:650px;
- margin:-35px auto 30px;
- position:relative;
- z-index:3;
+  width:92%;
+  max-width:650px;
+  margin:-35px auto 30px;
+  position:relative;
 }
 
 .card{
- background:#121216ee;
- backdrop-filter:blur(18px);
- border:1px solid #29292e;
- border-radius:22px;
- padding:18px;
- box-shadow:0 20px 60px #0008;
+  background:#121216f2;
+  backdrop-filter:blur(18px);
+  border:1px solid #29292e;
+  border-radius:22px;
+  padding:18px;
+  box-shadow:0 20px 60px #0009;
 }
 
 label{
- display:block;
- color:#ccc;
- margin:12px 0 6px;
+  display:block;
+  margin:12px 0 6px;
+  color:#ccc;
 }
 
 select,input{
- width:100%;
- padding:14px;
- border-radius:12px;
- border:1px solid #333;
- background:#0b0b0e;
- color:#fff;
- font-size:16px;
- outline:none;
+  width:100%;
+  padding:14px;
+  border-radius:12px;
+  border:1px solid #333;
+  background:#0b0b0e;
+  color:#fff;
+  font-size:16px;
 }
 
 .grid{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
- margin-top:15px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:9px;
+  margin-top:15px;
 }
 
 button{
- border:0;
- border-radius:12px;
- padding:14px;
- font-size:15px;
- font-weight:700;
- cursor:pointer;
+  border:0;
+  border-radius:12px;
+  padding:14px;
+  font-size:15px;
+  font-weight:bold;
 }
 
 .start{
- background:#fff;
- color:#000;
+  background:#fff;
+  color:#000;
 }
 
 .copy{
- background:#29292f;
- color:#fff;
+  background:#29292f;
+  color:#fff;
 }
 
 .stop{
- width:100%;
- margin-top:9px;
- background:#4b2020;
- color:#fff;
+  width:100%;
+  margin-top:9px;
+  background:#4b2020;
+  color:#fff;
 }
 
 #status{
- text-align:center;
- color:#aaa;
- margin:18px 0;
- min-height:22px;
+  text-align:center;
+  color:#aaa;
+  margin:18px 0;
 }
 
 .stats{
- display:grid;
- grid-template-columns:repeat(4,1fr);
- gap:7px;
- margin-bottom:15px;
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:7px;
+  margin-bottom:15px;
 }
 
 .stat{
- background:#0d0d10;
- border:1px solid #29292e;
- border-radius:11px;
- padding:10px 5px;
- text-align:center;
+  background:#0d0d10;
+  border:1px solid #29292e;
+  border-radius:11px;
+  padding:10px;
+  text-align:center;
 }
 
 .stat b{
- display:block;
- font-size:19px;
+  display:block;
+  font-size:19px;
 }
 
 .green{color:#70ff90}
 .red{color:#ff7070}
 .yellow{color:#ffe16b}
-.gray{color:#aaa}
 
 .item{
- display:flex;
- align-items:center;
- justify-content:space-between;
- gap:7px;
- background:#0d0d10;
- border:1px solid #29292e;
- border-radius:11px;
- padding:11px;
- margin:7px 0;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:7px;
+  background:#0d0d10;
+  border:1px solid #29292e;
+  border-radius:11px;
+  padding:11px;
+  margin:7px 0;
 }
 
 .item a{
- color:#fff;
- text-decoration:none;
- background:#222;
- padding:5px 8px;
- border-radius:7px;
- font-size:12px;
+  color:#fff;
+  text-decoration:none;
+  background:#222;
+  padding:6px 9px;
+  border-radius:7px;
+  font-size:12px;
 }
 
 .note{
- color:#777;
- text-align:center;
- font-size:12px;
- line-height:1.7;
- margin-top:15px;
+  color:#777;
+  text-align:center;
+  font-size:12px;
+  line-height:1.7;
+  margin-top:15px;
 }
 </style>
 </head>
@@ -195,52 +170,43 @@ button{
 <body>
 
 <div class="cover">
- <div class="coverContent">
-  <div class="logo">🎯</div>
-  <h1>TikTok Username Scanner</h1>
-  <p>ثلاثي • رباعي • خماسي</p>
- </div>
+  <div>
+    <div class="logo">🎯</div>
+    <h1>TikTok Username Scanner</h1>
+    <p>ثلاثي • رباعي • خماسي</p>
+  </div>
 </div>
 
 <div class="app">
-
 <div class="card">
 
 <label>نوع اليوزر</label>
 
 <select id="length">
- <option value="3">ثلاثي</option>
- <option value="4">رباعي</option>
- <option value="5">خماسي</option>
- <option value="all">ثلاثي + رباعي + خماسي</option>
+  <option value="3">ثلاثي</option>
+  <option value="4">رباعي</option>
+  <option value="5">خماسي</option>
+  <option value="all">ثلاثي + رباعي + خماسي</option>
 </select>
 
-<label>عدد المحاولات</label>
+<label>عدد اليوزرات</label>
 
 <input
- id="amount"
- type="number"
- value="30"
- min="1"
- max="100"
-/>
-
-<label>سرعة الفحص</label>
-
-<select id="delay">
- <option value="1500">سريع</option>
- <option value="2500" selected>متوازن</option>
- <option value="4000">آمن</option>
-</select>
+  id="amount"
+  type="number"
+  min="1"
+  max="500"
+  value="50"
+>
 
 <div class="grid">
 
-<button class="start" onclick="start()">
-▶️ بدء تلقائي
+<button class="start" onclick="generate()">
+🚀 توليد
 </button>
 
-<button class="copy" onclick="copyCandidates()">
-📋 نسخ المرشحين
+<button class="copy" onclick="copyAll()">
+📋 نسخ الكل
 </button>
 
 </div>
@@ -249,28 +215,25 @@ button{
 ⛔ إيقاف
 </button>
 
-<div id="status">جاهز 🚀</div>
+<div id="status">
+جاهز
+</div>
 
 <div class="stats">
 
 <div class="stat">
-<b id="checked">0</b>
-<span>فُحص</span>
+<b id="total">0</b>
+<span>الإجمالي</span>
 </div>
 
 <div class="stat">
-<b id="candidate" class="green">0</b>
-<span>مرشح</span>
+<b id="three" class="green">0</b>
+<span>ثلاثي</span>
 </div>
 
 <div class="stat">
-<b id="found" class="red">0</b>
-<span>موجود</span>
-</div>
-
-<div class="stat">
-<b id="failed" class="yellow">0</b>
-<span>تعذر</span>
+<b id="four" class="green">0</b>
+<span>رباعي</span>
 </div>
 
 </div>
@@ -278,10 +241,8 @@ button{
 <div id="results"></div>
 
 <div class="note">
-🟢 مرشح = لم يتم العثور على الحساب من مصدر الفحص.<br>
-🔴 موجود = تم العثور على الحساب.<br>
-🟡 تعذر = المصدر لم يسمح بتأكيد الحالة.<br>
-المرشح ليس ضمانًا أن TikTok يسمح بحجز الاسم.
+الأداة تولّد أسماء محتملة فقط ولا تؤكد توفر الاسم للحجز.
+اضغط «فتح» للتحقق من الاسم على TikTok.
 </div>
 
 </div>
@@ -292,334 +253,200 @@ button{
 const chars =
 "abcdefghijklmnopqrstuvwxyz0123456789";
 
-let running=false;
 let stopped=false;
+let usernames=[];
 
-let checkedUsers=new Set();
-let candidates=[];
+function randomUsername(){
 
-let checked=0;
-let found=0;
-let failed=0;
+  const type=
+    document.getElementById("length").value;
 
+  let length;
 
-// توليد الاسم
-function generate(){
+  if(type==="all"){
 
- const type=
- document.getElementById("length").value;
+    const list=[3,4,5];
 
- let len;
+    length=
+      list[
+        Math.floor(Math.random()*list.length)
+      ];
 
- if(type==="all"){
+  }else{
 
-  const values=[3,4,5];
-
-  len=
-   values[
-    Math.floor(Math.random()*values.length)
-   ];
-
- }else{
-
-  len=Number(type);
-
- }
-
- let username="";
-
- for(let i=0;i<len;i++){
-
-  username +=
-   chars[
-    Math.floor(Math.random()*chars.length)
-   ];
-
- }
-
- return username;
-}
-
-
-// انتظار
-function wait(ms){
-
- return new Promise(
-  resolve=>setTimeout(resolve,ms)
- );
-
-}
-
-
-// فحص السيرفر
-async function check(username){
-
- try{
-
-  const response=
-   await fetch(
-    "/api/check?username="+
-    encodeURIComponent(username)
-   );
-
-  if(!response.ok){
-
-   return {status:"error"};
+    length=Number(type);
 
   }
 
-  return await response.json();
+  let username="";
 
- }catch{
+  for(let i=0;i<length;i++){
 
-  return {status:"error"};
+    username+=
+      chars[
+        Math.floor(Math.random()*chars.length)
+      ];
 
- }
+  }
+
+  return username;
+}
+
+function sleep(ms){
+
+  return new Promise(
+    resolve=>setTimeout(resolve,ms)
+  );
 
 }
 
+async function generate(){
 
-// عرض النتيجة
-function show(username,result){
+  stopped=false;
+  usernames=[];
 
- const box=
-  document.getElementById("results");
+  document.getElementById("results")
+    .innerHTML="";
 
- const item=
-  document.createElement("div");
+  document.getElementById("total")
+    .textContent="0";
 
- item.className="item";
+  document.getElementById("three")
+    .textContent="0";
 
- const name=
-  document.createElement("span");
+  document.getElementById("four")
+    .textContent="0";
 
- name.textContent="@"+username;
+  const amount=
+    Math.min(
+      500,
+      Math.max(
+        1,
+        Number(
+          document.getElementById("amount").value
+        ) || 50
+      )
+    );
 
- const state=
-  document.createElement("span");
+  let three=0;
+  let four=0;
+  let five=0;
 
- const link=
-  document.createElement("a");
+  for(let i=0;i<amount;i++){
 
- link.href=
-  "https://www.tiktok.com/@"+
-  encodeURIComponent(username);
+    if(stopped)break;
 
- link.target="_blank";
+    let username;
 
- link.textContent="فتح";
+    do{
 
+      username=randomUsername();
 
- if(result.status==="not_found"){
+    }while(
+      usernames.includes(username)
+    );
 
-  state.className="green";
-  state.textContent="مرشح 🟢";
+    usernames.push(username);
 
-  candidates.push(username);
+    const item=
+      document.createElement("div");
 
- }else if(result.status==="found"){
+    item.className="item";
 
-  state.className="red";
-  state.textContent="موجود 🔴";
+    const name=
+      document.createElement("span");
 
- }else{
+    name.textContent="@"+username;
 
-  state.className="yellow";
-  state.textContent="تعذر الفحص 🟡";
+    const link=
+      document.createElement("a");
 
-  failed++;
+    link.href=
+      "https://www.tiktok.com/@"+
+      encodeURIComponent(username);
 
- }
+    link.target="_blank";
 
- item.appendChild(name);
- item.appendChild(state);
- item.appendChild(link);
+    link.textContent="فتح";
 
- box.prepend(item);
+    item.appendChild(name);
+    item.appendChild(link);
 
- updateStats();
+    document.getElementById("results")
+      .appendChild(item);
 
-}
+    if(username.length===3)three++;
+    if(username.length===4)four++;
+    if(username.length===5)five++;
 
+    document.getElementById("total")
+      .textContent=usernames.length;
 
-// تحديث الإحصائيات
-function updateStats(){
+    document.getElementById("three")
+      .textContent=three;
 
- document.getElementById("checked")
-  .textContent=checked;
+    document.getElementById("four")
+      .textContent=four;
 
- document.getElementById("candidate")
-  .textContent=candidates.length;
+    document.getElementById("status")
+      .textContent=
+      `🚀 توليد ${i+1} / ${amount}`;
 
- document.getElementById("found")
-  .textContent=found;
-
- document.getElementById("failed")
-  .textContent=failed;
-
-}
-
-
-// بدء
-async function start(){
-
- if(running)return;
-
- running=true;
- stopped=false;
-
- checkedUsers.clear();
- candidates=[];
-
- checked=0;
- found=0;
- failed=0;
-
- document.getElementById("results")
-  .innerHTML="";
-
- updateStats();
-
- const amount=
-  Math.min(
-   100,
-   Math.max(
-    1,
-    Number(
-     document.getElementById("amount").value
-    )||30
-   )
-  );
-
- const delay=
-  Number(
-   document.getElementById("delay").value
-  );
-
-
- for(let i=1;i<=amount;i++){
-
-  if(stopped)break;
-
-  let username;
-
-  do{
-
-   username=generate();
-
-  }while(
-   checkedUsers.has(username)
-  );
-
-  checkedUsers.add(username);
+    await sleep(10);
+  }
 
   document.getElementById("status")
-   .textContent=
-   `🔎 ${i}/${amount} — فحص @${username}`;
-
-  const result=
-   await check(username);
-
-  checked++;
-
-  if(result.status==="found"){
-   found++;
-  }
-
-  show(username,result);
-
-  if(
-   result.status==="blocked"
-  ){
-
-   document.getElementById("status")
     .textContent=
-    "⚠️ تم إيقاف الفحص لأن TikTok حدّ الطلبات";
-
-   break;
-  }
-
-  if(i<amount){
-   await wait(delay);
-  }
-
- }
-
-
- running=false;
-
- if(stopped){
-
-  document.getElementById("status")
-   .textContent=
-   "⛔ تم الإيقاف";
-
- }else{
-
-  document.getElementById("status")
-   .textContent=
-   `✓ انتهى — ${candidates.length} مرشح`;
-
- }
-
+    `✓ انتهى التوليد — ${usernames.length} يوزر`;
 }
 
-
-// إيقاف
 function stop(){
 
- stopped=true;
-
- document.getElementById("status")
-  .textContent=
-  "⛔ جارٍ الإيقاف...";
-
-}
-
-
-// نسخ
-async function copyCandidates(){
-
- if(!candidates.length){
+  stopped=true;
 
   document.getElementById("status")
-   .textContent=
-   "لا توجد مرشحات حتى الآن";
+    .textContent="⛔ تم الإيقاف";
+}
 
-  return;
- }
+async function copyAll(){
 
- const text=
-  candidates
-   .map(x=>"@"+x)
-   .join("\n");
+  if(!usernames.length){
 
- try{
+    document.getElementById("status")
+      .textContent=
+      "ولّد اليوزرات أولًا";
 
-  await navigator.clipboard
-   .writeText(text);
+    return;
+  }
 
- }catch{
+  const text=
+    usernames
+      .map(x=>"@"+x)
+      .join("\n");
 
-  const area=
-   document.createElement("textarea");
+  try{
 
-  area.value=text;
+    await navigator.clipboard.writeText(text);
 
-  document.body.appendChild(area);
+  }catch{
 
-  area.select();
+    const area=
+      document.createElement("textarea");
 
-  document.execCommand("copy");
+    area.value=text;
 
-  area.remove();
+    document.body.appendChild(area);
 
- }
+    area.select();
 
- document.getElementById("status")
-  .textContent=
-  "📋 تم نسخ المرشحين";
+    document.execCommand("copy");
 
+    area.remove();
+  }
+
+  document.getElementById("status")
+    .textContent=
+    "📋 تم نسخ جميع اليوزرات";
 }
 
 </script>
