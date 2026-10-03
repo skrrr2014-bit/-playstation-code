@@ -1,491 +1,693 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
 <meta charset="UTF-8">
+
 <meta name="viewport"
-content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+content="width=device-width,
+initial-scale=1,
+maximum-scale=1,
+user-scalable=no">
 
 <title>LaGranny</title>
 
 <style>
+
 *{
-    box-sizing:border-box;
-    -webkit-tap-highlight-color:transparent;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
 html,body{
-    margin:0;
-    width:100%;
-    height:100%;
-    overflow:hidden;
-    background:#000;
-    font-family:Arial,sans-serif;
-    color:white;
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+background:#000;
+font-family:Arial,sans-serif;
+color:white;
 }
 
 canvas{
-    display:block;
-    width:100%;
-    height:100%;
-    touch-action:none;
+display:block;
+width:100%;
+height:100%;
+touch-action:none;
 }
 
-/* القائمة */
+
+/* =========================
+   الشاشات
+========================= */
 
 .screen{
-    position:fixed;
-    inset:0;
-    z-index:30;
+position:fixed;
+inset:0;
+z-index:50;
 
-    display:flex;
-    align-items:center;
-    justify-content:center;
+display:flex;
+align-items:center;
+justify-content:center;
 
-    background:
-    radial-gradient(
-        circle at center,
-        #191919 0%,
-        #070707 55%,
-        #000 100%
-    );
+background:
+radial-gradient(
+circle at 50% 35%,
+#292522 0%,
+#0c0b0a 45%,
+#000 100%
+);
 }
 
 .panel{
-    width:90%;
-    max-width:500px;
+width:90%;
+max-width:520px;
 
-    padding:30px;
+padding:30px;
 
-    text-align:center;
+background:
+rgba(7,6,6,.88);
 
-    background:rgba(5,5,5,.88);
+border:
+1px solid rgba(255,255,255,.15);
 
-    border:1px solid #444;
-    border-radius:15px;
+border-radius:15px;
 
-    box-shadow:
-    0 0 50px #000,
-    inset 0 0 30px #000;
+box-shadow:
+0 20px 80px #000;
+
+text-align:center;
 }
 
-h1{
-    font-size:58px;
-    margin:0 0 10px;
+.title{
 
-    letter-spacing:4px;
+font-size:60px;
 
-    color:#ddd;
+letter-spacing:5px;
 
-    text-shadow:
-    0 0 10px #700,
-    0 0 30px #300;
+margin:0;
+
+color:#d8d8d8;
+
+text-shadow:
+0 0 10px #900,
+0 0 30px #300;
 }
 
-h2{
-    margin:10px 0 20px;
-}
-
-.sub{
-    color:#888;
-    margin-bottom:25px;
+.subtitle{
+color:#888;
+margin:12px 0 25px;
 }
 
 button{
-    width:100%;
-    padding:15px;
 
-    margin:7px 0;
+width:100%;
 
-    border:1px solid #555;
-    border-radius:9px;
+padding:15px;
 
-    background:#111;
-    color:white;
+margin:7px 0;
 
-    font-size:18px;
+border:
+1px solid #555;
+
+border-radius:9px;
+
+background:#111;
+
+color:white;
+
+font-size:18px;
+
 }
 
 button:active{
-    transform:scale(.97);
-    background:#292929;
+transform:scale(.97);
+background:#292929;
 }
 
 .hidden{
-    display:none!important;
+display:none!important;
 }
 
-/* HUD */
+
+/* =========================
+   شاشة اليوم الأول
+========================= */
+
+#dayScreen{
+
+background:
+linear-gradient(
+rgba(0,0,0,.25),
+rgba(0,0,0,.9)
+),
+url("");
+
+}
+
+#dayText{
+
+font-size:52px;
+
+letter-spacing:6px;
+
+text-shadow:
+0 0 20px #000,
+0 0 40px #000;
+
+animation:
+dayAppear 3s ease;
+
+}
+
+#daySub{
+
+margin-top:15px;
+
+color:#aaa;
+
+font-size:17px;
+
+}
+
+@keyframes dayAppear{
+
+0%{
+opacity:0;
+transform:scale(1.3);
+}
+
+100%{
+opacity:1;
+transform:scale(1);
+}
+
+}
+
+
+/* =========================
+   HUD
+========================= */
 
 #hud{
-    position:fixed;
-    inset:0;
 
-    z-index:8;
+position:fixed;
 
-    pointer-events:none;
-}
+inset:0;
 
-#crosshair{
-    position:absolute;
+z-index:10;
 
-    left:50%;
-    top:50%;
+pointer-events:none;
 
-    transform:translate(-50%,-50%);
-
-    font-size:20px;
-
-    text-shadow:
-    0 0 5px black;
 }
 
 #objective{
-    position:absolute;
 
-    top:18px;
-    right:18px;
+position:absolute;
 
-    padding:10px 14px;
+top:18px;
 
-    border-radius:8px;
+right:18px;
 
-    background:#0009;
+padding:11px 15px;
 
-    font-size:14px;
+background:#0009;
+
+border-radius:8px;
+
+font-size:15px;
+
+}
+
+#crosshair{
+
+position:absolute;
+
+left:50%;
+
+top:50%;
+
+transform:
+translate(-50%,-50%);
+
+font-size:18px;
+
+text-shadow:
+0 0 5px #000;
 }
 
 #message{
-    position:absolute;
 
-    bottom:18%;
+position:absolute;
 
-    left:50%;
+left:50%;
 
-    transform:translateX(-50%);
+bottom:19%;
 
-    width:90%;
+transform:
+translateX(-50%);
 
-    text-align:center;
+width:90%;
 
-    font-size:18px;
+text-align:center;
 
-    text-shadow:
-    0 2px 8px black;
+font-size:18px;
+
+text-shadow:
+0 2px 8px #000;
 }
 
-/* العصا */
+
+/* =========================
+   عصا الحركة
+========================= */
 
 #joystick{
-    position:fixed;
 
-    left:18px;
-    bottom:20px;
+position:fixed;
 
-    width:130px;
-    height:130px;
+left:20px;
 
-    z-index:12;
+bottom:25px;
 
-    border:
-    2px solid rgba(255,255,255,.25);
+width:135px;
 
-    border-radius:50%;
+height:135px;
 
-    touch-action:none;
+z-index:20;
+
+border:
+2px solid #ffffff25;
+
+border-radius:50%;
+
+background:#0003;
+
+touch-action:none;
 }
 
 #stick{
-    position:absolute;
 
-    left:35px;
-    top:35px;
+position:absolute;
 
-    width:56px;
-    height:56px;
+left:38px;
 
-    border-radius:50%;
+top:38px;
 
-    background:#ffffff30;
+width:58px;
 
-    border:1px solid #fff5;
+height:58px;
+
+border-radius:50%;
+
+background:#ffffff28;
+
+border:
+1px solid #ffffff40;
+
+box-shadow:
+0 0 15px #000;
 }
 
-/* منطقة النظر */
+
+/* =========================
+   النظر
+========================= */
 
 #lookZone{
-    position:fixed;
 
-    right:0;
-    top:0;
+position:fixed;
 
-    width:62%;
-    height:78%;
+right:0;
 
-    z-index:10;
+top:0;
 
-    touch-action:none;
+width:65%;
+
+height:80%;
+
+z-index:15;
+
+touch-action:none;
+
 }
 
-/* أزرار اللعبة */
 
-.action{
-    position:fixed;
+/* =========================
+   زر التفاعل
+========================= */
 
-    right:20px;
-    bottom:28px;
+#action{
 
-    width:68px;
-    height:68px;
+position:fixed;
 
-    z-index:13;
+right:22px;
 
-    border-radius:50%;
+bottom:28px;
 
-    background:#111b;
+width:70px;
 
-    border:1px solid #aaa;
+height:70px;
 
-    font-size:26px;
+border-radius:50%;
+
+z-index:25;
+
+background:#111c;
+
+border:1px solid #aaa;
+
+font-size:27px;
 }
 
-#runBtn{
-    position:fixed;
 
-    right:105px;
-    bottom:32px;
+/* =========================
+   زر الركض
+========================= */
 
-    width:60px;
-    height:60px;
+#run{
 
-    z-index:13;
+position:fixed;
 
-    border-radius:50%;
+right:110px;
 
-    background:#111b;
+bottom:32px;
 
-    border:1px solid #777;
+width:62px;
 
-    font-size:24px;
+height:62px;
+
+border-radius:50%;
+
+z-index:25;
+
+background:#111c;
+
+border:1px solid #777;
+
+font-size:25px;
 }
+
+
+/* =========================
+   تأثير الرعب
+========================= */
+
+#vignette{
+
+position:fixed;
+
+inset:0;
+
+z-index:9;
+
+pointer-events:none;
+
+background:
+radial-gradient(
+circle,
+transparent 35%,
+rgba(0,0,0,.75) 100%
+);
+
+}
+
+
+/* =========================
+   التلاشي
+========================= */
 
 #fade{
-    position:fixed;
-    inset:0;
 
-    z-index:50;
+position:fixed;
 
-    background:#000;
+inset:0;
 
-    opacity:0;
+z-index:100;
 
-    pointer-events:none;
+background:#000;
 
-    transition:
-    opacity 1s;
+opacity:0;
+
+pointer-events:none;
+
+transition:
+opacity 1.2s;
 }
 
-.small{
-    color:#888;
-    font-size:13px;
-    line-height:1.7;
-}
 </style>
+
 </head>
 
 <body>
 
-<!-- القائمة الرئيسية -->
 
-<div id="menu" class="screen">
+<!-- =========================
+     القائمة
+========================= -->
 
-    <div class="panel">
+<div
+id="menu"
+class="screen">
 
-        <h1>LaGranny</h1>
+<div class="panel">
 
-        <div class="sub">
-            لا تثق بالظلام...
-        </div>
+<h1 class="title">
+LaGranny
+</h1>
 
-        <button id="play">
-            لعب
-        </button>
+<div class="subtitle">
+البيت الذي لم يعد أحد يسكنه...
+</div>
 
-        <button id="settings">
-            إعدادات
-        </button>
+<button id="play">
+لعب
+</button>
 
-        <div class="small">
-            ابحث عن طريق الهروب قبل أن يجدك شيء في البيت.
-        </div>
+<button id="settings">
+إعدادات
+</button>
 
-    </div>
+</div>
 
 </div>
 
 
-<!-- اختيار الصعوبة -->
+<!-- =========================
+     الصعوبة
+========================= -->
 
-<div id="modes" class="screen hidden">
+<div
+id="difficulty"
+class="screen hidden">
 
-    <div class="panel">
+<div class="panel">
 
-        <h2>
-            اختر وضع اللعب
-        </h2>
+<h2>
+اختر مستوى الرعب
+</h2>
 
-        <button data-mode="easy">
-            سهل
-        </button>
+<button data-mode="easy">
+سهل
+</button>
 
-        <button data-mode="normal">
-            عادي
-        </button>
+<button data-mode="normal">
+عادي
+</button>
 
-        <button data-mode="hard">
-            صعب
-        </button>
+<button data-mode="hard">
+صعب
+</button>
 
-        <button id="back1">
-            رجوع
-        </button>
+<button id="back">
+رجوع
+</button>
 
-    </div>
+</div>
 
 </div>
 
 
-<!-- الإعدادات -->
+<!-- =========================
+     الإعدادات
+========================= -->
 
-<div id="settingsPanel" class="screen hidden">
+<div
+id="settingsPanel"
+class="screen hidden">
 
-    <div class="panel">
+<div class="panel">
 
-        <h2>
-            الإعدادات
-        </h2>
+<h2>
+الإعدادات
+</h2>
 
-        <button id="soundBtn">
-            الصوت: تشغيل
-        </button>
+<button id="sound">
+الصوت: تشغيل
+</button>
 
-        <button id="lookBtn">
-            حساسية النظر: متوسطة
-        </button>
+<button id="sensitivity">
+حساسية النظر: متوسطة
+</button>
 
-        <button id="back2">
-            رجوع
-        </button>
+<button id="backSettings">
+رجوع
+</button>
 
-    </div>
+</div>
 
 </div>
 
 
-<!-- المشهد السينمائي -->
+<!-- =========================
+     اليوم الأول
+========================= -->
 
-<div id="intro" class="screen hidden">
+<div
+id="dayScreen"
+class="screen hidden">
 
-    <div class="panel">
+<div>
 
-        <h2 id="introText">
-            ...
-        </h2>
+<div id="dayText">
+اليوم الأول
+</div>
 
-        <div class="small">
-            المشهد السينمائي
-        </div>
+<div id="daySub">
+أنت لا تعرف أين أنت...
+</div>
 
-    </div>
+</div>
 
 </div>
 
 
-<!-- واجهة اللعب -->
+<!-- =========================
+     HUD
+========================= -->
 
-<div id="hud" class="hidden">
+<div
+id="hud"
+class="hidden">
 
-    <div id="objective">
-        الهدف: استكشف البيت
-    </div>
+<div id="objective">
+الهدف: اهرب من البيت
+</div>
 
-    <div id="crosshair">
-        +
-    </div>
+<div id="crosshair">
++
+</div>
 
-    <div id="message"></div>
+<div id="message">
+</div>
 
+</div>
+
+
+<div
+id="vignette"
+class="hidden">
 </div>
 
 
 <!-- التحكم -->
 
-<div id="joystick" class="hidden">
+<div
+id="joystick"
+class="hidden">
 
-    <div id="stick"></div>
+<div id="stick">
+</div>
 
 </div>
 
 
-<div id="lookZone" class="hidden"></div>
+<div
+id="lookZone"
+class="hidden">
+</div>
 
 
-<button id="runBtn" class="hidden">
-    🏃
+<button
+id="run"
+class="hidden">
+🏃
 </button>
 
 
-<button id="action" class="action hidden">
-    ✋
+<button
+id="action"
+class="hidden">
+✋
 </button>
 
 
-<div id="fade"></div>
+<div id="fade">
+</div>
 
 
 <script type="module">
 
-import * as THREE from
+
+/* =====================================================
+   THREE.JS
+===================================================== */
+
+import * as THREE
+from
 "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
 
-/* =========================
-   المتغيرات
-========================= */
-
-const $ = id =>
-document.getElementById(id);
-
+/* =====================================================
+   العناصر
+===================================================== */
 
 const menu =
-$("menu");
+document.getElementById("menu");
 
-const modes =
-$("modes");
+const difficulty =
+document.getElementById("difficulty");
 
-const settings =
-$("settingsPanel");
+const settingsPanel =
+document.getElementById("settingsPanel");
 
-const intro =
-$("intro");
+const dayScreen =
+document.getElementById("dayScreen");
 
 const hud =
-$("hud");
+document.getElementById("hud");
 
 const joystick =
-$("joystick");
+document.getElementById("joystick");
+
+const stick =
+document.getElementById("stick");
 
 const lookZone =
-$("lookZone");
+document.getElementById("lookZone");
 
 const action =
-$("action");
+document.getElementById("action");
 
-const runBtn =
-$("runBtn");
+const runButton =
+document.getElementById("run");
 
 const fade =
-$("fade");
+document.getElementById("fade");
 
+const vignette =
+document.getElementById("vignette");
+
+const objective =
+document.getElementById("objective");
+
+const message =
+document.getElementById("message");
+
+
+/* =====================================================
+   المتغيرات
+===================================================== */
 
 let scene;
 
@@ -499,1840 +701,2167 @@ let enemy;
 
 let key;
 
-let battery;
-
 let exitDoor;
 
-let game = false;
+let gameRunning=false;
 
-let dead = false;
+let cinematic=false;
 
-let won = false;
+let enemyActive=false;
 
-let mode = "normal";
+let hasKey=false;
 
-let sound = true;
+let dead=false;
 
-let sensitivity = .004;
+let escaped=false;
 
-let yaw = 0;
+let soundEnabled=true;
 
-let pitch = 0;
+let sensitivity=.0045;
 
-let enemyAwake = false;
+let yaw=0;
 
-let cinematic = false;
+let pitch=0;
 
-let hasKey = false;
-
-let stamina = 1;
-
-let audioCtx;
+let audioContext;
 
 
-/* =========================
+/* =====================================================
    اللاعب
-========================= */
+===================================================== */
 
-const player = {
+const player={
 
-    x:0,
+x:0,
 
-    y:1.65,
+y:1.65,
 
-    z:7
+z:7,
+
+vx:0,
+
+vz:0
 
 };
 
 
-/* =========================
+/* =====================================================
+   التحكم
+===================================================== */
+
+let joystickX=0;
+
+let joystickY=0;
+
+let looking=false;
+
+let lastLookX=0;
+
+let lastLookY=0;
+
+let running=false;
+
+let stamina=1;
+
+
+/* =====================================================
    الصعوبة
-========================= */
+===================================================== */
 
-const difficulty = {
+let difficultyMode="normal";
 
-    easy:{
-        enemy:.7
-    },
+const enemySpeed={
 
-    normal:{
-        enemy:1
-    },
+easy:.75,
 
-    hard:{
-        enemy:1.45
-    }
+normal:1,
+
+hard:1.35
 
 };
 
 
-/* =========================
-   القائمة
-========================= */
+/* =====================================================
+   المواد
+===================================================== */
 
-$("play").onclick = ()=>{
+function material(
+color,
+roughness=1,
+metalness=0
+){
 
-    menu.classList.add("hidden");
+return new THREE.MeshStandardMaterial({
 
-    modes.classList.remove("hidden");
+color:color,
 
-};
+roughness:roughness,
 
+metalness:metalness
 
-$("settings").onclick = ()=>{
+});
 
-    menu.classList.add("hidden");
-
-    settings.classList.remove("hidden");
-
-};
-
-
-$("back1").onclick = ()=>{
-
-    modes.classList.add("hidden");
-
-    menu.classList.remove("hidden");
-
-};
+}
 
 
-$("back2").onclick = ()=>{
+/* =====================================================
+   الجدران
+===================================================== */
 
-    settings.classList.add("hidden");
+function createWall(
+x,
+y,
+z,
+width,
+height,
+depth,
+color=0x302925
+){
 
-    menu.classList.remove("hidden");
+const wall=
+new THREE.Mesh(
 
-};
+new THREE.BoxGeometry(
+width,
+height,
+depth
+),
+
+material(color)
+
+);
+
+wall.position.set(
+x,
+y,
+z
+);
+
+wall.castShadow=true;
+
+wall.receiveShadow=true;
+
+scene.add(wall);
+
+return wall;
+
+}
 
 
-$("soundBtn").onclick = ()=>{
+/* =====================================================
+   الأثاث
+===================================================== */
 
-    sound = !sound;
+function furniture(
+x,
+y,
+z,
+width,
+height,
+depth,
+color,
+rotation=0
+){
 
-    $("soundBtn").textContent =
-    "الصوت: " +
-    (sound ? "تشغيل" : "إيقاف");
+const item=
+new THREE.Mesh(
 
-};
+new THREE.BoxGeometry(
+width,
+height,
+depth
+),
+
+material(color)
+
+);
+
+item.position.set(
+x,
+y,
+z
+);
+
+item.rotation.y=
+rotation;
+
+item.castShadow=true;
+
+item.receiveShadow=true;
+
+scene.add(item);
+
+return item;
+
+}
 
 
-$("lookBtn").onclick = ()=>{
+/* =====================================================
+   بناء البيت
+===================================================== */
 
-    if(sensitivity === .004){
+function buildHouse(){
 
-        sensitivity = .006;
 
-        $("lookBtn").textContent =
-        "حساسية النظر: عالية";
+/* الأرض */
 
-    }else{
+const floor=
+new THREE.Mesh(
 
-        sensitivity = .004;
+new THREE.PlaneGeometry(
+30,
+28
+),
 
-        $("lookBtn").textContent =
-        "حساسية النظر: متوسطة";
+material(
+0x211d1b,
+.95
+)
 
-    }
+);
+
+floor.rotation.x=
+-Math.PI/2;
+
+floor.receiveShadow=true;
+
+scene.add(floor);
+
+
+/* الجدران الخارجية */
+
+createWall(
+0,2,-12,
+24,4,.4
+);
+
+createWall(
+-12,2,0,
+.4,4,24
+);
+
+createWall(
+12,2,0,
+.4,4,24
+);
+
+
+/* الجدران الداخلية */
+
+createWall(
+-6,2,-3,
+.3,4,12
+);
+
+createWall(
+6,2,-3,
+.3,4,12
+);
+
+createWall(
+0,2,5,
+12,.3,.3
+);
+
+
+/* =====================
+   غرفة النوم
+===================== */
+
+furniture(
+0,.55,7,
+3,.35,5,
+0x342523
+);
+
+furniture(
+0,.9,7,
+2.8,.45,4.7,
+0x161719
+);
+
+
+/* الوسادة */
+
+furniture(
+0,1.17,8.5,
+1.8,.2,.8,
+0x77706b
+);
+
+
+/* =====================
+   طاولة
+===================== */
+
+furniture(
+-8,1,7,
+2.8,.25,1.4,
+0x3b2920
+);
+
+furniture(
+-9.1,.5,7,
+.18,1,.18,
+0x3b2920
+);
+
+furniture(
+-6.9,.5,7,
+.18,1,.18,
+0x3b2920
+);
+
+
+/* =====================
+   كراسي
+===================== */
+
+for(
+let i=0;
+i<2;
+i++
+){
+
+furniture(
+-8+i*2,
+.6,
+5.5,
+.8,
+1.2,
+.8,
+0x352820
+);
+
+}
+
+
+/* =====================
+   خزانة قديمة
+===================== */
+
+furniture(
+8,
+2,
+7,
+2,
+4,
+1,
+0x241817
+);
+
+
+/* مقابض الخزانة */
+
+for(
+let x of [7.7,8.3]
+){
+
+const handle=
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.07,
+8,
+8
+),
+
+new THREE.MeshStandardMaterial({
+color:0x8d7044,
+metalness:.8,
+roughness:.3
+})
+
+);
+
+handle.position.set(
+x,
+2,
+6.43
+);
+
+scene.add(handle);
+
+}
+
+
+/* =====================
+   طاولة جانبية
+===================== */
+
+furniture(
+-3,
+.7,
+8.5,
+1,
+.2,
+1,
+0x3b2920
+);
+
+
+/* =====================
+   أريكة
+===================== */
+
+furniture(
+8,
+.7,
+1,
+3.2,
+.8,
+1,
+0x302222
+);
+
+furniture(
+8,
+1.45,
+1.45,
+3.2,
+1,
+.3,
+0x241b1b
+);
+
+
+/* =====================
+   سجادة
+===================== */
+
+const carpet=
+new THREE.Mesh(
+
+new THREE.PlaneGeometry(
+5,
+3
+),
+
+material(
+0x2b1717
+)
+
+);
+
+carpet.rotation.x=
+-Math.PI/2;
+
+carpet.position.set(
+0,
+.015,
+1
+);
+
+scene.add(carpet);
+
+
+/* =====================
+   صور قديمة
+===================== */
+
+for(
+let x of [-8,8]
+){
+
+furniture(
+x,
+2.3,
+-8,
+.08,
+2,
+1.4,
+0x151515
+);
+
+}
+
+
+/* =====================
+   باب الخروج
+===================== */
+
+exitDoor=
+furniture(
+0,
+1.5,
+-11.75,
+2.6,
+3,
+.25,
+0x3a2019
+);
+
+
+/* =====================
+   المفتاح
+===================== */
+
+key=
+new THREE.Mesh(
+
+new THREE.BoxGeometry(
+.65,.07,.12
+),
+
+new THREE.MeshStandardMaterial({
+
+color:0xd9a92d,
+
+metalness:.9,
+
+roughness:.2
+
+})
+
+);
+
+key.position.set(
+-8,
+1.25,
+7
+);
+
+key.rotation.z=.4;
+
+key.castShadow=true;
+
+scene.add(key);
+
+
+/* =====================
+   لمبات
+===================== */
+
+createLamp(0,3.5,2);
+
+createLamp(-8,3,7);
+
+createLamp(8,3,-7);
+
+}
+
+
+/* =====================================================
+   المصابيح
+===================================================== */
+
+function createLamp(
+x,
+y,
+z
+){
+
+const light=
+new THREE.PointLight(
+0xffc58a,
+1.0,
+7
+);
+
+light.position.set(
+x,y,z
+);
+
+light.castShadow=true;
+
+scene.add(light);
+
+
+const bulb=
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.1,
+12,
+12
+),
+
+new THREE.MeshBasicMaterial({
+color:0xffd6a0
+})
+
+);
+
+bulb.position.set(
+x,y,z
+);
+
+scene.add(bulb);
+
+}
+
+
+/* =====================================================
+   الوحش: عجوز
+===================================================== */
+
+function createOldWoman(){
+
+enemy=
+new THREE.Group();
+
+
+/* الجسم */
+
+const body=
+new THREE.Mesh(
+
+new THREE.CapsuleGeometry(
+.48,
+1.15,
+8,
+16
+),
+
+material(
+0x382e2d
+)
+
+);
+
+body.position.y=1;
+
+enemy.add(body);
+
+
+/* الرأس */
+
+const head=
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.48,
+24,
+24
+),
+
+material(
+0xb8a69c,
+.8
+)
+
+);
+
+head.position.y=2.05;
+
+enemy.add(head);
+
+
+/* الشعر */
+
+const hair=
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.54,
+20,
+20
+),
+
+material(
+0x242323
+)
+
+);
+
+hair.scale.set(
+1.05,
+1.1,
+1.05
+);
+
+hair.position.y=2.18;
+
+enemy.add(hair);
+
+
+/* العين */
+
+const eyeMaterial=
+new THREE.MeshBasicMaterial({
+color:0x9b1111
+});
+
+
+for(
+const x of [-.16,.16]
+){
+
+const eye=
+new THREE.Mesh(
+
+new THREE.SphereGeometry(
+.055,
+10,
+10
+),
+
+eyeMaterial
+
+);
+
+eye.position.set(
+x,
+2.07,
+.43
+);
+
+enemy.add(eye);
+
+}
+
+
+/* الفستان */
+
+const dress=
+new THREE.Mesh(
+
+new THREE.ConeGeometry(
+.7,
+1.8,
+18
+),
+
+material(
+0x292121
+)
+
+);
+
+dress.position.y=.75;
+
+enemy.add(dress);
+
+
+/* وضع البداية */
+
+enemy.position.set(
+0,
+0,
+-7
+);
+
+enemy.visible=false;
+
+scene.add(enemy);
+
+}
+
+
+/* =====================================================
+   الكشاف
+===================================================== */
+
+function createFlashlight(){
+
+flashlight=
+new THREE.SpotLight(
+
+0xfff4d6,
+
+8,
+
+24,
+
+Math.PI/7,
+
+.48,
+
+1
+);
+
+flashlight.castShadow=true;
+
+flashlight.shadow.mapSize.width=1024;
+
+flashlight.shadow.mapSize.height=1024;
+
+scene.add(flashlight);
+
+scene.add(
+flashlight.target
+);
+
+}
+
+
+/* =====================================================
+   إعداد المحرك
+===================================================== */
+
+function init(){
+
+scene=
+new THREE.Scene();
+
+
+scene.background=
+new THREE.Color(
+0x080706
+);
+
+
+scene.fog=
+new THREE.FogExp2(
+0x080706,
+.035
+);
+
+
+/* الكاميرا */
+
+camera=
+new THREE.PerspectiveCamera(
+74,
+innerWidth/innerHeight,
+.05,
+100
+);
+
+camera.rotation.order=
+"YXZ";
+
+
+/* الرندر */
+
+renderer=
+new THREE.WebGLRenderer({
+
+antialias:true,
+
+powerPreference:"high-performance"
+
+});
+
+
+renderer.setPixelRatio(
+Math.min(
+devicePixelRatio,
+1.8
+)
+);
+
+
+renderer.setSize(
+innerWidth,
+innerHeight
+);
+
+
+renderer.shadowMap.enabled=true;
+
+renderer.shadowMap.type=
+THREE.PCFSoftShadowMap;
+
+
+/* تحسين الصورة */
+
+renderer.outputColorSpace=
+THREE.SRGBColorSpace;
+
+renderer.toneMapping=
+THREE.ACESFilmicToneMapping;
+
+renderer.toneMappingExposure=
+1.25;
+
+
+document.body.insertBefore(
+renderer.domElement,
+document.body.firstChild
+);
+
+
+/* إضاءة عامة */
+
+const ambient=
+new THREE.HemisphereLight(
+0x6e7680,
+0x15100e,
+.42
+);
+
+scene.add(ambient);
+
+
+/* ضوء القمر */
+
+const moon=
+new THREE.DirectionalLight(
+0x8796aa,
+.75
+);
+
+moon.position.set(
+-8,
+12,
+6
+);
+
+moon.castShadow=true;
+
+scene.add(moon);
+
+
+buildHouse();
+
+createOldWoman();
+
+createFlashlight();
+
+bindControls();
+
+
+window.addEventListener(
+"resize",
+resize
+);
+
+}
+
+
+/* =====================================================
+   التحكم باللمس
+===================================================== */
+
+function bindControls(){
+
+
+/* العصا */
+
+joystick.addEventListener(
+"pointerdown",
+e=>{
+
+joystick.setPointerCapture(
+e.pointerId
+);
+
+updateJoystick(e);
+
+}
+);
+
+
+joystick.addEventListener(
+"pointermove",
+e=>{
+
+if(
+joystick.hasPointerCapture(
+e.pointerId
+)
+){
+
+updateJoystick(e);
+
+}
+
+}
+);
+
+
+joystick.addEventListener(
+"pointerup",
+()=>{
+
+joystickX=0;
+
+joystickY=0;
+
+stick.style.transform=
+"translate(0,0)";
+
+}
+);
+
+
+function updateJoystick(e){
+
+const rect=
+joystick.getBoundingClientRect();
+
+const centerX=
+rect.left+
+rect.width/2;
+
+const centerY=
+rect.top+
+rect.height/2;
+
+let dx=
+e.clientX-centerX;
+
+let dy=
+e.clientY-centerY;
+
+
+const max=42;
+
+const length=
+Math.hypot(dx,dy);
+
+
+if(length>max){
+
+dx=
+dx/length*max;
+
+dy=
+dy/length*max;
+
+}
+
+
+joystickX=
+dx/max;
+
+joystickY=
+dy/max;
+
+
+stick.style.transform=
+`translate(${dx}px,${dy}px)`;
+
+}
+
+
+/* =====================
+   النظر
+===================== */
+
+lookZone.addEventListener(
+"pointerdown",
+e=>{
+
+looking=true;
+
+lastLookX=
+e.clientX;
+
+lastLookY=
+e.clientY;
+
+lookZone.setPointerCapture(
+e.pointerId
+);
+
+}
+);
+
+
+lookZone.addEventListener(
+"pointermove",
+e=>{
+
+if(!looking)return;
+
+
+const dx=
+e.clientX-lastLookX;
+
+const dy=
+e.clientY-lastLookY;
+
+
+lastLookX=
+e.clientX;
+
+lastLookY=
+e.clientY;
+
+
+/* يمين ويسار */
+
+yaw -=
+dx*sensitivity;
+
+
+/* فوق وتحت */
+
+pitch -=
+dy*sensitivity;
+
+
+pitch=
+Math.max(
+-1.35,
+Math.min(
+1.35,
+pitch
+)
+);
+
+}
+);
+
+
+lookZone.addEventListener(
+"pointerup",
+()=>{
+looking=false;
+}
+);
+
+
+/* =====================
+   الركض
+===================== */
+
+runButton.addEventListener(
+"pointerdown",
+()=>{
+running=true;
+}
+);
+
+runButton.addEventListener(
+"pointerup",
+()=>{
+running=false;
+}
+);
+
+runButton.addEventListener(
+"pointercancel",
+()=>{
+running=false;
+}
+);
+
+
+/* =====================
+   التفاعل
+===================== */
+
+action.onclick=
+interact;
+
+}
+
+
+/* =====================================================
+   بداية اللعبة
+===================================================== */
+
+document
+.getElementById("play")
+.onclick=()=>{
+
+menu.classList.add(
+"hidden"
+);
+
+difficulty.classList.remove(
+"hidden"
+);
 
 };
 
 
 document
-.querySelectorAll("[data-mode]")
+.getElementById("back")
+.onclick=()=>{
+
+difficulty.classList.add(
+"hidden"
+);
+
+menu.classList.remove(
+"hidden"
+);
+
+};
+
+
+document
+.getElementById("settings")
+.onclick=()=>{
+
+menu.classList.add(
+"hidden"
+);
+
+settingsPanel.classList.remove(
+"hidden"
+);
+
+};
+
+
+document
+.getElementById("backSettings")
+.onclick=()=>{
+
+settingsPanel.classList.add(
+"hidden"
+);
+
+menu.classList.remove(
+"hidden"
+);
+
+};
+
+
+document
+.getElementById("sound")
+.onclick=()=>{
+
+soundEnabled=
+!soundEnabled;
+
+document.getElementById(
+"sound"
+).textContent=
+"الصوت: "+
+(
+soundEnabled
+?
+"تشغيل"
+:
+"إيقاف"
+);
+
+};
+
+
+document
+.getElementById("sensitivity")
+.onclick=()=>{
+
+if(
+sensitivity===
+.0045
+){
+
+sensitivity=.0065;
+
+document.getElementById(
+"sensitivity"
+).textContent=
+"حساسية النظر: عالية";
+
+}else{
+
+sensitivity=.0045;
+
+document.getElementById(
+"sensitivity"
+).textContent=
+"حساسية النظر: متوسطة";
+
+}
+
+};
+
+
+/* =====================================================
+   اختيار الصعوبة
+===================================================== */
+
+document
+.querySelectorAll(
+"[data-mode]"
+)
 .forEach(button=>{
 
-    button.onclick = ()=>{
+button.onclick=()=>{
 
-        mode =
-        button.dataset.mode;
+difficultyMode=
+button.dataset.mode;
 
-        modes.classList.add("hidden");
+difficulty.classList.add(
+"hidden"
+);
 
-        startGame();
+startGame();
 
-    };
+};
 
 });
 
 
-/* =========================
-   الصوت
-========================= */
-
-function beep(
-    frequency=100,
-    duration=.15,
-    type="sine",
-    volume=.04
-){
-
-    if(!sound)return;
-
-    try{
-
-        audioCtx ||=
-
-        new (
-            window.AudioContext ||
-            window.webkitAudioContext
-        )();
-
-        const oscillator =
-        audioCtx.createOscillator();
-
-        const gain =
-        audioCtx.createGain();
-
-        oscillator.type =
-        type;
-
-        oscillator.frequency.value =
-        frequency;
-
-        gain.gain.value =
-        volume;
-
-        oscillator.connect(gain);
-
-        gain.connect(
-            audioCtx.destination
-        );
-
-        oscillator.start();
-
-        gain.gain.exponentialRampToValueAtTime(
-            .0001,
-            audioCtx.currentTime + duration
-        );
-
-        oscillator.stop(
-            audioCtx.currentTime + duration
-        );
-
-    }catch(e){}
-
-}
-
-
-function horrorSound(){
-
-    beep(
-        45,
-        .7,
-        "sawtooth",
-        .025
-    );
-
-    setTimeout(()=>{
-
-        beep(
-            30,
-            .8,
-            "triangle",
-            .02
-        );
-
-    },180);
-
-}
-
-
-/* =========================
-   المواد
-========================= */
-
-function material(
-    color,
-    roughness=1,
-    metalness=0
-){
-
-    return new THREE.MeshStandardMaterial({
-
-        color,
-
-        roughness,
-
-        metalness
-
-    });
-
-}
-
-
-/* =========================
-   إنشاء جدار
-========================= */
-
-function wall(
-    x,
-    y,
-    z,
-    sx,
-    sy,
-    sz,
-    color=0x302a28
-){
-
-    const mesh =
-    new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-            sx,
-            sy,
-            sz
-        ),
-
-        material(color)
-
-    );
-
-    mesh.position.set(
-        x,
-        y,
-        z
-    );
-
-    mesh.castShadow = true;
-
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-    return mesh;
-
-}
-
-
-/* =========================
-   إنشاء غرض
-========================= */
-
-function object(
-    x,
-    y,
-    z,
-    sx,
-    sy,
-    sz,
-    color,
-    rotation=0
-){
-
-    const mesh =
-    new THREE.Mesh(
-
-        new THREE.BoxGeometry(
-            sx,
-            sy,
-            sz
-        ),
-
-        material(color)
-
-    );
-
-    mesh.position.set(
-        x,
-        y,
-        z
-    );
-
-    mesh.rotation.y =
-    rotation;
-
-    mesh.castShadow = true;
-
-    mesh.receiveShadow = true;
-
-    scene.add(mesh);
-
-    return mesh;
-
-}
-
-
-/* =========================
-   رسالة
-========================= */
-
-function message(
-    text,
-    duration=2200
-){
-
-    $("message").textContent =
-    text;
-
-    clearTimeout(
-        message.timer
-    );
-
-    message.timer =
-    setTimeout(()=>{
-
-        $("message").textContent =
-        "";
-
-    },duration);
-
-}
-
-
-/* =========================
-   الهدف
-========================= */
-
-function objective(text){
-
-    $("objective").textContent =
-    "الهدف: " + text;
-
-}
-
-
-/* =========================
-   بناء البيت
-========================= */
-
-function createHouse(){
-
-    /* الأرض */
-
-    const floor =
-    new THREE.Mesh(
-
-        new THREE.PlaneGeometry(
-            28,
-            24
-        ),
-
-        material(0x25201e)
-
-    );
-
-    floor.rotation.x =
-    -Math.PI/2;
-
-    floor.receiveShadow =
-    true;
-
-    scene.add(floor);
-
-
-    /* الجدران الخارجية */
-
-    wall(
-        0,
-        2,
-        -11,
-        22,
-        4,
-        .35
-    );
-
-    wall(
-        -11,
-        2,
-        0,
-        .35,
-        4,
-        22
-    );
-
-    wall(
-        11,
-        2,
-        0,
-        .35,
-        4,
-        22
-    );
-
-
-    /* تقسيمات البيت */
-
-    wall(
-        -5.5,
-        2,
-        -2,
-        .3,
-        4,
-        10
-    );
-
-    wall(
-        5.5,
-        2,
-        -2,
-        .3,
-        4,
-        10
-    );
-
-
-    /* طاولة */
-
-    object(
-        -8,
-        1.1,
-        6,
-        2.2,
-        2.2,
-        .25,
-        0x3a2c22
-    );
-
-
-    /* كرسي */
-
-    object(
-        8,
-        1,
-        4,
-        2,
-        2,
-        .2,
-        0x242424
-    );
-
-
-    /* السرير */
-
-    object(
-        0,
-        .55,
-        7,
-        3,
-        .35,
-        5,
-        0x2d2020
-    );
-
-    object(
-        0,
-        .9,
-        7,
-        2.8,
-        .45,
-        4.8,
-        0x16171a
-    );
-
-
-    /* مصابيح البيت */
-
-    const lights = [
-
-        [0,3.7,3],
-
-        [-8,3,7],
-
-        [8,3,-7]
-
-    ];
-
-
-    lights.forEach(position=>{
-
-        const light =
-        new THREE.PointLight(
-            0xffb36b,
-            .45,
-            6
-        );
-
-        light.position.set(
-            ...position
-        );
-
-        scene.add(light);
-
-
-        const bulb =
-        new THREE.Mesh(
-
-            new THREE.SphereGeometry(
-                .08,
-                10,
-                10
-            ),
-
-            new THREE.MeshBasicMaterial({
-                color:0xffd0a0
-            })
-
-        );
-
-        bulb.position.set(
-            ...position
-        );
-
-        scene.add(bulb);
-
-    });
-
-
-    /* باب الخروج */
-
-    exitDoor =
-    object(
-        0,
-        1.5,
-        -10.75,
-        2.5,
-        3,
-        .25,
-        0x3a1e17
-    );
-
-
-    /* المفتاح */
-
-    key =
-    object(
-        -7,
-        1.05,
-        6,
-        .65,
-        .08,
-        .12,
-        0xd7a72d
-    );
-
-    key.rotation.z =
-    .35;
-
-
-    /* البطارية */
-
-    battery =
-    object(
-        8,
-        .75,
-        4,
-        .28,
-        .55,
-        .28,
-        0x888888
-    );
-
-}
-
-
-/* =========================
-   إنشاء الوحش
-========================= */
-
-function createEnemy(){
-
-    enemy =
-    new THREE.Group();
-
-
-    const body =
-    new THREE.Mesh(
-
-        new THREE.CapsuleGeometry(
-            .48,
-            1.15,
-            8,
-            16
-        ),
-
-        material(0x241719)
-
-    );
-
-    body.position.y =
-    1.05;
-
-    enemy.add(body);
-
-
-    const head =
-    new THREE.Mesh(
-
-        new THREE.SphereGeometry(
-            .48,
-            20,
-            20
-        ),
-
-        material(0x9d8c80)
-
-    );
-
-    head.position.y =
-    2.05;
-
-    enemy.add(head);
-
-
-    /* العيون */
-
-    const eyeMaterial =
-    new THREE.MeshBasicMaterial({
-        color:0xff1111
-    });
-
-
-    for(
-        const x of [-.16,.16]
-    ){
-
-        const eye =
-        new THREE.Mesh(
-
-            new THREE.SphereGeometry(
-                .045,
-                8,
-                8
-            ),
-
-            eyeMaterial
-
-        );
-
-        eye.position.set(
-            x,
-            2.12,
-            .42
-        );
-
-        enemy.add(eye);
-
-    }
-
-
-    enemy.position.set(
-        0,
-        0,
-        -7
-    );
-
-
-    enemy.visible =
-    false;
-
-
-    scene.add(enemy);
-
-}
-
-
-/* =========================
-   إنشاء اللعبة
-========================= */
-
-function init(){
-
-    scene =
-    new THREE.Scene();
-
-
-    scene.background =
-    new THREE.Color(
-        0x030303
-    );
-
-
-    scene.fog =
-    new THREE.Fog(
-        0x030303,
-        3,
-        27
-    );
-
-
-    camera =
-    new THREE.PerspectiveCamera(
-        74,
-        innerWidth / innerHeight,
-        .05,
-        100
-    );
-
-
-    camera.rotation.order =
-    "YXZ";
-
-
-    renderer =
-    new THREE.WebGLRenderer({
-        antialias:true
-    });
-
-
-    renderer.setPixelRatio(
-        Math.min(
-            devicePixelRatio,
-            1.7
-        )
-    );
-
-
-    renderer.setSize(
-        innerWidth,
-        innerHeight
-    );
-
-
-    renderer.shadowMap.enabled =
-    true;
-
-
-    document.body.insertBefore(
-        renderer.domElement,
-        document.body.firstChild
-    );
-
-
-    /* إضاءة عامة */
-
-    const ambient =
-    new THREE.HemisphereLight(
-        0x777777,
-        0x070707,
-        .28
-    );
-
-    scene.add(ambient);
-
-
-    /* ضوء القمر */
-
-    const moon =
-    new THREE.DirectionalLight(
-        0x8b9bb0,
-        .55
-    );
-
-    moon.position.set(
-        -5,
-        10,
-        4
-    );
-
-    moon.castShadow =
-    true;
-
-    scene.add(moon);
-
-
-    /* الكشاف */
-
-    flashlight =
-    new THREE.SpotLight(
-        0xfff4dc,
-        5,
-        18,
-        Math.PI/8,
-        .5,
-        1
-    );
-
-    flashlight.castShadow =
-    true;
-
-    scene.add(flashlight);
-
-    scene.add(
-        flashlight.target
-    );
-
-
-    createHouse();
-
-    createEnemy();
-
-    bindControls();
-
-
-    window.addEventListener(
-        "resize",
-        resize
-    );
-
-}
-
-
-/* =========================
-   تغيير حجم الشاشة
-========================= */
-
-function resize(){
-
-    camera.aspect =
-    innerWidth / innerHeight;
-
-    camera.updateProjectionMatrix();
-
-    renderer.setSize(
-        innerWidth,
-        innerHeight
-    );
-
-}
-
-
-/* =========================
-   التحكم
-========================= */
-
-function bindControls(){
-
-    /* كيبورد */
-
-    window.addEventListener(
-        "keydown",
-        event=>{
-
-            keys.add(
-                event.code
-            );
-
-            if(
-                event.code ===
-                "KeyE"
-            ){
-
-                interact();
-
-            }
-
-        }
-    );
-
-
-    window.addEventListener(
-        "keyup",
-        event=>{
-
-            keys.delete(
-                event.code
-            );
-
-        }
-    );
-
-
-    /* العصا */
-
-    let startX=0;
-
-    let startY=0;
-
-    let joystickActive=false;
-
-
-    joystick.addEventListener(
-        "pointerdown",
-        event=>{
-
-            joystickActive=true;
-
-            startX =
-            event.clientX;
-
-            startY =
-            event.clientY;
-
-            joystick.setPointerCapture(
-                event.pointerId
-            );
-
-        }
-    );
-
-
-    joystick.addEventListener(
-        "pointermove",
-        event=>{
-
-            if(!joystickActive)
-                return;
-
-
-            const dx =
-            event.clientX -
-            startX;
-
-            const dy =
-            event.clientY -
-            startY;
-
-
-            const x =
-            Math.max(
-                -30,
-                Math.min(
-                    30,
-                    dx
-                )
-            );
-
-
-            const y =
-            Math.max(
-                -30,
-                Math.min(
-                    30,
-                    dy
-                )
-            );
-
-
-            $("stick").style.transform =
-            `translate(${x}px,${y}px)`;
-
-        }
-    );
-
-
-    joystick.addEventListener(
-        "pointerup",
-        event=>{
-
-            joystickActive=false;
-
-            $("stick").style.transform =
-            "translate(0,0)";
-
-        }
-    );
-
-
-    /* النظر */
-
-    let lookActive=false;
-
-    let lastX=0;
-
-    let lastY=0;
-
-
-    lookZone.addEventListener(
-        "pointerdown",
-        event=>{
-
-            lookActive=true;
-
-            lastX =
-            event.clientX;
-
-            lastY =
-            event.clientY;
-
-            lookZone.setPointerCapture(
-                event.pointerId
-            );
-
-        }
-    );
-
-
-    lookZone.addEventListener(
-        "pointermove",
-        event=>{
-
-            if(!lookActive)
-                return;
-
-
-            const dx =
-            event.clientX -
-            lastX;
-
-
-            const dy =
-            event.clientY -
-            lastY;
-
-
-            lastX =
-            event.clientX;
-
-            lastY =
-            event.clientY;
-
-
-            yaw -=
-            dx * sensitivity;
-
-
-            pitch -=
-            dy * sensitivity;
-
-
-            pitch =
-            Math.max(
-                -1.25,
-                Math.min(
-                    1.25,
-                    pitch
-                )
-            );
-
-        }
-    );
-
-
-    lookZone.addEventListener(
-        "pointerup",
-        ()=>{
-
-            lookActive=false;
-
-        }
-    );
-
-
-    /* زر الركض */
-
-    runBtn.addEventListener(
-        "pointerdown",
-        ()=>{
-            keys.add("ShiftLeft");
-        }
-    );
-
-
-    runBtn.addEventListener(
-        "pointerup",
-        ()=>{
-            keys.delete("ShiftLeft");
-        }
-    );
-
-
-    /* زر التفاعل */
-
-    action.onclick =
-    interact;
-
-}
-
-
-/* =========================
-   لوحة المفاتيح
-========================= */
-
-const keys =
-new Set();
-
-
-/* =========================
+/* =====================================================
    بدء اللعبة
-========================= */
+===================================================== */
 
 function startGame(){
 
-    init();
+init();
 
-    game=true;
+gameRunning=true;
 
-    intro.classList.remove(
-        "hidden"
-    );
 
-    cinematic=true;
+/* شاشة اليوم الأول */
 
-    introSequence();
+dayScreen.classList.remove(
+"hidden"
+);
+
+
+/* مدة ظهور اليوم الأول */
+
+setTimeout(()=>{
+
+cinematic=true;
+
+startCinematic();
+
+},2200);
 
 }
 
 
-/* =========================
+/* =====================================================
    المشهد السينمائي
-========================= */
+===================================================== */
 
-function introSequence(){
+function startCinematic(){
 
-    const lines = [
+/*
+المشهد هنا بصري:
+الكاميرا تبدأ منخفضة فوق السرير،
+ثم ترتفع تدريجيًا،
+ثم تنظر للباب،
+ثم يبدأ اللعب.
+*/
 
-        "أين أنا؟",
+camera.position.set(
+0,
+.75,
+7
+);
 
-        "البيت... كان فارغًا.",
-
-        "سمعت شيئًا في الطابق السفلي.",
-
-        "لازم أطلع من هنا."
-
-    ];
-
-
-    let index=0;
-
-
-    $("introText").textContent =
-    lines[index++];
-
-
-    beep(
-        80,
-        .25
-    );
+camera.rotation.set(
+-.15,
+Math.PI,
+0
+);
 
 
-    const timer =
-    setInterval(()=>{
+/* إخفاء HUD */
 
-        if(
-            index <
-            lines.length
-        ){
+hud.classList.add(
+"hidden"
+);
 
-            $("introText").textContent =
-            lines[index++];
+joystick.classList.add(
+"hidden"
+);
 
-            horrorSound();
+lookZone.classList.add(
+"hidden"
+);
 
-        }else{
+action.classList.add(
+"hidden"
+);
 
-            clearInterval(timer);
-
-
-            intro.classList.add(
-                "hidden"
-            );
-
-
-            hud.classList.remove(
-                "hidden"
-            );
+runButton.classList.add(
+"hidden"
+);
 
 
-            joystick.classList.remove(
-                "hidden"
-            );
+/* إخفاء اليوم الأول */
+
+dayScreen.classList.add(
+"hidden"
+);
 
 
-            lookZone.classList.remove(
-                "hidden"
-            );
+/* حركة الكاميرا */
+
+const startTime=
+performance.now();
 
 
-            action.classList.remove(
-                "hidden"
-            );
+function cinematicFrame(){
+
+const elapsed=
+(performance.now()-
+startTime)/1000;
 
 
-            runBtn.classList.remove(
-                "hidden"
-            );
+/* 0 - 2 ثواني */
 
-
-            cinematic=false;
-
-
-            enemyAwake=true;
-
-            enemy.visible=true;
-
-
-            objective(
-                "ابحث عن المفتاح 🔑"
-            );
-
-
-            message(
-                "المفتاح في مكان ما داخل البيت..."
-            );
-
-        }
-
-    },2200);
-
-}
-
-
-/* =========================
-   حساب المسافة
-========================= */
-
-function distance(
-    a,
-    b
+if(
+elapsed<2
 ){
 
-    return Math.hypot(
-        a.x-b.x,
-        a.z-b.z
-    );
+const t=
+elapsed/2;
+
+camera.position.y=
+.75+
+t*.9;
+
+camera.rotation.x=
+-.15+
+t*.1;
 
 }
 
 
-/* =========================
-   حركة اللاعب
-========================= */
+/* 2 - 4 ثواني */
 
-function move(dt){
+else if(
+elapsed<4
+){
 
-    let forward=0;
+const t=
+(elapsed-2)/2;
 
-    let side=0;
-
-
-    if(
-        keys.has("KeyW")
-    )
-        forward++;
-
-
-    if(
-        keys.has("KeyS")
-    )
-        forward--;
-
-
-    if(
-        keys.has("KeyD")
-    )
-        side++;
-
-
-    if(
-        keys.has("KeyA")
-    )
-        side--;
-
-
-    /* قراءة العصا */
-
-    const transform =
-    getComputedStyle(
-        $("stick")
-    ).transform;
-
-
-    if(
-        transform &&
-        transform !== "none"
-    ){
-
-        const matrix =
-        new DOMMatrix(
-            transform
-        );
-
-
-        side +=
-        matrix.m41 / 30;
-
-
-        forward -=
-        matrix.m42 / 30;
-
-    }
-
-
-    const length =
-    Math.hypot(
-        forward,
-        side
-    );
-
-
-    if(length>0){
-
-        forward/=length;
-
-        side/=length;
-
-    }
-
-
-    /* الركض */
-
-    const running =
-    keys.has("ShiftLeft") &&
-    stamina>.02;
-
-
-    const speed =
-    running ?
-    4 :
-    2.35;
-
-
-    if(running){
-
-        stamina =
-        Math.max(
-            0,
-            stamina -
-            dt*.32
-        );
-
-    }else{
-
-        stamina =
-        Math.min(
-            1,
-            stamina +
-            dt*.18
-        );
-
-    }
-
-
-    const movement =
-    speed*dt;
-
-
-    const sin =
-    Math.sin(yaw);
-
-
-    const cos =
-    Math.cos(yaw);
-
-
-    player.x +=
-    (
-        side*cos +
-        forward*sin
-    ) * movement;
-
-
-    player.z +=
-    (
-        -side*sin +
-        forward*cos
-    ) * movement;
-
-
-    /* حدود البيت */
-
-    player.x =
-    Math.max(
-        -9.7,
-        Math.min(
-            9.7,
-            player.x
-        )
-    );
-
-
-    player.z =
-    Math.max(
-        -9.7,
-        Math.min(
-            9.7,
-            player.z
-        )
-    );
-
-
-    camera.position.set(
-        player.x,
-        player.y,
-        player.z
-    );
-
-
-    camera.rotation.set(
-        pitch,
-        yaw,
-        0
-    );
+camera.rotation.y=
+Math.PI-
+t*.7;
 
 }
 
 
-/* =========================
-   التفاعل مع الأشياء
-========================= */
+/* 4 - 6 ثواني */
+
+else if(
+elapsed<6
+){
+
+const t=
+(elapsed-4)/2;
+
+camera.position.z=
+7-
+t*1.5;
+
+camera.rotation.x=
+-.05+
+t*.15;
+
+}
+
+
+/* نهاية المشهد */
+
+else{
+
+cinematic=false;
+
+showGameplay();
+
+return;
+
+}
+
+
+requestAnimationFrame(
+cinematicFrame
+);
+
+}
+
+
+cinematicFrame();
+
+}
+
+
+/* =====================================================
+   إظهار اللعب
+===================================================== */
+
+function showGameplay(){
+
+hud.classList.remove(
+"hidden"
+);
+
+joystick.classList.remove(
+"hidden"
+);
+
+lookZone.classList.remove(
+"hidden"
+);
+
+action.classList.remove(
+"hidden"
+);
+
+runButton.classList.remove(
+"hidden"
+);
+
+vignette.classList.remove(
+"hidden"
+);
+
+
+/* العجوز تظهر */
+
+enemyActive=true;
+
+enemy.visible=true;
+
+enemy.position.set(
+0,
+0,
+-7
+);
+
+
+/* الهدف */
+
+objective.textContent=
+"الهدف: اهرب من البيت";
+
+
+message.textContent=
+"هناك شيء هنا... ابحث عن المفتاح.";
+
+}
+
+
+/* =====================================================
+   التفاعل
+===================================================== */
 
 function interact(){
 
-    if(
-        !game ||
-        dead ||
-        won
-    )
-        return;
+if(
+!gameRunning ||
+cinematic ||
+dead ||
+escaped
+)return;
 
 
-    /* المفتاح */
+/* المفتاح */
 
-    if(
-        key.visible &&
-        distance(
-            player,
-            key.position
-        ) < 1.6
-    ){
+if(
+key.visible &&
+distance(
+player,
+key.position
+)<1.7
+){
 
-        hasKey=true;
+hasKey=true;
 
-        key.visible=false;
+key.visible=false;
 
-        beep(
-            700,
-            .15
-        );
+playSound(
+650,
+.15
+);
 
-
-        message(
-            "أخذت المفتاح 🔑"
-        );
+message.textContent=
+"وجدت المفتاح.";
 
 
-        objective(
-            "اذهب إلى باب الخروج"
-        );
+objective.textContent=
+"الهدف: اذهب إلى باب الخروج";
 
 
-        return;
-
-    }
-
-
-    /* البطارية */
-
-    if(
-        battery.visible &&
-        distance(
-            player,
-            battery.position
-        ) < 1.5
-    ){
-
-        battery.visible=false;
-
-        beep(
-            500,
-            .12
-        );
+setTimeout(()=>{
+message.textContent="";
+},2200);
 
 
-        flashlight.intensity=8;
-
-
-        message(
-            "وجدت بطارية. الكشاف أصبح أقوى."
-        );
-
-
-        return;
-
-    }
-
-
-    /* باب الخروج */
-
-    if(
-        distance(
-            player,
-            exitDoor.position
-        ) < 2
-    ){
-
-        if(hasKey){
-
-            won=true;
-
-            endGame(true);
-
-        }else{
-
-            message(
-                "الباب مقفل... تحتاج إلى المفتاح."
-            );
-
-        }
-
-        return;
-
-    }
-
-
-    message(
-        "لا يوجد شيء مهم هنا."
-    );
+return;
 
 }
 
 
-/* =========================
-   ذكاء الشرير
-========================= */
+/* الباب */
 
-function enemyAI(dt){
+if(
+distance(
+player,
+exitDoor.position
+)<2
+){
 
-    if(!enemyAwake)
-        return;
+if(hasKey){
 
+escaped=true;
 
-    const dx =
-    player.x -
-    enemy.position.x;
+finishGame(true);
 
+}else{
 
-    const dz =
-    player.z -
-    enemy.position.z;
+message.textContent=
+"الباب مقفل... تحتاج إلى مفتاح.";
 
+setTimeout(()=>{
+message.textContent="";
+},2200);
 
-    const dist =
-    Math.hypot(
-        dx,
-        dz
-    );
+}
 
-
-    if(dist<12){
-
-        const speed =
-        .55 *
-        difficulty[mode].enemy *
-        (
-            dist<7 ?
-            1.25 :
-            .5
-        );
-
-
-        enemy.position.x +=
-        (
-            dx/dist
-        ) *
-        Math.min(
-            speed*dt,
-            .04
-        );
-
-
-        enemy.position.z +=
-        (
-            dz/dist
-        ) *
-        Math.min(
-            speed*dt,
-            .04
-        );
-
-
-        enemy.lookAt(
-            player.x,
-            1,
-            player.z
-        );
-
-    }
-
-
-    /* إذا اقترب */
-
-    if(dist<1.15){
-
-        dead=true;
-
-        endGame(false);
-
-    }
-
-
-    /* أصوات عشوائية */
-
-    if(
-        Math.random()<.002
-    ){
-
-        horrorSound();
-
-    }
+}
 
 }
 
 
-/* =========================
+/* =====================================================
+   المسافة
+===================================================== */
+
+function distance(a,b){
+
+return Math.hypot(
+a.x-b.x,
+a.z-b.z
+);
+
+}
+
+
+/* =====================================================
+   حركة اللاعب
+===================================================== */
+
+function updatePlayer(dt){
+
+/*
+الحركة الجديدة:
+ليست مباشرة.
+فيها تسارع وتباطؤ
+حتى تصبح Smooth.
+*/
+
+
+let forward=
+-joystickY;
+
+let strafe=
+joystickX;
+
+
+/* السرعة */
+
+let maxSpeed=
+running &&
+stamina>.05
+?
+4.2
+:
+2.4;
+
+
+/* استهلاك stamina */
+
+if(
+running &&
+(
+Math.abs(forward)>.1 ||
+Math.abs(strafe)>.1
+)
+){
+
+stamina=
+Math.max(
+0,
+stamina-dt*.4
+);
+
+}else{
+
+stamina=
+Math.min(
+1,
+stamina+dt*.22
+);
+
+}
+
+
+/* اتجاه الكاميرا */
+
+const sin=
+Math.sin(yaw);
+
+const cos=
+Math.cos(yaw);
+
+
+/* الاتجاه الصحيح */
+
+const targetX=
+(
+strafe*cos+
+forward*sin
+)*maxSpeed;
+
+
+const targetZ=
+(
+-strafe*sin+
+forward*cos
+)*maxSpeed;
+
+
+/* Smooth acceleration */
+
+const acceleration=
+12;
+
+
+player.vx=
+THREE.MathUtils.damp(
+player.vx,
+targetX,
+acceleration,
+dt
+);
+
+
+player.vz=
+THREE.MathUtils.damp(
+player.vz,
+targetZ,
+acceleration,
+dt
+);
+
+
+/* الحركة */
+
+player.x +=
+player.vx*dt;
+
+player.z +=
+player.vz*dt;
+
+
+/* حدود البيت */
+
+player.x=
+THREE.MathUtils.clamp(
+player.x,
+-10,
+10
+);
+
+player.z=
+THREE.MathUtils.clamp(
+player.z,
+-10,
+10
+);
+
+
+/* الكاميرا */
+
+camera.position.x=
+player.x;
+
+camera.position.y=
+player.y;
+
+camera.position.z=
+player.z;
+
+
+/* النظر */
+
+camera.rotation.x=
+pitch;
+
+camera.rotation.y=
+yaw;
+
+camera.rotation.z=0;
+
+
+/* اهتزاز خفيف أثناء المشي */
+
+const moving=
+Math.hypot(
+player.vx,
+player.vz
+)>0.2;
+
+
+if(moving){
+
+const bob=
+Math.sin(
+performance.now()*.009
+)*.018;
+
+camera.position.y=
+player.y+bob;
+
+}
+
+}
+
+
+/* =====================================================
+   الذكاء الاصطناعي للعجوز
+===================================================== */
+
+function updateEnemy(dt){
+
+if(!enemyActive)
+return;
+
+
+const dx=
+player.x-
+enemy.position.x;
+
+const dz=
+player.z-
+enemy.position.z;
+
+const distanceToPlayer=
+Math.hypot(
+dx,
+dz
+);
+
+
+if(
+distanceToPlayer<14
+){
+
+const speed=
+.75*
+enemySpeed[difficultyMode];
+
+
+/* العجوز تقترب */
+
+enemy.position.x +=
+dx/distanceToPlayer*
+speed*
+dt;
+
+enemy.position.z +=
+dz/distanceToPlayer*
+speed*
+dt;
+
+
+/* تنظر للاعب */
+
+enemy.lookAt(
+player.x,
+1.2,
+player.z
+);
+
+
+/* رعب */
+
+if(
+distanceToPlayer<6
+){
+
+vignette.style.opacity=
+"0.65";
+
+}else{
+
+vignette.style.opacity=
+"0.2";
+
+}
+
+
+/* قبضت عليك */
+
+if(
+distanceToPlayer<1.15
+){
+
+dead=true;
+
+finishGame(false);
+
+}
+
+}
+
+}
+
+
+/* =====================================================
+   تحديث الكشاف
+===================================================== */
+
+function updateFlashlight(){
+
+flashlight.position.copy(
+camera.position
+);
+
+
+/*
+مهم:
+الضوء يتبع اتجاه النظر
+بدون عكس.
+*/
+
+const direction=
+new THREE.Vector3(
+0,
+0,
+-1
+);
+
+direction.applyQuaternion(
+camera.quaternion
+);
+
+
+flashlight.target.position.copy(
+camera.position
+).add(
+direction.multiplyScalar(10)
+);
+
+}
+
+
+/* =====================================================
+   الصوت
+===================================================== */
+
+function playSound(
+frequency,
+duration
+){
+
+if(!soundEnabled)
+return;
+
+
+try{
+
+audioContext||=
+new(
+window.AudioContext||
+window.webkitAudioContext
+)();
+
+
+const oscillator=
+audioContext.createOscillator();
+
+const gain=
+audioContext.createGain();
+
+
+oscillator.frequency.value=
+frequency;
+
+oscillator.type=
+"sine";
+
+
+gain.gain.value=.04;
+
+
+oscillator.connect(gain);
+
+gain.connect(
+audioContext.destination
+);
+
+
+oscillator.start();
+
+
+gain.gain.exponentialRampToValueAtTime(
+.0001,
+audioContext.currentTime+
+duration
+);
+
+
+oscillator.stop(
+audioContext.currentTime+
+duration
+);
+
+}catch(e){}
+
+}
+
+
+/* =====================================================
    نهاية اللعبة
-========================= */
+===================================================== */
 
-function endGame(win){
+function finishGame(won){
 
-    game=false;
+gameRunning=false;
 
+hud.classList.add(
+"hidden"
+);
 
-    hud.classList.add(
-        "hidden"
-    );
+joystick.classList.add(
+"hidden"
+);
 
+lookZone.classList.add(
+"hidden"
+);
 
-    joystick.classList.add(
-        "hidden"
-    );
+action.classList.add(
+"hidden"
+);
 
-
-    lookZone.classList.add(
-        "hidden"
-    );
-
-
-    action.classList.add(
-        "hidden"
-    );
-
-
-    runBtn.classList.add(
-        "hidden"
-    );
+runButton.classList.add(
+"hidden"
+);
 
 
-    fade.style.opacity=1;
+fade.style.opacity=
+"1";
 
 
-    setTimeout(()=>{
+setTimeout(()=>{
 
-        fade.style.opacity=0;
-
-
-        menu.classList.remove(
-            "hidden"
-        );
+fade.style.opacity=
+"0";
 
 
-        const panel =
-        menu.querySelector(
-            ".panel"
-        );
+menu.classList.remove(
+"hidden"
+);
 
 
-        if(win){
-
-            panel.innerHTML = `
-
-                <h1>
-                    LaGranny
-                </h1>
-
-                <h2>
-                    نجوت... مؤقتًا.
-                </h2>
-
-                <p class="sub">
-                    خرجت من البيت، لكن الكابوس لم ينتهِ.
-                </p>
-
-                <button id="again">
-                    العب من جديد
-                </button>
-
-            `;
-
-        }else{
-
-            panel.innerHTML = `
-
-                <h1>
-                    LaGranny
-                </h1>
-
-                <h2>
-                    لقد وجدتك...
-                </h2>
-
-                <p class="sub">
-                    المحاولة انتهت.
-                </p>
-
-                <button id="again">
-                    حاول مرة أخرى
-                </button>
-
-            `;
-
-        }
+const panel=
+menu.querySelector(
+".panel"
+);
 
 
-        $("again").onclick =
-        ()=>{
-            location.reload();
-        };
+if(won){
 
+panel.innerHTML=`
 
-    },1000);
+<h1 class="title">
+LaGranny
+</h1>
+
+<h2>
+لقد هربت!
+</h2>
+
+<div class="subtitle">
+خرجت من البيت... لكنك لا تعرف ماذا كان يعيش هناك.
+</div>
+
+<button id="restart">
+العب من جديد
+</button>
+
+`;
+
+}else{
+
+panel.innerHTML=`
+
+<h1 class="title">
+LaGranny
+</h1>
+
+<h2>
+لقد وجدتك...
+</h2>
+
+<div class="subtitle">
+لم يكن البيت مهجورًا كما ظننت.
+</div>
+
+<button id="restart">
+حاول مرة أخرى
+</button>
+
+`;
 
 }
 
 
-/* =========================
-   حلقة اللعبة
-========================= */
-
-function animate(time){
-
-    requestAnimationFrame(
-        animate
-    );
+document
+.getElementById("restart")
+.onclick=
+()=>{
+location.reload();
+};
 
 
-    const dt =
-    Math.min(
-        .05,
-        (time -
-        (animate.last || time))
-        /1000
-    );
-
-
-    animate.last=time;
-
-
-    if(
-        game &&
-        !cinematic
-    ){
-
-        move(dt);
-
-        enemyAI(dt);
-
-
-        /* الكشاف */
-
-        flashlight.position.copy(
-            camera.position
-        );
-
-
-        flashlight.target.position.set(
-
-            camera.position.x -
-            Math.sin(yaw),
-
-            camera.position.y +
-            Math.sin(pitch),
-
-            camera.position.z -
-            Math.cos(yaw)
-
-        );
-
-    }
-
-
-    if(renderer){
-
-        renderer.render(
-            scene,
-            camera
-        );
-
-    }
+},1200);
 
 }
 
 
-animate(0);
+/* =====================================================
+   الحلقة الرئيسية
+===================================================== */
+
+let lastTime=
+performance.now();
 
 
-/* تشغيل القائمة بدون WebGL قبل البداية */
+function loop(){
+
+requestAnimationFrame(
+loop
+);
+
+
+const now=
+performance.now();
+
+
+const dt=
+Math.min(
+.05,
+(now-lastTime)/1000
+);
+
+
+lastTime=now;
+
+
+if(
+gameRunning &&
+!cinematic
+){
+
+updatePlayer(dt);
+
+updateEnemy(dt);
+
+updateFlashlight();
+
+}
+
+
+if(renderer){
+
+renderer.render(
+scene,
+camera
+);
+
+}
+
+}
+
+
+loop();
+
+
+/* =====================================================
+   بدء شاشة القائمة
+===================================================== */
 
 </script>
 
