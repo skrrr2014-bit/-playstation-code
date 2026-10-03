@@ -1,352 +1,97 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-
-<title>Username Generator</title>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-    margin:0;
-    background:#08080a;
-    color:#fff;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
-}
-
-.app{
-    width:92%;
-    max-width:650px;
-    margin:25px auto;
-}
-
-h1{
-    text-align:center;
-    margin:0 0 5px;
-}
-
-.desc{
-    text-align:center;
-    color:#999;
-    margin-bottom:20px;
-}
-
-.card{
-    background:#151518;
-    border:1px solid #29292e;
-    border-radius:18px;
-    padding:18px;
-}
-
-label{
-    display:block;
-    color:#ccc;
-    margin:12px 0 7px;
-}
-
-select,
-input{
-    width:100%;
-    padding:14px;
-    border-radius:12px;
-    border:1px solid #333;
-    background:#0e0e11;
-    color:#fff;
-    font-size:16px;
-}
-
-.grid{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:15px;
-}
-
-button{
-    border:0;
-    border-radius:12px;
-    padding:14px;
-    font-size:15px;
-    font-weight:700;
-}
-
-.generate{
-    background:#fff;
-    color:#000;
-}
-
-.copy{
-    background:#29292f;
-    color:#fff;
-}
-
-.clear{
-    width:100%;
-    margin-top:10px;
-    background:#202024;
-    color:#fff;
-}
-
-.info{
-    text-align:center;
-    color:#aaa;
-    margin:16px 0;
-}
-
-.results{
-    display:grid;
-    grid-template-columns:repeat(2,1fr);
-    gap:8px;
-}
-
-.item{
-    background:#111114;
-    border:1px solid #29292e;
-    border-radius:12px;
-    padding:10px;
-}
-
-.name{
-    text-align:center;
-    font-family:monospace;
-    font-size:18px;
-    margin-bottom:8px;
-}
+from flask import Flask, render_template, request, jsonify, send_file
+import random
+import string
+import os
 
-.open{
-    width:100%;
-    background:#242428;
-    color:white;
-    padding:9px;
-    font-size:12px;
-}
+app = Flask(__name__)
 
-.msg{
-    text-align:center;
-    min-height:22px;
-    color:#72ff91;
-    margin-top:10px;
-}
-</style>
-</head>
+RESULTS_DIR = "results"
+RESULTS_FILE = os.path.join(RESULTS_DIR, "available.txt")
 
-<body>
+os.makedirs(RESULTS_DIR, exist_ok=True)
 
-<div class="app">
 
-<h1>🎲 Username Generator</h1>
+def generate_username(length, mode="mixed"):
+    if mode == "letters":
+        chars = string.ascii_lowercase
+    elif mode == "numbers":
+        chars = string.digits
+    else:
+        chars = string.ascii_lowercase + string.digits
 
-<div class="desc">
-ثلاثي ورباعي • عشوائي • بدون تكرار
-</div>
+    return "".join(random.choice(chars) for _ in range(length))
 
-<div class="card">
 
-<label>النوع</label>
+@app.route("/")
+def index():
+    return render_template("index.html")
 
-<select id="type">
-    <option value="3">ثلاثي</option>
-    <option value="4">رباعي</option>
-    <option value="both">ثلاثي + رباعي</option>
-</select>
 
-<label>عدد النتائج</label>
+@app.post("/generate")
+def generate():
+    data = request.get_json(silent=True) or {}
 
-<input
-    id="amount"
-    type="number"
-    value="100"
-    min="1"
-    max="5000"
->
+    try:
+        length = int(data.get("length", 4))
+        amount = int(data.get("amount", 100))
+    except (TypeError, ValueError):
+        return jsonify({"error": "قيم غير صحيحة"}), 400
 
-<div class="grid">
+    length = max(3, min(length, 5))
+    amount = max(1, min(amount, 5000))
 
-<button
-    class="generate"
-    onclick="generate()">
-    🎲 توليد
-</button>
+    mode = data.get("mode", "mixed")
 
-<button
-    class="copy"
-    onclick="copyAll()">
-    📋 نسخ الكل
-</button>
+    usernames = []
+    used = set()
 
-</div>
+    while len(usernames) < amount:
+        username = generate_username(length, mode)
 
-<button
-    class="clear"
-    onclick="clearAll()"
-    style="margin-top:10px">
-    🗑️ مسح
-</button>
+        if username not in used:
+            used.add(username)
+            usernames.append(username)
 
-<div id="info" class="info">
-    لم يتم توليد شيء
-</div>
+    return jsonify({
+        "success": True,
+        "usernames": usernames
+    })
 
-<div id="msg" class="msg"></div>
 
-<div id="results" class="results"></div>
+@app.post("/save")
+def save():
+    data = request.get_json(silent=True) or {}
+    username = str(data.get("username", "")).strip().lower()
 
-</div>
+    allowed = string.ascii_lowercase + string.digits + "_."
 
-</div>
+    if not username or len(username) > 24:
+        return jsonify({"success": False}), 400
 
-<script>
+    if any(c not in allowed for c in username):
+        return jsonify({"success": False}), 400
 
-const chars =
-"abcdefghijklmnopqrstuvwxyz0123456789";
+    with open(RESULTS_FILE, "a", encoding="utf-8") as f:
+        f.write(username + "\n")
 
-let usernames = new Set();
+    return jsonify({"success": True})
 
-function randomChar(){
-    return chars[Math.floor(Math.random()*chars.length)];
-}
 
-function createUsername(length){
+@app.get("/download")
+def download():
+    if not os.path.exists(RESULTS_FILE):
+        open(RESULTS_FILE, "w", encoding="utf-8").close()
 
-    let username = "";
+    return send_file(
+        RESULTS_FILE,
+        as_attachment=True,
+        download_name="available.txt"
+    )
 
-    for(let i=0;i<length;i++){
-        username += randomChar();
-    }
 
-    return username;
-}
-
-function generate(){
-
-    usernames.clear();
-
-    const amount =
-        Math.max(
-            1,
-            Math.min(
-                5000,
-                Number(document.getElementById("amount").value) || 100
-            )
-        );
-
-    const type =
-        document.getElementById("type").value;
-
-    while(usernames.size < amount){
-
-        let length;
-
-        if(type === "both"){
-            length = Math.random() < 0.5 ? 3 : 4;
-        }else{
-            length = Number(type);
-        }
-
-        usernames.add(createUsername(length));
-    }
-
-    render();
-
-    document.getElementById("msg").textContent =
-        "تم التوليد بدون تكرار ✓";
-}
-
-function render(){
-
-    const box =
-        document.getElementById("results");
-
-    box.innerHTML = "";
-
-    usernames.forEach(username => {
-
-        const item =
-            document.createElement("div");
-
-        item.className = "item";
-
-        item.innerHTML = `
-            <div class="name">@${username}</div>
-
-            <button
-                class="open"
-                onclick="openTikTok('${username}')">
-                فتح TikTok
-            </button>
-        `;
-
-        box.appendChild(item);
-    });
-
-    document.getElementById("info").textContent =
-        `عدد النتائج: ${usernames.size}`;
-}
-
-function openTikTok(username){
-
-    window.open(
-        "https://www.tiktok.com/@" +
-        encodeURIComponent(username),
-        "_blank"
-    );
-}
-
-async function copyAll(){
-
-    if(usernames.size === 0){
-        document.getElementById("msg").textContent =
-            "ولّد اليوزرات أولًا.";
-        return;
-    }
-
-    const text =
-        [...usernames]
-        .map(x => "@" + x)
-        .join("\n");
-
-    try{
-
-        await navigator.clipboard.writeText(text);
-
-        document.getElementById("msg").textContent =
-            "تم نسخ جميع اليوزرات ✓";
-
-    }catch{
-
-        const area =
-            document.createElement("textarea");
-
-        area.value = text;
-
-        document.body.appendChild(area);
-
-        area.select();
-
-        document.execCommand("copy");
-
-        area.remove();
-
-        document.getElementById("msg").textContent =
-            "تم النسخ ✓";
-    }
-}
-
-function clearAll(){
-
-    usernames.clear();
-
-    document.getElementById("results").innerHTML = "";
-
-    document.getElementById("info").textContent =
-        "لم يتم توليد شيء";
-
-    document.getElementById("msg").textContent = "";
-}
-
-</script>
-
-</body>
-</html>
+if __name__ == "__main__":
+    app.run(
+        host="0.0.0.0",
+        port=5000,
+        debug=False
+    )
