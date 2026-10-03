@@ -4,57 +4,93 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 
-<title>TikTok Username Checker</title>
+<title>TikTok Username Scanner</title>
 
 <style>
-*{
- box-sizing:border-box;
-}
+*{box-sizing:border-box}
 
 body{
  margin:0;
- background:#09090b;
+ min-height:100vh;
+ background:#050507;
  color:#fff;
  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+}
+
+.cover{
+ position:relative;
+ height:260px;
+ overflow:hidden;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ text-align:center;
+ background:
+ radial-gradient(circle at 20% 20%,#ff005522,transparent 35%),
+ radial-gradient(circle at 80% 30%,#00f2ea22,transparent 35%),
+ linear-gradient(135deg,#111,#050507);
+ border-bottom:1px solid #29292e;
+}
+
+.cover:before{
+ content:"";
+ position:absolute;
+ width:240px;
+ height:240px;
+ border:1px solid #ffffff18;
+ border-radius:50%;
+ box-shadow:0 0 80px #ffffff0d;
+}
+
+.coverContent{
+ position:relative;
+ z-index:2;
+}
+
+.logo{
+ font-size:58px;
+ margin-bottom:5px;
+}
+
+.cover h1{
+ margin:0;
+ font-size:29px;
+}
+
+.cover p{
+ color:#aaa;
+ margin:8px 0;
 }
 
 .app{
  width:92%;
  max-width:650px;
- margin:25px auto;
+ margin:-35px auto 30px;
+ position:relative;
+ z-index:3;
 }
 
 .card{
- background:#151518;
+ background:#121216ee;
+ backdrop-filter:blur(18px);
  border:1px solid #29292e;
- border-radius:18px;
+ border-radius:22px;
  padding:18px;
-}
-
-h1{
- text-align:center;
- margin-bottom:5px;
-}
-
-p{
- text-align:center;
- color:#999;
+ box-shadow:0 20px 60px #0008;
 }
 
 label{
  display:block;
- margin-top:12px;
  color:#ccc;
+ margin:12px 0 6px;
 }
 
-select,
-input{
+select,input{
  width:100%;
- padding:13px;
- margin:7px 0 12px;
- border-radius:11px;
+ padding:14px;
+ border-radius:12px;
  border:1px solid #333;
- background:#0d0d10;
+ background:#0b0b0e;
  color:#fff;
  font-size:16px;
  outline:none;
@@ -64,14 +100,15 @@ input{
  display:grid;
  grid-template-columns:1fr 1fr;
  gap:9px;
+ margin-top:15px;
 }
 
 button{
  border:0;
- border-radius:11px;
- padding:13px;
- font-weight:bold;
+ border-radius:12px;
+ padding:14px;
  font-size:15px;
+ font-weight:700;
  cursor:pointer;
 }
 
@@ -86,44 +123,54 @@ button{
 }
 
 .stop{
- background:#542020;
- color:#fff;
  width:100%;
  margin-top:9px;
+ background:#4b2020;
+ color:#fff;
 }
 
 #status{
  text-align:center;
- margin:15px 0;
  color:#aaa;
+ margin:18px 0;
+ min-height:22px;
 }
+
+.stats{
+ display:grid;
+ grid-template-columns:repeat(4,1fr);
+ gap:7px;
+ margin-bottom:15px;
+}
+
+.stat{
+ background:#0d0d10;
+ border:1px solid #29292e;
+ border-radius:11px;
+ padding:10px 5px;
+ text-align:center;
+}
+
+.stat b{
+ display:block;
+ font-size:19px;
+}
+
+.green{color:#70ff90}
+.red{color:#ff7070}
+.yellow{color:#ffe16b}
+.gray{color:#aaa}
 
 .item{
  display:flex;
- justify-content:space-between;
  align-items:center;
- gap:8px;
- background:#101014;
+ justify-content:space-between;
+ gap:7px;
+ background:#0d0d10;
  border:1px solid #29292e;
- border-radius:10px;
+ border-radius:11px;
  padding:11px;
  margin:7px 0;
-}
-
-.green{
- color:#70ff90;
-}
-
-.yellow{
- color:#ffe16b;
-}
-
-.red{
- color:#ff7070;
-}
-
-.gray{
- color:#aaa;
 }
 
 .item a{
@@ -131,38 +178,41 @@ button{
  text-decoration:none;
  background:#222;
  padding:5px 8px;
- border-radius:6px;
+ border-radius:7px;
  font-size:12px;
 }
 
-.small{
- text-align:center;
+.note{
  color:#777;
+ text-align:center;
  font-size:12px;
- margin-top:15px;
  line-height:1.7;
+ margin-top:15px;
 }
 </style>
 </head>
 
 <body>
 
+<div class="cover">
+ <div class="coverContent">
+  <div class="logo">🎯</div>
+  <h1>TikTok Username Scanner</h1>
+  <p>ثلاثي • رباعي • خماسي</p>
+ </div>
+</div>
+
 <div class="app">
-
-<h1>🔎 TikTok Checker</h1>
-
-<p>
-توليد وفحص ثلاثيات ورباعيات تلقائياً
-</p>
 
 <div class="card">
 
-<label>الطول</label>
+<label>نوع اليوزر</label>
 
 <select id="length">
  <option value="3">ثلاثي</option>
  <option value="4">رباعي</option>
- <option value="both">ثلاثي + رباعي</option>
+ <option value="5">خماسي</option>
+ <option value="all">ثلاثي + رباعي + خماسي</option>
 </select>
 
 <label>عدد المحاولات</label>
@@ -170,43 +220,68 @@ button{
 <input
  id="amount"
  type="number"
- value="20"
+ value="30"
  min="1"
  max="100"
->
+/>
+
+<label>سرعة الفحص</label>
+
+<select id="delay">
+ <option value="1500">سريع</option>
+ <option value="2500" selected>متوازن</option>
+ <option value="4000">آمن</option>
+</select>
 
 <div class="grid">
 
-<button
- class="start"
- id="startBtn"
- onclick="start()">
- ▶️ بدء
+<button class="start" onclick="start()">
+▶️ بدء تلقائي
 </button>
 
-<button
- class="copy"
- onclick="copyResults()">
- 📋 نسخ النتائج
+<button class="copy" onclick="copyCandidates()">
+📋 نسخ المرشحين
 </button>
 
 </div>
 
-<button
- class="stop"
- onclick="stop()">
- ⛔ إيقاف
+<button class="stop" onclick="stop()">
+⛔ إيقاف
 </button>
 
-<div id="status">
- جاهز
+<div id="status">جاهز 🚀</div>
+
+<div class="stats">
+
+<div class="stat">
+<b id="checked">0</b>
+<span>فُحص</span>
+</div>
+
+<div class="stat">
+<b id="candidate" class="green">0</b>
+<span>مرشح</span>
+</div>
+
+<div class="stat">
+<b id="found" class="red">0</b>
+<span>موجود</span>
+</div>
+
+<div class="stat">
+<b id="failed" class="yellow">0</b>
+<span>تعذر</span>
+</div>
+
 </div>
 
 <div id="results"></div>
 
-<div class="small">
-⚠️ "غير موجود" يعني أن صفحة الحساب لم تظهر في نتيجة الفحص.
-لا يعني ضماناً أن TikTok يسمح بحجز الاسم.
+<div class="note">
+🟢 مرشح = لم يتم العثور على الحساب من مصدر الفحص.<br>
+🔴 موجود = تم العثور على الحساب.<br>
+🟡 تعذر = المصدر لم يسمح بتأكيد الحالة.<br>
+المرشح ليس ضمانًا أن TikTok يسمح بحجز الاسم.
 </div>
 
 </div>
@@ -217,42 +292,48 @@ button{
 const chars =
 "abcdefghijklmnopqrstuvwxyz0123456789";
 
-let running = false;
-let stopped = false;
+let running=false;
+let stopped=false;
 
-let checked = new Set();
+let checkedUsers=new Set();
+let candidates=[];
 
-let possibleUsers = [];
+let checked=0;
+let found=0;
+let failed=0;
 
 
-// ==============================
-// توليد يوزر عشوائي
-// ==============================
+// توليد الاسم
+function generate(){
 
-function randomUsername(){
-
- let type =
+ const type=
  document.getElementById("length").value;
 
- let length;
+ let len;
 
- if(type === "both"){
+ if(type==="all"){
 
-   length =
-   Math.random() < 0.5 ? 3 : 4;
+  const values=[3,4,5];
+
+  len=
+   values[
+    Math.floor(Math.random()*values.length)
+   ];
 
  }else{
 
-   length = Number(type);
+  len=Number(type);
 
  }
 
- let username = "";
+ let username="";
 
- for(let i = 0; i < length; i++){
+ for(let i=0;i<len;i++){
 
-   username +=
-   chars[Math.floor(Math.random() * chars.length)];
+  username +=
+   chars[
+    Math.floor(Math.random()*chars.length)
+   ];
 
  }
 
@@ -260,372 +341,284 @@ function randomUsername(){
 }
 
 
-// ==============================
 // انتظار
-// ==============================
-
-function delay(ms){
+function wait(ms){
 
  return new Promise(
-   resolve => setTimeout(resolve,ms)
+  resolve=>setTimeout(resolve,ms)
  );
 
 }
 
 
-// ==============================
-// فحص الصفحة
-// ==============================
-
-async function inspect(username){
-
- const tiktokURL =
- "https://www.tiktok.com/@" + username;
-
- const proxyURL =
- "https://api.allorigins.win/raw?url=" +
- encodeURIComponent(tiktokURL);
+// فحص السيرفر
+async function check(username){
 
  try{
 
-   const response =
-   await fetch(proxyURL,{
-     method:"GET"
-   });
-
-   if(!response.ok){
-
-     return "manual";
-
-   }
-
-   const text =
-   await response.text();
-
-   const lower =
-   text.toLowerCase();
-
-
-   // إشارات واضحة للحساب غير الموجود
-   const notFoundSignals = [
-
-     "couldn't find this account",
-
-     "couldn’t find this account",
-
-     "this account doesn't exist",
-
-     "this account does not exist",
-
-     "account not found"
-
-   ];
-
-
-   for(const signal of notFoundSignals){
-
-     if(lower.includes(signal)){
-
-       return "notfound";
-
-     }
-
-   }
-
-
-   // إذا ظهر اسم الحساب داخل البيانات
-   if(
-     lower.includes('"uniqueid":"' + username.toLowerCase() + '"') ||
-     lower.includes('"unique_id":"' + username.toLowerCase() + '"')
-   ){
-
-     return "found";
-
-   }
-
-
-   /*
-     لا نخمن.
-     إذا لم نستطع تحديد الحالة،
-     نرجع manual بدل أن نقول متاح.
-   */
-
-   return "manual";
-
- }catch(error){
-
-   return "manual";
-
- }
-
-}
-
-
-// ==============================
-// إضافة النتيجة
-// ==============================
-
-function addResult(username,status){
-
- const results =
- document.getElementById("results");
-
- const item =
- document.createElement("div");
-
- item.className = "item";
-
-
- const name =
- document.createElement("span");
-
- name.textContent =
- "@" + username;
-
-
- const state =
- document.createElement("span");
-
-
- const link =
- document.createElement("a");
-
- link.href =
- "https://www.tiktok.com/@" +
- encodeURIComponent(username);
-
- link.target = "_blank";
-
- link.textContent = "فتح";
-
-
- if(status === "notfound"){
-
-   state.className = "green";
-
-   state.textContent =
-   "غير موجود 🔎";
-
-   possibleUsers.push(username);
-
- }else if(status === "found"){
-
-   state.className = "red";
-
-   state.textContent =
-   "موجود ❌";
-
- }else{
-
-   state.className = "yellow";
-
-   state.textContent =
-   "تعذر الفحص ⚠️";
-
- }
-
-
- item.appendChild(name);
-
- item.appendChild(state);
-
- item.appendChild(link);
-
- results.prepend(item);
-
-}
-
-
-// ==============================
-// بدء الفحص
-// ==============================
-
-async function start(){
-
- if(running){
-
-   return;
-
- }
-
- running = true;
-
- stopped = false;
-
- checked.clear();
-
- possibleUsers = [];
-
-
- document.getElementById(
-   "results"
- ).innerHTML = "";
-
-
- const amount =
- Math.min(
-   100,
-   Math.max(
-     1,
-     Number(
-       document.getElementById("amount").value
-     ) || 20
-   )
- );
-
-
- for(let i = 1; i <= amount; i++){
-
-   if(stopped){
-
-     break;
-
-   }
-
-
-   let username;
-
-
-   do{
-
-     username =
-     randomUsername();
-
-   }while(
-     checked.has(username)
+  const response=
+   await fetch(
+    "/api/check?username="+
+    encodeURIComponent(username)
    );
 
+  if(!response.ok){
 
-   checked.add(username);
+   return {status:"error"};
 
+  }
 
-   document.getElementById(
-     "status"
-   ).textContent =
-   `جاري الفحص ${i} / ${amount} — @${username}`;
-
-
-   const status =
-   await inspect(username);
-
-
-   addResult(
-     username,
-     status
-   );
-
-
-   /*
-     انتظار بسيط بين الفحوص
-   */
-
-   await delay(1500);
-
- }
-
-
- running = false;
-
-
- if(stopped){
-
-   document.getElementById(
-     "status"
-   ).textContent =
-   "تم الإيقاف ⛔";
-
- }else{
-
-   document.getElementById(
-     "status"
-   ).textContent =
-   `انتهى الفحص ✓ — المرشحون: ${possibleUsers.length}`;
-
- }
-
-}
-
-
-// ==============================
-// إيقاف
-// ==============================
-
-function stop(){
-
- stopped = true;
-
- running = false;
-
- document.getElementById(
-   "status"
- ).textContent =
- "تم الإيقاف ⛔";
-
-}
-
-
-// ==============================
-// نسخ النتائج
-// ==============================
-
-async function copyResults(){
-
- if(
-   possibleUsers.length === 0
- ){
-
-   document.getElementById(
-     "status"
-   ).textContent =
-   "لا توجد نتائج غير موجودة لنسخها";
-
-   return;
-
- }
-
-
- const text =
- possibleUsers
- .map(
-   username => "@" + username
- )
- .join("\n");
-
-
- try{
-
-   await navigator.clipboard.writeText(
-     text
-   );
+  return await response.json();
 
  }catch{
 
-   const area =
-   document.createElement(
-     "textarea"
-   );
+  return {status:"error"};
 
-   area.value = text;
+ }
 
-   document.body.appendChild(
-     area
-   );
+}
 
-   area.select();
 
-   document.execCommand(
-     "copy"
-   );
+// عرض النتيجة
+function show(username,result){
 
-   area.remove();
+ const box=
+  document.getElementById("results");
+
+ const item=
+  document.createElement("div");
+
+ item.className="item";
+
+ const name=
+  document.createElement("span");
+
+ name.textContent="@"+username;
+
+ const state=
+  document.createElement("span");
+
+ const link=
+  document.createElement("a");
+
+ link.href=
+  "https://www.tiktok.com/@"+
+  encodeURIComponent(username);
+
+ link.target="_blank";
+
+ link.textContent="فتح";
+
+
+ if(result.status==="not_found"){
+
+  state.className="green";
+  state.textContent="مرشح 🟢";
+
+  candidates.push(username);
+
+ }else if(result.status==="found"){
+
+  state.className="red";
+  state.textContent="موجود 🔴";
+
+ }else{
+
+  state.className="yellow";
+  state.textContent="تعذر الفحص 🟡";
+
+  failed++;
+
+ }
+
+ item.appendChild(name);
+ item.appendChild(state);
+ item.appendChild(link);
+
+ box.prepend(item);
+
+ updateStats();
+
+}
+
+
+// تحديث الإحصائيات
+function updateStats(){
+
+ document.getElementById("checked")
+  .textContent=checked;
+
+ document.getElementById("candidate")
+  .textContent=candidates.length;
+
+ document.getElementById("found")
+  .textContent=found;
+
+ document.getElementById("failed")
+  .textContent=failed;
+
+}
+
+
+// بدء
+async function start(){
+
+ if(running)return;
+
+ running=true;
+ stopped=false;
+
+ checkedUsers.clear();
+ candidates=[];
+
+ checked=0;
+ found=0;
+ failed=0;
+
+ document.getElementById("results")
+  .innerHTML="";
+
+ updateStats();
+
+ const amount=
+  Math.min(
+   100,
+   Math.max(
+    1,
+    Number(
+     document.getElementById("amount").value
+    )||30
+   )
+  );
+
+ const delay=
+  Number(
+   document.getElementById("delay").value
+  );
+
+
+ for(let i=1;i<=amount;i++){
+
+  if(stopped)break;
+
+  let username;
+
+  do{
+
+   username=generate();
+
+  }while(
+   checkedUsers.has(username)
+  );
+
+  checkedUsers.add(username);
+
+  document.getElementById("status")
+   .textContent=
+   `🔎 ${i}/${amount} — فحص @${username}`;
+
+  const result=
+   await check(username);
+
+  checked++;
+
+  if(result.status==="found"){
+   found++;
+  }
+
+  show(username,result);
+
+  if(
+   result.status==="blocked"
+  ){
+
+   document.getElementById("status")
+    .textContent=
+    "⚠️ تم إيقاف الفحص لأن TikTok حدّ الطلبات";
+
+   break;
+  }
+
+  if(i<amount){
+   await wait(delay);
+  }
 
  }
 
 
- document.getElementById(
-   "status"
- ).textContent =
- "تم نسخ المرشحين ✓";
+ running=false;
+
+ if(stopped){
+
+  document.getElementById("status")
+   .textContent=
+   "⛔ تم الإيقاف";
+
+ }else{
+
+  document.getElementById("status")
+   .textContent=
+   `✓ انتهى — ${candidates.length} مرشح`;
+
+ }
+
+}
+
+
+// إيقاف
+function stop(){
+
+ stopped=true;
+
+ document.getElementById("status")
+  .textContent=
+  "⛔ جارٍ الإيقاف...";
+
+}
+
+
+// نسخ
+async function copyCandidates(){
+
+ if(!candidates.length){
+
+  document.getElementById("status")
+   .textContent=
+   "لا توجد مرشحات حتى الآن";
+
+  return;
+ }
+
+ const text=
+  candidates
+   .map(x=>"@"+x)
+   .join("\n");
+
+ try{
+
+  await navigator.clipboard
+   .writeText(text);
+
+ }catch{
+
+  const area=
+   document.createElement("textarea");
+
+  area.value=text;
+
+  document.body.appendChild(area);
+
+  area.select();
+
+  document.execCommand("copy");
+
+  area.remove();
+
+ }
+
+ document.getElementById("status")
+  .textContent=
+  "📋 تم نسخ المرشحين";
 
 }
 
