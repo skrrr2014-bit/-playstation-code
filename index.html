@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RwL</title>
+<title>RwL Plus</title>
 
 <style>
 * {
@@ -14,188 +14,476 @@
 body {
   margin: 0;
   min-height: 100vh;
+  overflow: hidden;
+
   display: flex;
   justify-content: center;
   align-items: center;
-  background:
-    radial-gradient(circle at top, #242424 0%, #0a0a0a 45%, #000 100%);
+
+  background: #020205;
+
   font-family: Arial, sans-serif;
   color: white;
 }
 
-/* الغلاف الفخم */
-.card {
-  width: 285px;
-  padding: 19px;
-  text-align: center;
-  border-radius: 20px;
+/* =========================
+   الخلفية المتحركة
+========================= */
 
-  background: linear-gradient(
-    145deg,
-    #222,
-    #101010 55%,
-    #080808
-  );
+body::before,
+body::after {
+  content: "";
+  position: fixed;
 
-  border: 1px solid #3a3a3a;
+  width: 500px;
+  height: 500px;
 
-  box-shadow:
-    0 20px 50px rgba(0,0,0,.7),
-    inset 0 1px 0 rgba(255,255,255,.08);
+  border-radius: 50%;
+
+  filter: blur(100px);
+
+  opacity: .25;
+
+  animation: moveGlow 8s infinite alternate ease-in-out;
 }
 
-/* RwL */
-.brand {
-  font-size: 34px;
-  font-weight: 900;
-  letter-spacing: 5px;
+body::before {
+  background: #3d5afe;
+  top: -220px;
+  left: -180px;
+}
 
-  background: linear-gradient(
-    180deg,
-    #ffffff,
-    #8f8f8f
-  );
+body::after {
+  background: #8e24aa;
+  bottom: -250px;
+  right: -200px;
+
+  animation-delay: 2s;
+}
+
+@keyframes moveGlow {
+
+  0% {
+    transform: translate(0,0) scale(1);
+  }
+
+  50% {
+    transform: translate(80px,40px) scale(1.2);
+  }
+
+  100% {
+    transform: translate(-30px,100px) scale(.9);
+  }
+}
+
+
+/* =========================
+   نجوم متحركة
+========================= */
+
+.stars {
+  position: fixed;
+  inset: 0;
+
+  background-image:
+    radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1px);
+
+  background-size: 55px 55px;
+
+  opacity: .15;
+
+  animation: starsMove 15s linear infinite;
+}
+
+@keyframes starsMove {
+
+  from {
+    transform: translateY(0);
+  }
+
+  to {
+    transform: translateY(55px);
+  }
+}
+
+
+/* =========================
+   الغلاف الرئيسي
+========================= */
+
+.card {
+  position: relative;
+  z-index: 2;
+
+  width: 310px;
+
+  padding: 25px;
+
+  text-align: center;
+
+  border-radius: 28px;
+
+  background:
+    linear-gradient(
+      145deg,
+      rgba(35,35,45,.95),
+      rgba(8,8,12,.96)
+    );
+
+  border: 1px solid rgba(255,255,255,.13);
+
+  box-shadow:
+    0 30px 90px rgba(0,0,0,.8),
+    inset 0 1px 0 rgba(255,255,255,.1);
+
+  backdrop-filter: blur(20px);
+
+  animation: cardFloat 5s ease-in-out infinite;
+}
+
+@keyframes cardFloat {
+
+  0%,100% {
+    transform: translateY(0);
+  }
+
+  50% {
+    transform: translateY(-7px);
+  }
+}
+
+
+/* =========================
+   RwL
+========================= */
+
+.brand {
+  font-size: 48px;
+
+  font-weight: 900;
+
+  letter-spacing: 8px;
+
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #8ab4ff,
+      #ffffff,
+      #c58cff,
+      #ffffff
+    );
+
+  background-size: 300%;
 
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 
-  text-shadow: 0 5px 20px rgba(255,255,255,.12);
+  animation: shine 4s linear infinite;
 
-  margin-bottom: 2px;
+  text-shadow:
+    0 0 35px rgba(110,150,255,.3);
 }
 
-/* Sony */
-.sony {
-  font-family: Georgia, serif;
-  font-size: 15px;
-  letter-spacing: 3px;
-  color: #d7d7d7;
-  margin-bottom: 2px;
+@keyframes shine {
+
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 300%;
+  }
 }
 
-/* PlayStation */
-.playstation-logo {
+
+/* =========================
+   PLUS
+========================= */
+
+.plus {
+  display: inline-flex;
+
+  align-items: center;
+
+  gap: 8px;
+
+  margin-top: 5px;
+  margin-bottom: 20px;
+
   font-size: 11px;
-  font-weight: bold;
+
   letter-spacing: 2px;
-  color: #8f8f8f;
-  margin-bottom: 15px;
+
+  color: #ddd;
 }
 
-/* الكود */
-#code {
+.plus-icon {
+  width: 25px;
+  height: 25px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  border-radius: 7px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #fff,
+      #aaa
+    );
+
+  color: #111;
+
+  font-size: 20px;
+
+  font-weight: 900;
+
+  animation: plusPulse 2s infinite;
+}
+
+@keyframes plusPulse {
+
+  0%,100% {
+    box-shadow: 0 0 5px rgba(255,255,255,.1);
+  }
+
+  50% {
+    box-shadow: 0 0 25px rgba(255,255,255,.35);
+  }
+}
+
+
+/* =========================
+   صندوق الكود
+========================= */
+
+.code-box {
+  position: relative;
+
+  padding: 16px 8px;
+
+  border-radius: 14px;
+
+  background: #030305;
+
+  border: 1px solid #30303a;
+
+  overflow: hidden;
+
+  margin-bottom: 10px;
+}
+
+.code-box::before {
+  content: "";
+
+  position: absolute;
+
+  top: 0;
+  left: -100%;
+
   width: 100%;
-  background: #050505;
+  height: 2px;
 
-  border: 1px solid #303030;
-  border-radius: 10px;
+  background:
+    linear-gradient(
+      90deg,
+      transparent,
+      #fff,
+      transparent
+    );
 
-  padding: 12px 5px;
-
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 1.7px;
-
-  direction: ltr;
-  white-space: nowrap;
-
-  box-shadow:
-    inset 0 0 15px rgba(255,255,255,.03);
-
-  margin-bottom: 8px;
+  animation: scan 3s infinite;
 }
 
-/* الأزرار */
+@keyframes scan {
+
+  0% {
+    left: -100%;
+  }
+
+  50%,100% {
+    left: 100%;
+  }
+}
+
+#code {
+  direction: ltr;
+
+  font-size: 17px;
+
+  font-weight: bold;
+
+  letter-spacing: 2px;
+
+  white-space: nowrap;
+}
+
+
+/* =========================
+   الأزرار
+========================= */
+
 button {
   width: 100%;
+
   border: 0;
-  border-radius: 9px;
 
-  padding: 9px;
-  margin-top: 6px;
+  border-radius: 11px;
 
-  font-size: 13px;
+  padding: 11px;
+
+  margin-top: 7px;
+
+  font-size: 14px;
+
   font-weight: bold;
 
   cursor: pointer;
-  transition: .2s;
+
+  transition: .25s;
+}
+
+button:hover {
+  transform: translateY(-2px);
 }
 
 button:active {
-  transform: scale(.97);
+  transform: scale(.96);
 }
+
+
+/* توليد */
 
 .generate {
-  background: linear-gradient(
-    180deg,
-    #ffffff,
-    #cfcfcf
-  );
+  background:
+    linear-gradient(
+      90deg,
+      #ffffff,
+      #d9e4ff,
+      #ffffff
+    );
 
-  color: #000;
+  color: #080808;
+
+  box-shadow:
+    0 8px 25px rgba(255,255,255,.12);
 }
+
+
+/* نسخ */
 
 .copy {
-  background: #303030;
-  color: white;
-}
-
-.open-ps {
-  background: linear-gradient(
-    180deg,
-    #1475c9,
-    #07549a
-  );
+  background: #292930;
 
   color: white;
+
+  border: 1px solid #3d3d46;
 }
+
+
+/* موقع PlayStation */
+
+.website {
+  background:
+    linear-gradient(
+      90deg,
+      #075cff,
+      #5126d8
+    );
+
+  color: white;
+
+  box-shadow:
+    0 8px 30px rgba(45,80,255,.25);
+}
+
+
+/* =========================
+   أسفل البطاقة
+========================= */
 
 .footer {
-  margin-top: 12px;
+  margin-top: 15px;
+
   font-size: 9px;
-  color: #666;
-  letter-spacing: 1px;
+
+  color: #777;
+
+  letter-spacing: 3px;
 }
 </style>
 </head>
 
+
 <body>
+
+<!-- خلفية متحركة -->
+<div class="stars"></div>
+
 
 <div class="card">
 
   <!-- RwL -->
-  <div class="brand">RwL</div>
-
-  <!-- Sony -->
-  <div class="sony">SONY</div>
-
-  <!-- PlayStation -->
-  <div class="playstation-logo">
-    PLAYSTATION
+  <div class="brand">
+    RwL
   </div>
+
+
+  <!-- Plus -->
+  <div class="plus">
+
+    <span class="plus-icon">+</span>
+
+    PLAYSTATION PLUS
+
+  </div>
+
 
   <!-- الكود -->
-  <div id="code">
-    اضغط توليد
+  <div class="code-box">
+
+    <div id="code">
+      اضغط توليد
+    </div>
+
   </div>
 
+
   <!-- توليد -->
-  <button class="generate" onclick="generateCode()">
+  <button
+    class="generate"
+    onclick="generateCode()">
+
     توليد كود
+
   </button>
+
 
   <!-- نسخ -->
-  <button class="copy" onclick="copyCode()">
+  <button
+    class="copy"
+    onclick="copyCode()">
+
     نسخ
+
   </button>
 
-  <!-- فتح PlayStation -->
-  <button class="open-ps" onclick="openPlayStation()">
-    فتح PlayStation
+
+  <!-- موقع PlayStation -->
+  <button
+    class="website"
+    onclick="openPlayStationWebsite()">
+
+    موقع PlayStation
+
   </button>
+
 
   <div class="footer">
-    RwL • 12 CHARACTERS
+    RwL • PLUS • 12 CHARACTERS
   </div>
 
 </div>
@@ -203,11 +491,10 @@ button:active {
 
 <script>
 
-/* ==========================
-   مولد الأكواد
-   12 خانة فقط
-   A-Z + 0-9
-========================== */
+/* =========================
+   توليد 12 خانة
+   A-Z + 0-9 فقط
+========================= */
 
 function generateCode() {
 
@@ -218,48 +505,56 @@ function generateCode() {
 
   for (let i = 0; i < 12; i++) {
 
-    const random =
+    code += characters.charAt(
       Math.floor(
         Math.random() * characters.length
-      );
-
-    code += characters[random];
+      )
+    );
   }
 
-  document.getElementById("code").textContent = code;
+  document.getElementById("code")
+    .textContent = code;
 }
 
 
-/* ==========================
+/* =========================
    نسخ
-========================== */
+========================= */
 
 function copyCode() {
 
   const code =
-    document.getElementById("code").textContent;
+    document.getElementById("code")
+      .textContent;
 
   if (code === "اضغط توليد") {
     return;
   }
 
-  navigator.clipboard.writeText(code)
+  navigator.clipboard
+    .writeText(code)
     .then(() => {
+
       alert("تم نسخ الكود ✅");
+
     })
     .catch(() => {
+
       alert("تعذر نسخ الكود");
+
     });
 }
 
 
-/* ==========================
-   فتح تطبيق PlayStation
-========================== */
+/* =========================
+   فتح موقع PlayStation
+========================= */
 
-function openPlayStation() {
+function openPlayStationWebsite() {
 
-  window.location.href = "playstation://";
+  window.location.href =
+    "https://www.playstation.com/";
+
 }
 
 </script>
