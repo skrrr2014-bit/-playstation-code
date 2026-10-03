@@ -1,704 +1,551 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="ar">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RwL Tools</title>
+<meta name="viewport"
+      content="width=device-width,initial-scale=1.0,user-scalable=no">
+
+<title>LaGranny</title>
 
 <style>
-*{
-    box-sizing:border-box;
+html,body{
     margin:0;
     padding:0;
-    font-family:Arial,sans-serif;
-}
-
-body{
-    min-height:100vh;
-    background:
-      radial-gradient(circle at top,#25254a 0,#11111f 45%,#080810 100%);
-    color:white;
-}
-
-.app{
     width:100%;
-    max-width:480px;
-    margin:auto;
-    padding:22px 16px 35px;
+    height:100%;
+    overflow:hidden;
+    background:#000;
+    font-family:Arial;
 }
 
-.logo{
-    text-align:center;
-    font-size:52px;
-    font-weight:900;
-    letter-spacing:5px;
-    margin:25px 0 6px;
-    background:linear-gradient(135deg,#fff,#8b8bff,#ff70d9);
-    -webkit-background-clip:text;
-    color:transparent;
+#game{
+    width:100vw;
+    height:100vh;
 }
 
-.subtitle{
-    text-align:center;
-    color:#aaa;
-    font-size:13px;
-    margin-bottom:28px;
-}
-
-.card{
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:22px;
-    padding:17px;
-    margin-bottom:13px;
-    cursor:pointer;
-    transition:.2s;
-    backdrop-filter:blur(12px);
-}
-
-.card:hover{
-    transform:translateY(-2px);
-    background:rgba(255,255,255,.11);
-}
-
-.card-title{
-    font-size:18px;
-    font-weight:bold;
-}
-
-.card-desc{
-    color:#999;
-    font-size:12px;
-    margin-top:5px;
-}
-
-.icon{
-    font-size:28px;
-    margin-left:10px;
-}
-
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
-
-.top{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    margin-bottom:20px;
-}
-
-.top h2{
-    font-size:21px;
-}
-
-.back{
-    border:0;
-    background:#ffffff12;
-    color:white;
-    padding:10px 14px;
-    border-radius:12px;
-    cursor:pointer;
-}
-
-.hunter{
-    background:rgba(255,255,255,.07);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:24px;
-    padding:25px 18px;
-    text-align:center;
-}
-
-.hunter-icon{
-    font-size:55px;
-    margin-bottom:12px;
-}
-
-.username{
-    direction:ltr;
-    font-size:30px;
-    font-weight:bold;
-    letter-spacing:2px;
-    margin:15px 0;
-    word-break:break-all;
-}
-
-.status{
-    display:inline-block;
-    padding:8px 14px;
-    border-radius:20px;
-    background:#f0ad001c;
-    color:#ffd76a;
-    font-size:13px;
-}
-
-.buttons{
-    display:flex;
-    gap:10px;
-    margin-top:22px;
-}
-
-.btn{
-    flex:1;
-    border:0;
-    border-radius:14px;
-    padding:14px 10px;
-    color:white;
-    font-weight:bold;
-    cursor:pointer;
-    font-size:14px;
-}
-
-.refresh{
-    background:linear-gradient(135deg,#635bff,#8f45ff);
-}
-
-.copy{
-    background:#ffffff12;
-    border:1px solid #ffffff12;
-}
-
-.note{
-    margin-top:16px;
-    color:#888;
-    font-size:11px;
-    line-height:1.7;
-}
-
-.store-list{
-    display:flex;
-    flex-direction:column;
-    gap:10px;
-}
-
-.code{
-    direction:ltr;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:8px;
-    background:#ffffff09;
-    border:1px solid #ffffff0d;
-    padding:13px;
-    border-radius:14px;
-}
-
-.code span{
-    font-family:monospace;
-    letter-spacing:1px;
-    font-size:14px;
-}
-
-.small-copy{
-    border:0;
-    background:#ffffff12;
-    color:white;
-    padding:8px 10px;
-    border-radius:9px;
-    cursor:pointer;
-}
-
-.footer{
-    text-align:center;
-    color:#666;
-    font-size:11px;
-    margin-top:28px;
-}
-
-.hidden{
-    display:none;
-}
-
-.toast{
+#crosshair{
     position:fixed;
-    bottom:25px;
     left:50%;
-    transform:translateX(-50%) translateY(20px);
-    background:#fff;
-    color:#111;
-    padding:11px 18px;
-    border-radius:13px;
-    font-size:13px;
-    opacity:0;
+    top:50%;
+    transform:translate(-50%,-50%);
+    color:white;
+    font-size:22px;
+    z-index:5;
     pointer-events:none;
-    transition:.25s;
-    z-index:99;
 }
 
-.toast.show{
-    opacity:1;
-    transform:translateX(-50%) translateY(0);
+#title{
+    position:fixed;
+    top:15px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#ddd;
+    font-size:24px;
+    z-index:5;
+    text-shadow:0 0 10px #000;
+}
+
+#message{
+    position:fixed;
+    bottom:30px;
+    left:50%;
+    transform:translateX(-50%);
+    color:white;
+    font-size:18px;
+    z-index:5;
+    text-align:center;
+}
+
+#joystick{
+    position:fixed;
+    left:25px;
+    bottom:25px;
+    width:120px;
+    height:120px;
+    border:2px solid rgba(255,255,255,.25);
+    border-radius:50%;
+    z-index:10;
+}
+
+#stick{
+    position:absolute;
+    width:55px;
+    height:55px;
+    left:32px;
+    top:32px;
+    background:rgba(255,255,255,.25);
+    border-radius:50%;
+}
+
+#look{
+    position:fixed;
+    right:0;
+    top:0;
+    width:55%;
+    height:75%;
+    z-index:4;
+}
+
+#flash{
+    position:fixed;
+    right:25px;
+    bottom:30px;
+    width:65px;
+    height:65px;
+    border-radius:50%;
+    border:2px solid white;
+    background:rgba(255,255,255,.12);
+    color:white;
+    z-index:20;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div id="game"></div>
 
-<!-- الرئيسية -->
-<div id="home" class="page active">
+<div id="title">LAGRANNY</div>
+<div id="crosshair">+</div>
 
-    <div class="logo">RwL</div>
-    <div class="subtitle">Username Tools</div>
-
-    <div class="card" onclick="openPage('tiktok')">
-        <div>
-            <span class="icon">🎵</span>
-            <span class="card-title">TikTok</span>
-        </div>
-        <div class="card-desc">
-            صائد يوزرات TikTok
-        </div>
-    </div>
-
-    <div class="card" onclick="openPage('snapchat')">
-        <div>
-            <span class="icon">👻</span>
-            <span class="card-title">Snapchat</span>
-        </div>
-        <div class="card-desc">
-            صائد يوزرات Snapchat
-        </div>
-    </div>
-
-    <div class="card" onclick="openPage('store')">
-        <div>
-            <span class="icon">🎟️</span>
-            <span class="card-title">Store</span>
-        </div>
-        <div class="card-desc">
-            مولّد أكواد عشوائية
-        </div>
-    </div>
-
-    <div class="footer">
-        RwL • Local Tool
-    </div>
-
+<div id="message">
+    ابحث عن المفتاح... واخرج من البيت.
 </div>
 
-
-<!-- تيك توك -->
-<div id="tiktok" class="page">
-
-    <div class="top">
-        <button class="back" onclick="openPage('home')">رجوع</button>
-        <h2>🎵 TikTok</h2>
-    </div>
-
-    <div class="hunter">
-
-        <div class="hunter-icon">🎯</div>
-
-        <h3>صائد اليوزرات</h3>
-
-        <div id="tiktokUser" class="username">
-            @r7wx
-        </div>
-
-        <div class="status">
-            🟡 غير متحقق
-        </div>
-
-        <div class="buttons">
-
-            <button
-                class="btn refresh"
-                onclick="newUsername('tiktok')">
-                🔄 تجديد
-            </button>
-
-            <button
-                class="btn copy"
-                onclick="copyUsername('tiktok')">
-                📋 نسخ
-            </button>
-
-        </div>
-
-        <div class="note">
-            يتم توليد اليوزر محليًا. لا يعني ظهور اليوزر أنه متاح فعليًا
-            على TikTok بدون مصدر تحقق رسمي.
-        </div>
-
-    </div>
-
+<div id="joystick">
+    <div id="stick"></div>
 </div>
 
+<div id="look"></div>
 
-<!-- سناب -->
-<div id="snapchat" class="page">
+<button id="flash">🔦</button>
 
-    <div class="top">
-        <button class="back" onclick="openPage('home')">رجوع</button>
-        <h2>👻 Snapchat</h2>
-    </div>
+<script type="module">
 
-    <div class="hunter">
+import * as THREE
+from "https://cdn.jsdelivr.net/npm/three@0.180.0/build/three.module.js";
 
-        <div class="hunter-icon">🎯</div>
+const scene = new THREE.Scene();
 
-        <h3>صائد اليوزرات</h3>
+scene.background = new THREE.Color(0x020202);
 
-        <div id="snapUser" class="username">
-            @k8mz
-        </div>
+scene.fog = new THREE.Fog(
+    0x020202,
+    2,
+    18
+);
 
-        <div class="status">
-            🟡 غير متحقق
-        </div>
+const camera = new THREE.PerspectiveCamera(
+    75,
+    innerWidth / innerHeight,
+    0.1,
+    100
+);
 
-        <div class="buttons">
+camera.position.set(0,1.7,5);
 
-            <button
-                class="btn refresh"
-                onclick="newUsername('snap')">
-                🔄 تجديد
-            </button>
+const renderer = new THREE.WebGLRenderer({
+    antialias:true
+});
 
-            <button
-                class="btn copy"
-                onclick="copyUsername('snap')">
-                📋 نسخ
-            </button>
+renderer.setSize(
+    innerWidth,
+    innerHeight
+);
 
-        </div>
+renderer.shadowMap.enabled = true;
 
-        <div class="note">
-            يتم توليد اليوزر محليًا. لا يعني ظهور اليوزر أنه متاح فعليًا
-            على Snapchat بدون مصدر تحقق رسمي.
-        </div>
-
-    </div>
-
-</div>
+document
+    .getElementById("game")
+    .appendChild(renderer.domElement);
 
 
-<!-- ستور -->
-<div id="store" class="page">
+/* الإضاءة */
 
-    <div class="top">
-        <button class="back" onclick="openPage('home')">رجوع</button>
-        <h2>🎟️ Store</h2>
-    </div>
+const ambient = new THREE.HemisphereLight(
+    0x444444,
+    0x080808,
+    0.35
+);
 
-    <div class="hunter">
-
-        <div class="hunter-icon">🎟️</div>
-
-        <h3>مولّد الأكواد</h3>
-
-        <div id="codes" class="store-list"></div>
-
-        <div class="buttons">
-
-            <button
-                class="btn refresh"
-                onclick="generateCodes()">
-                🔄 تجديد
-            </button>
-
-            <button
-                class="btn copy"
-                onclick="copyAllCodes()">
-                📋 نسخ الكل
-            </button>
-
-        </div>
-
-        <div class="note">
-            هذه أكواد عشوائية للتجربة فقط وليست أكواد Store حقيقية
-            أو مضمونة.
-        </div>
-
-    </div>
-
-</div>
-
-</div>
-
-<div id="toast" class="toast">تم النسخ ✓</div>
+scene.add(ambient);
 
 
-<script>
+/* مصباح اللاعب */
 
-/* =========================
-   التنقل بين الصفحات
-========================= */
+const flashlight = new THREE.SpotLight(
+    0xffffff,
+    5,
+    20,
+    Math.PI/7,
+    0.5,
+    1
+);
 
-function openPage(page){
+flashlight.position.set(0,1.7,5);
 
-    document.querySelectorAll(".page")
-        .forEach(p => p.classList.remove("active"));
+flashlight.castShadow = true;
 
-    document.getElementById(page)
-        .classList.add("active");
+scene.add(flashlight);
 
-    window.scrollTo({
-        top:0,
-        behavior:"smooth"
-    });
+scene.add(flashlight.target);
 
-    if(page === "store"){
-        generateCodes();
+
+/* الأرض */
+
+const floor = new THREE.Mesh(
+    new THREE.PlaneGeometry(40,40),
+    new THREE.MeshStandardMaterial({
+        color:0x252525,
+        roughness:1
+    })
+);
+
+floor.rotation.x = -Math.PI/2;
+
+floor.receiveShadow = true;
+
+scene.add(floor);
+
+
+/* الجدران */
+
+function wall(x,y,z,sx,sy,sz){
+
+    const mesh = new THREE.Mesh(
+        new THREE.BoxGeometry(sx,sy,sz),
+        new THREE.MeshStandardMaterial({
+            color:0x292525,
+            roughness:1
+        })
+    );
+
+    mesh.position.set(x,y,z);
+
+    mesh.castShadow = true;
+    mesh.receiveShadow = true;
+
+    scene.add(mesh);
+
+    return mesh;
+}
+
+wall(0,2,-10,20,4,0.4);
+wall(-10,2,0,0.4,4,20);
+wall(10,2,0,0.4,4,20);
+
+
+/* غرفة داخلية */
+
+wall(-4,2,-3,0.4,4,8);
+wall(4,2,-3,0.4,4,8);
+
+wall(0,2,-7,8,4,0.4);
+
+
+/* باب */
+
+const door = new THREE.Mesh(
+    new THREE.BoxGeometry(2.5,3,0.25),
+    new THREE.MeshStandardMaterial({
+        color:0x321c15
+    })
+);
+
+door.position.set(
+    0,
+    1.5,
+    -9.7
+);
+
+scene.add(door);
+
+
+/* المفتاح */
+
+const key = new THREE.Mesh(
+    new THREE.BoxGeometry(.2,.05,.7),
+    new THREE.MeshStandardMaterial({
+        color:0xffcc33,
+        metalness:.8
+    })
+);
+
+key.position.set(
+    -3,
+    1.2,
+    -5
+);
+
+scene.add(key);
+
+
+/* الوحش */
+
+const enemy = new THREE.Group();
+
+const body = new THREE.Mesh(
+    new THREE.CylinderGeometry(
+        .55,
+        .7,
+        1.7,
+        16
+    ),
+    new THREE.MeshStandardMaterial({
+        color:0x301515
+    })
+);
+
+body.position.y = 1;
+
+enemy.add(body);
+
+
+const head = new THREE.Mesh(
+    new THREE.SphereGeometry(
+        .5,
+        20,
+        20
+    ),
+    new THREE.MeshStandardMaterial({
+        color:0xbca99a
+    })
+);
+
+head.position.y = 2.2;
+
+enemy.add(head);
+
+
+enemy.position.set(
+    0,
+    0,
+    -7
+);
+
+scene.add(enemy);
+
+
+/* التحكم */
+
+let forward = false;
+let backward = false;
+let left = false;
+let right = false;
+
+const speed = 0.045;
+
+function move(){
+
+    if(forward)
+        camera.translateZ(-speed);
+
+    if(backward)
+        camera.translateZ(speed);
+
+    if(left)
+        camera.translateX(-speed);
+
+    if(right)
+        camera.translateX(speed);
+
+}
+
+
+/* عصا التحكم */
+
+const joystick =
+    document.getElementById("joystick");
+
+const stick =
+    document.getElementById("stick");
+
+let joyStart = null;
+
+joystick.addEventListener(
+    "touchstart",
+    e=>{
+        joyStart = e.touches[0];
+    }
+);
+
+joystick.addEventListener(
+    "touchmove",
+    e=>{
+
+        if(!joyStart)return;
+
+        const t=e.touches[0];
+
+        const dx=t.clientX-joyStart.clientX;
+        const dy=t.clientY-joyStart.clientY;
+
+        forward = dy < -15;
+        backward = dy > 15;
+        left = dx < -15;
+        right = dx > 15;
+
+        stick.style.transform =
+            `translate(${Math.max(-30,
+            Math.min(30,dx))}px,
+            ${Math.max(-30,
+            Math.min(30,dy))}px)`;
+    }
+);
+
+joystick.addEventListener(
+    "touchend",
+    ()=>{
+        forward=false;
+        backward=false;
+        left=false;
+        right=false;
+
+        stick.style.transform="translate(0,0)";
+    }
+);
+
+
+/* تحريك النظر */
+
+let looking=false;
+let lastX=0;
+
+const look =
+    document.getElementById("look");
+
+look.addEventListener(
+    "touchstart",
+    e=>{
+        looking=true;
+        lastX=e.touches[0].clientX;
+    }
+);
+
+look.addEventListener(
+    "touchmove",
+    e=>{
+
+        if(!looking)return;
+
+        const x=e.touches[0].clientX;
+
+        const dx=x-lastX;
+
+        camera.rotation.y -= dx*0.004;
+
+        lastX=x;
+    }
+);
+
+look.addEventListener(
+    "touchend",
+    ()=>{
+        looking=false;
+    }
+);
+
+
+/* المصباح */
+
+let lightOn=true;
+
+document
+    .getElementById("flash")
+    .onclick=()=>{
+
+        lightOn=!lightOn;
+
+        flashlight.visible=lightOn;
+    };
+
+
+/* الذكاء الاصطناعي البسيط */
+
+function enemyAI(){
+
+    const dx =
+        camera.position.x -
+        enemy.position.x;
+
+    const dz =
+        camera.position.z -
+        enemy.position.z;
+
+    const distance =
+        Math.sqrt(dx*dx+dz*dz);
+
+    if(distance < 9){
+
+        enemy.position.x +=
+            dx/distance*0.012;
+
+        enemy.position.z +=
+            dz/distance*0.012;
     }
 
-    if(page === "tiktok"){
-        newUsername("tiktok");
-    }
+    if(distance < 1.2){
 
-    if(page === "snapchat"){
-        newUsername("snap");
+        document.getElementById(
+            "message"
+        ).textContent =
+        "هربت؟ لا... LAGRANNY وجدتك ☠️";
+
+        flashlight.intensity=0;
     }
 }
 
 
-/* =========================
-   مولد اليوزرات
-========================= */
+/* اللعبة */
 
-const letters = "abcdefghijklmnopqrstuvwxyz";
-const numbers = "0123456789";
+function animate(){
 
-function randomChar(){
+    requestAnimationFrame(animate);
 
-    const chars = letters + numbers;
+    move();
 
-    return chars[
-        Math.floor(Math.random() * chars.length)
-    ];
+    flashlight.position.copy(
+        camera.position
+    );
+
+    flashlight.target.position.set(
+        camera.position.x -
+        Math.sin(camera.rotation.y),
+
+        camera.position.y,
+
+        camera.position.z -
+        Math.cos(camera.rotation.y)
+    );
+
+    enemyAI();
+
+    renderer.render(
+        scene,
+        camera
+    );
 }
 
+animate();
 
-function generateUsername(){
 
-    /*
-      أغلب النتائج 4 أحرف.
-      أحيانًا يطلع 5 أو 6 حتى ما تكون النتائج نمطية.
-    */
+/* تغيير حجم الشاشة */
 
-    const chance = Math.random();
+addEventListener(
+    "resize",
+    ()=>{
 
-    let length;
+        camera.aspect =
+            innerWidth/innerHeight;
 
-    if(chance < 0.78){
-        length = 4;
+        camera.updateProjectionMatrix();
+
+        renderer.setSize(
+            innerWidth,
+            innerHeight
+        );
     }
-    else if(chance < 0.94){
-        length = 5;
-    }
-    else{
-        length = 6;
-    }
-
-    let username = "";
-
-    /*
-      أول حرف يكون حرفًا
-      وليس رقمًا.
-    */
-
-    username += letters[
-        Math.floor(Math.random() * letters.length)
-    ];
-
-    for(let i = 1; i < length; i++){
-
-        username += randomChar();
-
-    }
-
-    return username;
-}
-
-
-/* =========================
-   صائد TikTok / Snapchat
-========================= */
-
-function newUsername(type){
-
-    const username = generateUsername();
-
-    if(type === "tiktok"){
-
-        document.getElementById("tiktokUser")
-            .textContent = "@" + username;
-
-    }
-
-    if(type === "snap"){
-
-        document.getElementById("snapUser")
-            .textContent = "@" + username;
-
-    }
-}
-
-
-/* =========================
-   نسخ اليوزر
-========================= */
-
-async function copyUsername(type){
-
-    let username;
-
-    if(type === "tiktok"){
-
-        username =
-            document.getElementById("tiktokUser")
-            .textContent;
-
-    }
-    else{
-
-        username =
-            document.getElementById("snapUser")
-            .textContent;
-
-    }
-
-    await copyText(username);
-
-    showToast("تم نسخ اليوزر ✓");
-}
-
-
-/* =========================
-   نسخ عام
-========================= */
-
-async function copyText(text){
-
-    try{
-
-        await navigator.clipboard.writeText(text);
-
-    }catch(e){
-
-        const area =
-            document.createElement("textarea");
-
-        area.value = text;
-
-        area.style.position = "fixed";
-        area.style.opacity = "0";
-
-        document.body.appendChild(area);
-
-        area.focus();
-        area.select();
-
-        document.execCommand("copy");
-
-        area.remove();
-
-    }
-}
-
-
-/* =========================
-   Store
-========================= */
-
-function generateStoreCode(){
-
-    const chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    let code = "";
-
-    for(let i = 0; i < 12; i++){
-
-        code += chars[
-            Math.floor(Math.random() * chars.length)
-        ];
-
-    }
-
-    return code;
-}
-
-
-function generateCodes(){
-
-    const container =
-        document.getElementById("codes");
-
-    container.innerHTML = "";
-
-    for(let i = 0; i < 10; i++){
-
-        const code =
-            generateStoreCode();
-
-        const row =
-            document.createElement("div");
-
-        row.className = "code";
-
-        row.innerHTML = `
-            <span>${code}</span>
-
-            <button
-                class="small-copy"
-                onclick="copyText('${code}');showToast('تم النسخ ✓')">
-                📋
-            </button>
-        `;
-
-        container.appendChild(row);
-    }
-}
-
-
-async function copyAllCodes(){
-
-    const codes =
-        [...document.querySelectorAll(".code span")]
-        .map(x => x.textContent)
-        .join("\n");
-
-    await copyText(codes);
-
-    showToast("تم نسخ الأكواد ✓");
-}
-
-
-/* =========================
-   Toast
-========================= */
-
-function showToast(message){
-
-    const toast =
-        document.getElementById("toast");
-
-    toast.textContent = message;
-
-    toast.classList.add("show");
-
-    setTimeout(() => {
-
-        toast.classList.remove("show");
-
-    },1500);
-}
-
-
-/* =========================
-   تشغيل أولي
-========================= */
-
-newUsername("tiktok");
-newUsername("snap");
-generateCodes();
+);
 
 </script>
 
