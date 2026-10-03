@@ -1,1117 +1,150 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>ULTIMATE Username Hunter</title>
-
-<style>
-
-*{
-box-sizing:border-box;
-}
-
-body{
-margin:0;
-background:#050609;
-color:#fff;
-font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-}
-
-.container{
-width:100%;
-max-width:750px;
-margin:auto;
-padding:18px;
-}
-
-.header{
-text-align:center;
-padding:15px 0 20px;
-}
-
-.header h1{
-font-size:30px;
-margin:0;
-}
-
-.header p{
-color:#858b99;
-margin:8px 0 0;
-}
-
-.card{
-background:#101218;
-border:1px solid #272b35;
-border-radius:20px;
-padding:16px;
-margin-bottom:14px;
-}
-
-label{
-display:block;
-color:#aaa;
-font-size:14px;
-margin:12px 0 7px;
-}
-
-select{
-width:100%;
-padding:14px;
-border-radius:12px;
-border:1px solid #303541;
-background:#080a0f;
-color:#fff;
-font-size:16px;
-}
-
-button{
-border:0;
-border-radius:12px;
-padding:13px 15px;
-font-weight:800;
-font-size:15px;
-cursor:pointer;
-}
-
-.generate{
-width:100%;
-background:#fff;
-color:#000;
-margin-top:14px;
-}
-
-.clear{
-width:100%;
-background:#242833;
-color:#fff;
-margin-top:8px;
-}
-
-.stats{
-display:grid;
-grid-template-columns:repeat(3,1fr);
-gap:8px;
-}
-
-.stat{
-background:#080a0f;
-border-radius:13px;
-padding:12px 5px;
-text-align:center;
-}
-
-.stat strong{
-display:block;
-font-size:20px;
-}
-
-.stat span{
-font-size:11px;
-color:#818796;
-}
-
-.progress{
-height:7px;
-background:#080a0f;
-border-radius:20px;
-overflow:hidden;
-margin-top:13px;
-display:none;
-}
-
-.progressBar{
-height:100%;
-width:0%;
-background:#fff;
-transition:.15s;
-}
-
-.result{
-display:flex;
-justify-content:space-between;
-align-items:center;
-gap:10px;
-padding:13px;
-margin:8px 0;
-background:#090b10;
-border:1px solid #292e39;
-border-radius:14px;
-}
-
-.result.best{
-border-color:#74602b;
-}
-
-.result.good{
-border-color:#31583f;
-}
-
-.username{
-direction:ltr;
-text-align:left;
-font-size:18px;
-font-weight:800;
-}
+import requests
+import time
+import re
+from pathlib import Path
 
-.meta{
-color:#888f9d;
-font-size:12px;
-margin-top:4px;
-}
+# ==============================
+# TikTok Username Auto Checker
+# ==============================
 
-.actions{
-display:flex;
-gap:6px;
-}
+INPUT_FILE = "usernames.txt"
+OUTPUT_FILE = "results.txt"
 
-.actions button{
-padding:9px 11px;
-font-size:12px;
-}
+DELAY = 2  # ثانيتان بين كل فحص
 
-.copy{
-background:#fff;
-color:#000;
-}
 
-.open{
-background:#252a35;
-color:#fff;
-}
+def clean_username(username):
+    username = username.strip()
 
-.empty{
-text-align:center;
-color:#777;
-padding:30px 10px;
-}
+    username = re.sub(
+        r"^https?://(www\.)?tiktok\.com/@?",
+        "",
+        username,
+        flags=re.I
+    )
 
-.note{
-font-size:13px;
-line-height:1.7;
-color:#858b98;
-}
+    username = username.lstrip("@")
+    username = username.split("?")[0]
+    username = username.split("/")[0]
 
-@media(max-width:450px){
+    return username.strip()
 
-.container{
-padding:12px;
-}
 
-.header h1{
-font-size:26px;
-}
+def valid_username(username):
+    return bool(
+        re.fullmatch(r"[A-Za-z0-9._]{2,24}", username)
+    )
 
-.result{
-align-items:flex-start;
-}
 
-.actions{
-flex-direction:column;
-}
+def check_username(username):
+    url = f"https://www.tiktok.com/@{username}"
 
-}
+    headers = {
+        "User-Agent": (
+            "Mozilla/5.0 (Windows NT 10.0; Win64; x64) "
+            "AppleWebKit/537.36 "
+            "(KHTML, like Gecko) "
+            "Chrome/140.0 Safari/537.36"
+        )
+    }
 
-</style>
-</head>
+    try:
+        response = requests.get(
+            url,
+            headers=headers,
+            timeout=15,
+            allow_redirects=True
+        )
 
-<body>
+        # هذه مجرد إشارة لحالة الصفحة
+        if response.status_code == 404:
+            return "NOT FOUND"
 
-<div class="container">
+        if response.status_code == 200:
+            return "FOUND"
 
-<div class="header">
+        if response.status_code in (403, 429):
+            return "RATE LIMITED"
 
-<h1>🔥 ULTIMATE USERNAME HUNTER</h1>
+        return f"UNKNOWN ({response.status_code})"
 
-<p>
-مولّد سريع لليوزرات القصيرة والمميزة
-</p>
+    except requests.exceptions.Timeout:
+        return "TIMEOUT"
 
-</div>
+    except requests.exceptions.RequestException:
+        return "ERROR"
 
 
-<div class="card">
+def main():
 
-<label>طول اليوزر</label>
+    input_path = Path(INPUT_FILE)
 
-<select id="length">
+    if not input_path.exists():
+        print(f"لم يتم العثور على ملف {INPUT_FILE}")
+        print("أنشئ ملفًا بهذا الاسم وضع كل يوزر في سطر.")
+        return
 
-<option value="3">3 أحرف</option>
+    raw = input_path.read_text(
+        encoding="utf-8",
+        errors="ignore"
+    )
 
-<option value="4" selected>
-4 أحرف
-</option>
+    usernames = []
 
-<option value="5">
-5 أحرف
-</option>
+    for line in raw.splitlines():
 
-<option value="6">
-6 أحرف
-</option>
+        username = clean_username(line)
 
-</select>
+        if username and username not in usernames:
+            usernames.append(username)
 
-
-<label>النمط</label>
-
-<select id="mode">
-
-<option value="smart">
-🔥 Smart — الأفضل
-</option>
-
-<option value="letters">
-حروف فقط
-</option>
-
-<option value="numbers">
-حروف + رقم
-</option>
-
-<option value="patterns">
-تركيبات مميزة
-</option>
-
-</select>
-
-
-<label>عدد النتائج</label>
-
-<select id="amount">
-
-<option value="50">
-50
-</option>
-
-<option value="100" selected>
-100
-</option>
-
-<option value="250">
-250
-</option>
-
-<option value="500">
-500
-</option>
-
-</select>
-
-
-<button
-class="generate"
-onclick="startHunter()">
-
-🚀 ابدأ الآن
-
-</button>
-
-
-<button
-class="clear"
-onclick="clearResults()">
-
-مسح النتائج
-
-</button>
-
-
-<div
-class="progress"
-id="progress">
-
-<div
-class="progressBar"
-id="progressBar">
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div class="stats">
-
-<div class="stat">
-
-<strong id="generated">
-0
-</strong>
-
-<span>
-تم التوليد
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<strong id="unique">
-0
-</strong>
-
-<span>
-بدون تكرار
-</span>
-
-</div>
-
-
-<div class="stat">
-
-<strong id="excellent">
-0
-</strong>
-
-<span>
-80+
-</span>
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card">
-
-<div id="results">
-
-<div class="empty">
-
-اضغط «ابدأ الآن» 🔥
-
-</div>
-
-</div>
-
-</div>
-
-
-<div class="card note">
-
-<b>تنبيه:</b>
-
-التقييم هنا هو تقييم لجودة شكل اليوزر
-وليس إثباتًا أن اليوزر متاح للحجز.
-
-لا يوجد داخل هذا السكربت ادعاء كاذب
-بأن اليوزر متاح.
-
-</div>
-
-</div>
-
-
-<script>
-
-
-const LETTERS =
-"abcdefghijklmnopqrstuvwxyz";
-
-const NUMBERS =
-"0123456789";
-
-
-function randomChar(chars){
-
-return chars[
-Math.floor(
-Math.random()*chars.length
-)
-];
-
-}
-
-
-function randomLetter(){
-
-return randomChar(LETTERS);
-
-}
-
-
-function lettersOnly(length){
-
-let result="";
-
-for(
-let i=0;
-i<length;
-i++
-){
-
-result+=randomLetter();
-
-}
-
-return result;
-
-}
-
-
-function lettersNumbers(length){
-
-let result="";
-
-for(
-let i=0;
-i<length;
-i++
-){
-
-if(
-Math.random()<0.8
-){
-
-result+=randomLetter();
-
-}else{
-
-result+=randomChar(NUMBERS);
-
-}
-
-}
-
-return result;
-
-}
-
-
-function specialPattern(length){
-
-const a=randomLetter();
-
-const b=randomLetter();
-
-const c=randomLetter();
-
-
-const patterns=[
-
-(a+b)
-.repeat(
-Math.ceil(length/2)
-)
-.slice(0,length),
-
-
-(a+a+b+b)
-.repeat(
-Math.ceil(length/4)
-)
-.slice(0,length),
-
-
-(a+b+a+c)
-.repeat(
-Math.ceil(length/4)
-)
-.slice(0,length),
-
-
-(a+b+c+a)
-.repeat(
-Math.ceil(length/4)
-)
-.slice(0,length),
-
-
-a+b+a+b+a+b
-
-];
-
-
-return patterns[
-Math.floor(
-Math.random()*patterns.length
-)
-].slice(0,length);
-
-}
-
-
-function smartUsername(length){
-
-const chance=Math.random();
-
-
-if(chance<0.50){
-
-return specialPattern(length);
-
-}
-
-
-if(chance<0.82){
-
-return lettersOnly(length);
-
-}
-
-
-return lettersNumbers(length);
-
-}
-
-
-function makeUsername(length,mode){
-
-if(mode==="letters"){
-
-return lettersOnly(length);
-
-}
-
-
-if(mode==="numbers"){
-
-return lettersNumbers(length);
-
-}
-
-
-if(mode==="patterns"){
-
-return specialPattern(length);
-
-}
-
-
-return smartUsername(length);
-
-}
-
-
-function calculateScore(username){
-
-let score=40;
-
-
-/* القصر */
-
-if(username.length===3){
-
-score+=35;
-
-}
-
-else if(username.length===4){
-
-score+=25;
-
-}
-
-else if(username.length===5){
-
-score+=15;
-
-}
-
-else if(username.length===6){
-
-score+=8;
-
-}
-
-
-/* التكرار */
-
-const unique=
-new Set(username).size;
-
-
-if(
-unique<username.length
-){
-
-score+=15;
-
-}
-
-
-/* ABAB */
-
-if(
-username.length>=4 &&
-username[0]===username[2] &&
-username[1]===username[3]
-){
-
-score+=18;
-
-}
-
-
-/* ABCABC */
-
-if(
-username.length>=6 &&
-username[0]===username[3] &&
-username[1]===username[4] &&
-username[2]===username[5]
-){
-
-score+=15;
-
-}
-
-
-/* رقم واحد فقط */
-
-const digits=
-[...username]
-.filter(
-x=>NUMBERS.includes(x)
-).length;
-
-
-if(digits===0){
-
-score+=10;
-
-}
-
-else if(digits===1){
-
-score+=7;
-
-}
-
-
-/* حروف شكلها مميز */
-
-if(
-/^[qvxzjk]/i.test(username)
-){
-
-score+=5;
-
-}
-
-
-/* لا يبدأ برقم */
-
-if(
-!NUMBERS.includes(
-username[0]
-)
-){
-
-score+=3;
-
-}
-
-
-return Math.min(
-100,
-score
-);
-
-}
-
-
-function getQuality(score){
-
-if(score>=95){
-
-return "🔥 نادر جدًا";
-
-}
-
-if(score>=90){
-
-return "💎 استثنائي";
-
-}
-
-if(score>=80){
-
-return "⭐ ممتاز";
-
-}
-
-if(score>=70){
-
-return "👍 عالي";
-
-}
-
-if(score>=60){
-
-return "جيد";
-
-}
-
-return "عادي";
-
-}
-
-
-function startHunter(){
-
-const length=
-Number(
-document.getElementById(
-"length"
-).value
-);
-
-
-const mode=
-document.getElementById(
-"mode"
-).value
-;
-
-
-const amount=
-Number(
-document.getElementById(
-"amount"
-).value
-);
-
-
-const unique=
-new Set();
-
-
-const progress=
-document.getElementById(
-"progress"
-);
-
-const bar=
-document.getElementById(
-"progressBar"
-);
-
-
-progress.style.display="block";
-
-
-let attempts=0;
-
-
-/*
-
-نولد كمية أكبر من المطلوب
-ثم نختار الأفضل.
-
-*/
-
-const target=
-amount*12;
-
-
-while(
-unique.size<target &&
-attempts<target*5
-){
-
-unique.add(
-makeUsername(
-length,
-mode
-)
-);
-
-attempts++;
-
-}
-
-
-let results=
-[...unique]
-.map(
-username=>({
-
-username,
-
-score:
-calculateScore(username)
-
-})
-);
-
-
-results.sort(
-(a,b)=>
-b.score-a.score
-);
-
-
-results=
-results.slice(
-0,
-amount
-);
-
-
-bar.style.width="100%";
-
-
-document.getElementById(
-"generated"
-).textContent=
-attempts;
-
-
-document.getElementById(
-"unique"
-).textContent=
-results.length;
-
-
-document.getElementById(
-"excellent"
-).textContent=
-results.filter(
-x=>x.score>=80
-).length;
-
-
-const container=
-document.getElementById(
-"results"
-);
-
-
-container.innerHTML="";
-
-
-results.forEach(
-(item,index)=>{
-
-
-const box=
-document.createElement(
-"div"
-);
-
-
-box.className="result";
-
-
-if(
-item.score>=95
-){
-
-box.classList.add(
-"best"
-);
-
-}
-
-else if(
-item.score>=80
-){
-
-box.classList.add(
-"good"
-);
-
-}
-
-
-const info=
-document.createElement(
-"div"
-);
-
-
-const name=
-document.createElement(
-"div"
-);
-
-
-name.className=
-"username";
-
-
-name.textContent=
-"@"+item.username;
-
-
-const meta=
-document.createElement(
-"div"
-);
-
-
-meta.className=
-"meta";
-
-
-meta.textContent=
-"#"+(index+1)+
-" • "+
-getQuality(item.score)+
-" • "+
-item.score+
-"/100";
-
-
-info.appendChild(name);
-
-info.appendChild(meta);
-
-
-const actions=
-document.createElement(
-"div"
-);
-
-
-actions.className=
-"actions";
-
-
-const copy=
-document.createElement(
-"button"
-);
-
-
-copy.className="copy";
-
-copy.textContent="نسخ";
-
-
-copy.onclick=
-async function(){
-
-try{
-
-await navigator
-.clipboard
-.writeText(
-item.username
-);
-
-copy.textContent="✓ تم";
-
-setTimeout(
-()=>{
-copy.textContent="نسخ";
-},
-1000
-);
-
-}catch(e){
-
-alert(
-"انسخ اليوزر يدويًا: "+
-item.username
-);
-
-}
-
-};
-
-
-const open=
-document.createElement(
-"button"
-);
-
-
-open.className="open";
-
-open.textContent="فتح";
-
-
-open.onclick=
-function(){
-
-window.open(
-
-"https://www.tiktok.com/@" +
-encodeURIComponent(
-item.username
-),
-
-"_blank"
-
-);
-
-};
-
-
-actions.appendChild(
-copy
-);
-
-actions.appendChild(
-open
-);
-
-
-box.appendChild(
-info
-);
-
-box.appendChild(
-actions
-);
-
-
-container.appendChild(
-box
-);
-
-});
-
-
-setTimeout(
-()=>{
-bar.style.width="0%";
-progress.style.display="none";
-},
-400
-);
-
-}
-
-
-function clearResults(){
-
-document.getElementById(
-"results"
-).innerHTML=
-
-'<div class="empty">'+
-"تم مسح النتائج 🗑️"+
-"</div>";
-
-
-document.getElementById(
-"generated"
-).textContent="0";
-
-
-document.getElementById(
-"unique"
-).textContent="0";
-
-
-document.getElementById(
-"excellent"
-).textContent="0";
-
-}
-
-
-</script>
-
-</body>
-</html>
+    if not usernames:
+        print("القائمة فارغة.")
+        return
+
+    print("=" * 50)
+    print("TikTok Username Auto Checker")
+    print("=" * 50)
+    print(f"عدد اليوزرات: {len(usernames)}")
+    print()
+
+    results = []
+
+    for number, username in enumerate(usernames, 1):
+
+        print(
+            f"[{number}/{len(usernames)}] "
+            f"@{username}",
+            end=" -> ",
+            flush=True
+        )
+
+        if not valid_username(username):
+            status = "INVALID"
+        else:
+            status = check_username(username)
+
+        print(status)
+
+        results.append(
+            f"@{username} | {status}"
+        )
+
+        # تأخير بين الطلبات
+        if number < len(usernames):
+            time.sleep(DELAY)
+
+    Path(OUTPUT_FILE).write_text(
+        "\n".join(results),
+        encoding="utf-8"
+    )
+
+    print()
+    print("=" * 50)
+    print(f"انتهى الفحص.")
+    print(f"النتائج محفوظة في: {OUTPUT_FILE}")
+    print("=" * 50)
+
+
+if __name__ == "__main__":
+    main()
