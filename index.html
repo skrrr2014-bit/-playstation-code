@@ -4,9 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>مولد يوزرات</title>
+<title>مولد يوزرات Snapchat</title>
 
 <style>
+* {
+    box-sizing: border-box;
+}
+
 body {
     margin: 0;
     background: #111;
@@ -15,66 +19,103 @@ body {
 }
 
 .container {
-    max-width: 600px;
+    max-width: 650px;
     margin: auto;
     padding: 20px;
 }
 
 h1 {
     text-align: center;
+    margin-bottom: 8px;
 }
 
-button, select {
-    width: 100%;
-    padding: 13px;
-    border: none;
-    border-radius: 10px;
-    font-size: 16px;
+.subtitle {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 20px;
+}
+
+.box {
+    background: #1d1d1d;
+    padding: 16px;
+    border-radius: 16px;
+}
+
+label {
+    display: block;
+    margin: 10px 0 6px;
+}
+
+select,
+button {
+    border: 0;
+    border-radius: 11px;
+    padding: 12px;
+    font-size: 15px;
 }
 
 select {
+    width: 100%;
     background: #292929;
     color: white;
-    margin-bottom: 10px;
+    margin-bottom: 8px;
 }
 
 .generate {
+    width: 100%;
     background: #fffc00;
     color: #111;
     font-weight: bold;
-    margin: 10px 0 20px;
-}
-
-.result {
-    background: #202020;
-    padding: 10px;
-    margin-bottom: 8px;
-    border-radius: 12px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-
-    direction: ltr;
-}
-
-.username {
-    font-weight: bold;
-    font-size: 17px;
-}
-
-.copy {
-    width: auto;
-    background: #333;
-    color: white;
-    padding: 8px 12px;
-    font-size: 13px;
+    margin-top: 10px;
 }
 
 #status {
     text-align: center;
     color: #aaa;
-    margin-bottom: 12px;
+    margin: 18px 0 10px;
+}
+
+.result {
+    background: #202020;
+    padding: 12px;
+    border-radius: 13px;
+    margin-bottom: 9px;
+
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    direction: ltr;
+}
+
+.username {
+    flex: 1;
+    font-weight: bold;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.action {
+    width: auto;
+    margin: 0;
+    padding: 8px 10px;
+    color: white;
+    background: #333;
+    font-size: 13px;
+}
+
+.snap {
+    background: #fffc00;
+    color: #111;
+}
+
+.note {
+    margin-top: 15px;
+    background: #1d1d1d;
+    padding: 14px;
+    border-radius: 13px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.7;
 }
 </style>
 </head>
@@ -83,48 +124,94 @@ select {
 
 <div class="container">
 
-<h1>⚡ مولد اليوزرات</h1>
+<h1>⚡ مولد يوزرات Snapchat</h1>
+
+<div class="subtitle">
+    توليد سريع + نسخ + فتح Snapchat للتحقق
+</div>
+
+<div class="box">
+
+<label>طول اليوزر</label>
 
 <select id="length">
     <option value="3">3 خانات</option>
     <option value="4" selected>4 خانات</option>
 </select>
 
+<label>عدد اليوزرات</label>
+
 <select id="amount">
-    <option value="10">10 يوزرات</option>
-    <option value="25">25 يوزر</option>
-    <option value="50">50 يوزر</option>
-    <option value="100">100 يوزر</option>
+    <option value="10">10</option>
+    <option value="25">25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
+</select>
+
+<label>نوع اليوزر</label>
+
+<select id="mode">
+    <option value="mixed">حروف + أرقام</option>
+    <option value="letters">حروف فقط</option>
+    <option value="numbers">أرقام فقط</option>
 </select>
 
 <button class="generate" onclick="generate()">
     🎲 توليد اليوزرات
 </button>
 
-<div id="status">جاهز</div>
+</div>
+
+<div id="status">
+    جاهز
+</div>
 
 <div id="results"></div>
 
+<div class="note">
+    🔎 للتحقق الحقيقي، اضغط «تحقق» بجانب اليوزر.
+    سيتم فتح Snapchat لتبحث عن الاسم بنفسك.
+    الأداة لا تعرض نتيجة متاحة/غير متاحة من عندها بشكل وهمي.
 </div>
+
+</div>
+
 
 <script>
 
-const chars =
-"abcdefghijklmnopqrstuvwxyz0123456789";
+const letters =
+    "abcdefghijklmnopqrstuvwxyz";
+
+const numbers =
+    "0123456789";
 
 
-function makeUsername(length) {
+function createUsername(length, mode) {
+
+    let chars;
+
+    if (mode === "letters") {
+        chars = letters;
+    }
+
+    else if (mode === "numbers") {
+        chars = numbers;
+    }
+
+    else {
+        chars = letters + numbers;
+    }
 
     let username = "";
 
     for (let i = 0; i < length; i++) {
 
-        const random =
+        const index =
             Math.floor(
                 Math.random() * chars.length
             );
 
-        username += chars[random];
+        username += chars[index];
     }
 
     return username;
@@ -143,6 +230,9 @@ function generate() {
             document.getElementById("amount").value
         );
 
+    const mode =
+        document.getElementById("mode").value;
+
     const results =
         document.getElementById("results");
 
@@ -153,9 +243,13 @@ function generate() {
     while (usernames.size < amount) {
 
         usernames.add(
-            makeUsername(length)
+            createUsername(
+                length,
+                mode
+            )
         );
     }
+
 
     usernames.forEach(username => {
 
@@ -165,22 +259,48 @@ function generate() {
         row.className = "result";
 
         row.innerHTML = `
+
             <span class="username">
                 @${username}
             </span>
 
             <button
-                class="copy"
+                class="action snap"
+                onclick="checkOnSnapchat('${username}')">
+                🔎 تحقق
+            </button>
+
+            <button
+                class="action"
                 onclick="copyUsername('${username}')">
                 📋 نسخ
             </button>
+
         `;
 
         results.appendChild(row);
+
     });
+
 
     document.getElementById("status").textContent =
         `✅ تم توليد ${amount} يوزر`;
+}
+
+
+function checkOnSnapchat(username) {
+
+    /*
+      فتح صفحة Snapchat الرسمية.
+      إذا لم يفتح الرابط مباشرة داخل التطبيق،
+      يمكن البحث عن اليوزر داخل Snapchat يدويًا.
+    */
+
+    const url =
+        "https://www.snapchat.com/add/" +
+        encodeURIComponent(username);
+
+    window.open(url, "_blank");
 }
 
 
@@ -188,11 +308,23 @@ async function copyUsername(username) {
 
     try {
 
-        await navigator.clipboard.writeText(username);
+        await navigator.clipboard.writeText(
+            username
+        );
 
-        alert("✅ تم نسخ @" + username);
+        const oldTitle =
+            document.title;
 
-    } catch {
+        document.title =
+            "✅ تم النسخ";
+
+        setTimeout(() => {
+            document.title = oldTitle;
+        }, 900);
+
+    }
+
+    catch {
 
         const textarea =
             document.createElement("textarea");
@@ -207,7 +339,7 @@ async function copyUsername(username) {
 
         textarea.remove();
 
-        alert("✅ تم النسخ");
+        alert("✅ تم نسخ @" + username);
     }
 }
 
