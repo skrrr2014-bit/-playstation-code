@@ -3,200 +3,116 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>فاحص يوزرات Snapchat</title>
+<title>Snap Username Checker</title>
 
 <style>
 * {
-  box-sizing: border-box;
-  font-family: Arial, sans-serif;
+    box-sizing: border-box;
 }
 
 body {
-  margin: 0;
-  min-height: 100vh;
-  background: #101010;
-  color: white;
-  padding: 18px;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #111;
+    color: white;
 }
 
 .container {
-  max-width: 650px;
-  margin: auto;
-}
-
-.card {
-  background: #1c1c1c;
-  border-radius: 22px;
-  padding: 22px;
-  box-shadow: 0 12px 35px rgba(0,0,0,.4);
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
 }
 
 h1 {
-  text-align: center;
-  margin: 0 0 8px;
+    text-align: center;
+    margin-bottom: 20px;
 }
 
-.sub {
-  text-align: center;
-  color: #999;
-  font-size: 14px;
-  margin-bottom: 20px;
+.box {
+    background: #1c1c1c;
+    padding: 15px;
+    border-radius: 15px;
+    margin-bottom: 15px;
 }
 
-.row {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 12px;
-}
-
-.length {
-  flex: 1;
-  border: 0;
-  border-radius: 12px;
-  padding: 14px;
-  background: #333;
-  color: white;
-  font-size: 16px;
-}
-
-.length.active {
-  background: #fffc00;
-  color: #111;
-  font-weight: bold;
+label {
+    display: block;
+    margin-bottom: 7px;
 }
 
 select,
-input {
-  width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 13px;
-  background: #333;
-  color: white;
-  font-size: 15px;
-  margin-bottom: 12px;
+input,
+button {
+    width: 100%;
+    padding: 13px;
+    margin-bottom: 10px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
-.generate {
-  width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 15px;
-  background: #fffc00;
-  color: #111;
-  font-size: 18px;
-  font-weight: bold;
-  cursor: pointer;
+input,
+select {
+    background: #292929;
+    color: white;
 }
 
-.status {
-  text-align: center;
-  color: #aaa;
-  margin: 16px 0;
-  min-height: 20px;
+button {
+    background: #fffc00;
+    color: #111;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-#results {
-  display: grid;
-  gap: 9px;
+button:active {
+    transform: scale(.98);
 }
 
-.item {
-  background: #292929;
-  border-radius: 14px;
-  padding: 13px;
+#status {
+    text-align: center;
+    margin: 15px 0;
+    font-weight: bold;
 }
 
-.top {
-  display: flex;
-  align-items: center;
-  gap: 10px;
+.result {
+    background: #202020;
+    padding: 12px;
+    border-radius: 12px;
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 8px;
 }
 
-.name {
-  flex: 1;
-  direction: ltr;
-  text-align: left;
-  font-weight: bold;
-  font-size: 19px;
-}
-
-.badge {
-  padding: 5px 9px;
-  border-radius: 8px;
-  font-size: 12px;
-}
-
-.pending {
-  background: #444;
-  color: #ccc;
+.username {
+    font-weight: bold;
+    direction: ltr;
 }
 
 .available {
-  background: #174d2a;
-  color: #6cff9a;
+    color: #00ff7f;
 }
 
 .unavailable {
-  background: #4a2020;
-  color: #ff8b8b;
+    color: #ff5555;
 }
 
-.error {
-  background: #4a3b16;
-  color: #ffd76a;
+.unknown {
+    color: #ffaa00;
 }
 
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.actions button {
-  flex: 1;
-  border: 0;
-  border-radius: 10px;
-  padding: 10px;
-  cursor: pointer;
-}
-
-.copy {
-  background: #444;
-  color: white;
-}
-
-.open {
-  background: #fffc00;
-  color: #111;
-  font-weight: bold;
-}
-
-.api-box {
-  margin-top: 20px;
-  padding: 15px;
-  border-radius: 14px;
-  background: #242424;
-}
-
-.api-title {
-  font-weight: bold;
-  margin-bottom: 8px;
-}
-
-.api-note {
-  color: #999;
-  font-size: 12px;
-  line-height: 1.7;
+.small-btn {
+    width: auto;
+    padding: 8px 12px;
+    margin: 0;
+    font-size: 13px;
 }
 
 .note {
-  color: #777;
-  font-size: 12px;
-  line-height: 1.8;
-  text-align: center;
-  margin-top: 18px;
+    color: #aaa;
+    font-size: 13px;
+    line-height: 1.6;
 }
 </style>
 </head>
@@ -205,595 +121,392 @@ input {
 
 <div class="container">
 
-<div class="card">
+<h1>⚡ مولّد وفاحص اليوزرات</h1>
 
-<h1>👻 فاحص يوزرات Snapchat</h1>
+<div class="box">
 
-<div class="sub">
-يولد اليوزرات تلقائيًا ثم يرسلها إلى API للتحقق
-</div>
+<label>طول اليوزر</label>
 
+<select id="length">
+    <option value="3">3 أحرف</option>
+    <option value="4" selected>4 أحرف</option>
+</select>
 
-<div class="row">
-
-<button
-id="three"
-class="length"
-onclick="setLength(3)">
-3 خانات
-</button>
-
-<button
-id="four"
-class="length active"
-onclick="setLength(4)">
-4 خانات
-</button>
-
-</div>
-
+<label>عدد اليوزرات</label>
 
 <select id="amount">
-
-<option value="10">10 يوزرات</option>
-<option value="25">25 يوزر</option>
-<option value="50">50 يوزر</option>
-<option value="100">100 يوزر</option>
-
+    <option value="10">10</option>
+    <option value="25" selected>25</option>
+    <option value="50">50</option>
+    <option value="100">100</option>
 </select>
 
+<label>نوع اليوزر</label>
 
 <select id="mode">
-
-<option value="mixed">
-حروف وأرقام
-</option>
-
-<option value="letters">
-حروف فقط
-</option>
-
-<option value="numbers">
-أرقام فقط
-</option>
-
+    <option value="mixed">حروف + أرقام</option>
+    <option value="letters">حروف فقط</option>
+    <option value="numbers">أرقام فقط</option>
 </select>
 
+<label>API المصرّح لك باستخدامه</label>
 
-<button
-class="generate"
-onclick="startCheck()">
-🚀 ابدأ التحقق
+<input
+    id="apiUrl"
+    type="url"
+    placeholder="https://example.com/api/check"
+/>
+
+<button onclick="startCheck()">
+    ⚡ توليد وفحص
 </button>
 
-
-<div
-id="status"
-class="status">
-جاهز
 </div>
 
+<div id="status">
+    جاهز
+</div>
 
 <div id="results"></div>
 
-
-<div class="api-box">
-
-<div class="api-title">
-⚙️ إعداد API
-</div>
-
-<div class="api-note">
-ضع هنا عنوان API رسمي ومصرح لك باستخدامه.
-لا تضع مفاتيح سرية داخل HTML إذا كانت الخدمة تتطلب
-مفتاحًا خاصًا؛ استخدم خادمًا وسيطًا آمنًا.
-</div>
-
-<br>
-
-<input
-id="apiUrl"
-type="url"
-placeholder="https://example.com/api/check"
-value=""
->
-
-</div>
-
-
-<div class="note">
-⚠️ الأداة لا تعتبر اليوزر متاحًا إلا إذا أعاد الـAPI
-استجابة صريحة بذلك. بدون API ستظهر النتائج كـ«غير متحقق».
+<div class="box note">
+    ⚠️ التحقق الفعلي من توفر اسم مستخدم يتطلب API رسمي/مصرّح لك باستخدامه.
+    الأداة لا تتجاوز حماية Snapchat ولا تتحقق مباشرة من خوادم Snapchat بدون واجهة مصرح بها.
 </div>
 
 </div>
-
-</div>
-
 
 <script>
 
-/*
-==================================================
-إعدادات الأداة
-==================================================
-*/
-
-let usernameLength = 4;
-
 const letters =
-"abcdefghijklmnopqrstuvwxyz";
+    "abcdefghijklmnopqrstuvwxyz";
 
 const numbers =
-"0123456789";
+    "0123456789";
 
 
-/*
-==================================================
-تغيير الطول
-==================================================
-*/
+/* =========================
+   توليد يوزر عشوائي
+========================= */
 
-function setLength(length) {
+function generateUsername(length, mode) {
 
-  usernameLength = length;
-
-  document
-    .getElementById("three")
-    .classList.remove("active");
-
-  document
-    .getElementById("four")
-    .classList.remove("active");
-
-
-  document
-    .getElementById(
-      length === 3 ? "three" : "four"
-    )
-    .classList.add("active");
-
-}
-
-
-/*
-==================================================
-توليد حرف عشوائي
-==================================================
-*/
-
-function randomChar(source) {
-
-  return source[
-    Math.floor(
-      Math.random() * source.length
-    )
-  ];
-
-}
-
-
-/*
-==================================================
-توليد يوزر
-==================================================
-*/
-
-function generateUsername() {
-
-  const mode =
-    document.getElementById("mode").value;
-
-  let username = "";
-
-  for (
-    let i = 0;
-    i < usernameLength;
-    i++
-  ) {
-
-    let source;
+    let chars = "";
 
     if (mode === "letters") {
-
-      source = letters;
-
+        chars = letters;
     }
 
     else if (mode === "numbers") {
-
-      source = numbers;
-
+        chars = numbers;
     }
 
     else {
-
-      source =
-        Math.random() < 0.65
-        ? letters
-        : numbers;
-
+        chars = letters + numbers;
     }
 
-    username += randomChar(source);
+    let username = "";
 
-  }
+    for (let i = 0; i < length; i++) {
 
-  return username;
+        const randomIndex =
+            Math.floor(Math.random() * chars.length);
+
+        username += chars[randomIndex];
+    }
+
+    return username;
 }
 
 
-/*
-==================================================
-توليد مجموعة بدون تكرار
-==================================================
-*/
+/* =========================
+   توليد يوزرات بدون تكرار
+========================= */
 
 function generateUniqueUsernames(amount) {
 
-  const set = new Set();
+    const length =
+        Number(document.getElementById("length").value);
 
-  while (set.size < amount) {
+    const mode =
+        document.getElementById("mode").value;
 
-    set.add(
-      generateUsername()
-    );
+    const usernames = new Set();
 
-  }
+    while (usernames.size < amount) {
 
-  return [...set];
+        usernames.add(
+            generateUsername(length, mode)
+        );
+    }
+
+    return [...usernames];
 }
 
 
-/*
-==================================================
-بدء العملية
-==================================================
-*/
-
-async function startCheck() {
-
-  const amount =
-    Number(
-      document.getElementById("amount").value
-    );
-
-  const apiUrl =
-    document
-      .getElementById("apiUrl")
-      .value
-      .trim();
-
-
-  const results =
-    document.getElementById("results");
-
-  const status =
-    document.getElementById("status");
-
-
-  results.innerHTML = "";
-
-
-  const usernames =
-    generateUniqueUsernames(amount);
-
-
-  /*
-    إنشاء النتائج أولًا
-  */
-
-  usernames.forEach(username => {
-
-    createResultItem(username);
-
-  });
-
-
-  if (!apiUrl) {
-
-    status.textContent =
-      "⚠️ تم التوليد، لكن لم يتم إدخال API للتحقق.";
-
-    return;
-
-  }
-
-
-  /*
-    التحقق عبر API
-  */
-
-  let completed = 0;
-
-
-  for (const username of usernames) {
-
-    await checkUsername(
-      username,
-      apiUrl
-    );
-
-    completed++;
-
-    status.textContent =
-      `جاري التحقق: ${completed} / ${amount}`;
-
-  }
-
-
-  status.textContent =
-    "✅ انتهى التحقق";
-
-}
-
-
-/*
-==================================================
-إنشاء عنصر نتيجة
-==================================================
-*/
+/* =========================
+   إنشاء عنصر النتيجة
+========================= */
 
 function createResultItem(username) {
 
-  const results =
-    document.getElementById("results");
+    const results =
+        document.getElementById("results");
 
+    const item =
+        document.createElement("div");
 
-  const item =
-    document.createElement("div");
+    item.className = "result";
 
-  item.className = "item";
+    item.id =
+        "result-" + username;
 
-  item.id =
-    "item-" + username;
+    item.innerHTML = `
+        <span class="username">@${username}</span>
 
+        <span class="unknown">
+            ⏳ فحص...
+        </span>
 
-  const top =
-    document.createElement("div");
+        <button
+            class="small-btn"
+            onclick="copyUsername('${username}')">
+            نسخ
+        </button>
+    `;
 
-  top.className = "top";
-
-
-  const name =
-    document.createElement("div");
-
-  name.className = "name";
-
-  name.textContent =
-    username;
-
-
-  const badge =
-    document.createElement("span");
-
-  badge.className =
-    "badge pending";
-
-  badge.textContent =
-    "جاري التحقق";
-
-
-  top.appendChild(name);
-  top.appendChild(badge);
-
-
-  const actions =
-    document.createElement("div");
-
-  actions.className = "actions";
-
-
-  const copy =
-    document.createElement("button");
-
-  copy.className = "copy";
-
-  copy.textContent =
-    "📋 نسخ";
-
-  copy.onclick =
-    () => copyUsername(username);
-
-
-  const open =
-    document.createElement("button");
-
-  open.className = "open";
-
-  open.textContent =
-    "👻 فتح";
-
-  open.onclick =
-    () => openSnapchat(username);
-
-
-  actions.appendChild(copy);
-  actions.appendChild(open);
-
-
-  item.appendChild(top);
-  item.appendChild(actions);
-
-  results.appendChild(item);
-
+    results.appendChild(item);
 }
 
 
-/*
-==================================================
-فحص يوزر عبر API
-==================================================
+/* =========================
+   تحديث النتيجة
+========================= */
 
-مهم:
-هذا القالب يفترض أن الـAPI يقبل:
-
-POST /api/check
-
-JSON:
-
-{
-  "username": "abcd"
-}
-
-ويعيد مثلًا:
-
-{
-  "available": true
-}
-
-أو:
-
-{
-  "available": false
-}
-
-عدّل هذا الجزء فقط إذا كانت مواصفات
-الـAPI الرسمي مختلفة.
-==================================================
-*/
-
-async function checkUsername(
-  username,
-  apiUrl
+function updateResult(
+    username,
+    text,
+    className
 ) {
 
-  const item =
-    document.getElementById(
-      "item-" + username
-    );
+    const item =
+        document.getElementById(
+            "result-" + username
+        );
 
-  const badge =
-    item.querySelector(".badge");
+    if (!item) return;
 
+    const status =
+        item.querySelector("span:nth-child(2)");
 
-  try {
+    status.textContent =
+        text;
 
-    const response =
-      await fetch(
-        apiUrl,
-        {
-          method: "POST",
-
-          headers: {
-            "Content-Type":
-              "application/json"
-          },
-
-          body: JSON.stringify({
-            username: username
-          })
-        }
-      );
-
-
-    if (!response.ok) {
-      throw new Error(
-        "HTTP " + response.status
-      );
-    }
-
-
-    const data =
-      await response.json();
-
-
-    if (data.available === true) {
-
-      badge.className =
-        "badge available";
-
-      badge.textContent =
-        "✅ متاح";
-
-    }
-
-    else if (
-      data.available === false
-    ) {
-
-      badge.className =
-        "badge unavailable";
-
-      badge.textContent =
-        "❌ غير متاح";
-
-    }
-
-    else {
-
-      badge.className =
-        "badge error";
-
-      badge.textContent =
-        "⚠️ استجابة غير معروفة";
-
-    }
-
-
-  } catch (error) {
-
-    badge.className =
-      "badge error";
-
-    badge.textContent =
-      "⚠️ تعذر التحقق";
-
-  }
-
+    status.className =
+        className;
 }
 
 
-/*
-==================================================
-نسخ
-==================================================
-*/
+/* =========================
+   فحص يوزر عبر API
+========================= */
+
+async function checkUsername(
+    username,
+    apiUrl
+) {
+
+    try {
+
+        const response =
+            await fetch(apiUrl, {
+
+                method: "POST",
+
+                headers: {
+                    "Content-Type":
+                        "application/json"
+                },
+
+                body: JSON.stringify({
+                    username: username
+                })
+
+            });
+
+
+        if (!response.ok) {
+
+            throw new Error(
+                "HTTP " + response.status
+            );
+        }
+
+
+        const data =
+            await response.json();
+
+
+        if (data.available === true) {
+
+            updateResult(
+                username,
+                "✅ متاح",
+                "available"
+            );
+
+        }
+
+        else if (data.available === false) {
+
+            updateResult(
+                username,
+                "❌ غير متاح",
+                "unavailable"
+            );
+
+        }
+
+        else {
+
+            updateResult(
+                username,
+                "⚠️ استجابة غير معروفة",
+                "unknown"
+            );
+        }
+
+    }
+
+    catch (error) {
+
+        updateResult(
+            username,
+            "⚠️ تعذر التحقق",
+            "unknown"
+        );
+
+        console.log(
+            username,
+            error
+        );
+    }
+}
+
+
+/* =========================
+   نسخ اليوزر
+========================= */
 
 async function copyUsername(username) {
 
-  try {
+    try {
 
-    await navigator.clipboard.writeText(
-      username
-    );
+        await navigator.clipboard.writeText(
+            username
+        );
 
-    document.getElementById(
-      "status"
-    ).textContent =
-      "📋 تم نسخ " + username;
+    }
 
-  }
+    catch {
 
-  catch {
+        const input =
+            document.createElement("textarea");
 
-    document.getElementById(
-      "status"
-    ).textContent =
-      "❌ تعذر النسخ";
+        input.value =
+            username;
 
-  }
+        document.body.appendChild(input);
 
+        input.select();
+
+        document.execCommand("copy");
+
+        input.remove();
+    }
 }
 
 
-/*
-==================================================
-فتح Snapchat
-==================================================
-*/
+/* =========================
+   الفحص السريع
+========================= */
 
-function openSnapchat(username) {
+async function startCheck() {
 
-  const url =
-    "https://www.snapchat.com/add/" +
-    encodeURIComponent(username);
+    const amount =
+        Number(
+            document.getElementById("amount").value
+        );
 
-  window.open(
-    url,
-    "_blank"
-  );
+    const apiUrl =
+        document.getElementById("apiUrl")
+            .value
+            .trim();
 
+    const results =
+        document.getElementById("results");
+
+    const status =
+        document.getElementById("status");
+
+
+    results.innerHTML = "";
+
+
+    if (!apiUrl) {
+
+        status.textContent =
+            "⚠️ أدخل API مصرح لك باستخدامه";
+
+        return;
+    }
+
+
+    const usernames =
+        generateUniqueUsernames(amount);
+
+
+    usernames.forEach(
+        username => {
+
+            createResultItem(
+                username
+            );
+
+        }
+    );
+
+
+    status.textContent =
+        "⚡ جاري الفحص السريع...";
+
+
+    /*
+       الفكرة هنا:
+
+       بدلاً من فحص اليوزرات واحداً
+       وراء الآخر، يتم إرسال الطلبات
+       بالتوازي.
+
+       هذا يقلل وقت الانتظار مع API
+       المصرّح به.
+    */
+
+    const checks =
+        usernames.map(
+            username =>
+                checkUsername(
+                    username,
+                    apiUrl
+                )
+        );
+
+
+    await Promise.all(checks);
+
+
+    status.textContent =
+        "✅ انتهى الفحص";
 }
 
 </script>
