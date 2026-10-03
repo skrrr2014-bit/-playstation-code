@@ -1,311 +1,351 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>فاحص صيغة يوزر</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>مولد يوزرات Snapchat</title>
 
-  <style>
-    * {
-      box-sizing: border-box;
-      font-family: Arial, sans-serif;
-    }
+<style>
+* {
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
+}
 
-    body {
-      margin: 0;
-      min-height: 100vh;
-      background: #111;
-      color: white;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      padding: 20px;
-    }
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: #101010;
+  color: white;
+  padding: 20px;
+}
 
-    .box {
-      width: 100%;
-      max-width: 500px;
-      background: #1d1d1d;
-      padding: 25px;
-      border-radius: 22px;
-      text-align: center;
-    }
+.container {
+  max-width: 600px;
+  margin: auto;
+}
 
-    h1 {
-      margin-top: 0;
-    }
+.card {
+  background: #1d1d1d;
+  border-radius: 22px;
+  padding: 22px;
+  margin-bottom: 18px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.35);
+}
 
-    .info {
-      color: #aaa;
-      font-size: 14px;
-      margin-bottom: 20px;
-    }
+h1 {
+  text-align: center;
+  margin-top: 0;
+}
 
-    input {
-      width: 100%;
-      padding: 16px;
-      border: 2px solid #444;
-      border-radius: 12px;
-      background: #292929;
-      color: white;
-      font-size: 18px;
-      text-align: center;
-      outline: none;
-    }
+.description {
+  text-align: center;
+  color: #aaa;
+  margin-bottom: 22px;
+}
 
-    input:focus {
-      border-color: #fffc00;
-    }
+.options {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 15px;
+}
 
-    .buttons {
-      display: flex;
-      gap: 10px;
-      margin-top: 12px;
-    }
+button {
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
+  font-size: 16px;
+  cursor: pointer;
+}
 
-    button {
-      flex: 1;
-      border: 0;
-      border-radius: 12px;
-      padding: 14px;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.length {
+  flex: 1;
+  background: #333;
+  color: white;
+}
 
-    .check {
-      background: #fffc00;
-      color: #111;
-      font-weight: bold;
-    }
+.length.active {
+  background: #fffc00;
+  color: #111;
+  font-weight: bold;
+}
 
-    .clear {
-      background: #444;
-      color: white;
-    }
+.generate {
+  width: 100%;
+  background: #fffc00;
+  color: #111;
+  font-weight: bold;
+  font-size: 18px;
+}
 
-    #result {
-      margin-top: 20px;
-      padding: 18px;
-      border-radius: 14px;
-      display: none;
-      line-height: 1.8;
-    }
+#results {
+  display: grid;
+  gap: 10px;
+  margin-top: 20px;
+}
 
-    .valid {
-      display: block !important;
-      background: #173d22;
-      border: 1px solid #2e8b57;
-    }
+.username {
+  background: #292929;
+  border-radius: 15px;
+  padding: 14px;
+}
 
-    .invalid {
-      display: block !important;
-      background: #421c1c;
-      border: 1px solid #a33;
-    }
+.name {
+  text-align: center;
+  font-size: 21px;
+  font-weight: bold;
+  letter-spacing: 1px;
+  margin-bottom: 10px;
+}
 
-    .rules {
-      margin-top: 22px;
-      text-align: right;
-      background: #292929;
-      padding: 15px;
-      border-radius: 14px;
-      color: #bbb;
-      font-size: 14px;
-      line-height: 2;
-    }
+.actions {
+  display: flex;
+  gap: 8px;
+}
 
-    .ok {
-      color: #5cff8d;
-    }
+.actions button {
+  flex: 1;
+  font-size: 14px;
+}
 
-    .bad {
-      color: #ff7777;
-    }
-  </style>
+.copy {
+  background: #444;
+  color: white;
+}
+
+.open {
+  background: #fffc00;
+  color: #111;
+  font-weight: bold;
+}
+
+.status {
+  text-align: center;
+  color: #aaa;
+  margin-top: 15px;
+}
+
+.note {
+  color: #888;
+  font-size: 12px;
+  line-height: 1.8;
+  text-align: center;
+  margin-top: 18px;
+}
+</style>
 </head>
 
 <body>
 
-  <div class="box">
+<div class="container">
 
-    <h1>👻 فاحص صيغة اليوزر</h1>
+  <div class="card">
 
-    <div class="info">
-      يفحص التنسيق محليًا فقط ولا يتصل بـ Snapchat
+    <h1>👻 مولّد يوزرات Snapchat</h1>
+
+    <div class="description">
+      توليد يوزرات ثلاثية أو رباعية بدون تكرار
     </div>
 
-    <input
-      id="username"
-      type="text"
-      placeholder="اكتب اليوزر هنا"
-      autocomplete="off"
-      spellcheck="false"
-    >
+    <div class="options">
 
-    <div class="buttons">
-      <button class="check" onclick="checkUsername()">
-        🔎 فحص
+      <button
+        id="three"
+        class="length"
+        onclick="setLength(3)">
+        3 خانات
       </button>
 
-      <button class="clear" onclick="clearInput()">
-        🗑️ مسح
+      <button
+        id="four"
+        class="length active"
+        onclick="setLength(4)">
+        4 خانات
       </button>
+
     </div>
 
-    <div id="result"></div>
+    <button
+      class="generate"
+      onclick="generateUsernames()">
+      🎲 توليد يوزرات
+    </button>
 
-    <div class="rules">
-      <b>شروط الفحص:</b><br>
-      <span id="lengthRule">⚪ الطول من 3 إلى 4 خانات</span><br>
-      <span id="characterRule">⚪ أحرف إنجليزية وأرقام فقط</span><br>
-      <span id="spaceRule">⚪ بدون مسافات</span><br>
-      <span id="symbolRule">⚪ بدون رموز غير مسموحة</span>
+    <div id="results"></div>
+
+    <div id="status" class="status"></div>
+
+    <div class="note">
+      زر «فتح» يفتح صفحة Snapchat الخاصة باليوزر.
+      وجود صفحة أو عدم وجودها ليس ضمانًا للتوفر؛
+      التأكيد النهائي يكون من داخل Snapchat.
     </div>
 
   </div>
 
+</div>
+
+
 <script>
 
-function checkUsername() {
+let usernameLength = 4;
 
-  const input =
-    document.getElementById("username");
-
-  const result =
-    document.getElementById("result");
-
-  const username =
-    input.value.trim();
-
-  const lengthRule =
-    document.getElementById("lengthRule");
-
-  const characterRule =
-    document.getElementById("characterRule");
-
-  const spaceRule =
-    document.getElementById("spaceRule");
-
-  const symbolRule =
-    document.getElementById("symbolRule");
+const characters =
+  "abcdefghijklmnopqrstuvwxyz0123456789";
 
 
-  // إعادة ضبط
-  result.className = "";
+function setLength(length) {
 
-  if (username.length >= 3 && username.length <= 4) {
-    lengthRule.innerHTML =
-      "✅ الطول من 3 إلى 4 خانات";
-  } else {
-    lengthRule.innerHTML =
-      "❌ يجب أن يكون الطول 3 أو 4 خانات";
-  }
+  usernameLength = length;
 
+  document
+    .getElementById("three")
+    .classList.remove("active");
 
-  const charactersOK =
-    /^[a-zA-Z0-9]+$/.test(username);
+  document
+    .getElementById("four")
+    .classList.remove("active");
 
-  if (charactersOK) {
-    characterRule.innerHTML =
-      "✅ الأحرف والأرقام مسموحة";
-  } else {
-    characterRule.innerHTML =
-      "❌ يحتوي على أحرف أو رموز غير مسموحة";
-  }
+  if (length === 3) {
 
-
-  const spacesOK =
-    !/\s/.test(username);
-
-  if (spacesOK) {
-    spaceRule.innerHTML =
-      "✅ بدون مسافات";
-  } else {
-    spaceRule.innerHTML =
-      "❌ يحتوي على مسافة";
-  }
-
-
-  const symbolsOK =
-    /^[a-zA-Z0-9]+$/.test(username);
-
-  if (symbolsOK) {
-    symbolRule.innerHTML =
-      "✅ لا توجد رموز غير مسموحة";
-  } else {
-    symbolRule.innerHTML =
-      "❌ توجد رموز غير مسموحة";
-  }
-
-
-  const valid =
-    username.length >= 3 &&
-    username.length <= 4 &&
-    charactersOK &&
-    spacesOK &&
-    symbolsOK;
-
-
-  if (valid) {
-
-    result.className = "valid";
-
-    result.innerHTML = `
-      <strong>✅ الصيغة صالحة</strong><br>
-      اليوزر <b>${escapeHTML(username)}</b>
-      مطابق لشروط الفحص المحلي.
-      <br><br>
-      ⚠️ هذا لا يعني أن اليوزر متاح أو غير مستخدم.
-    `;
+    document
+      .getElementById("three")
+      .classList.add("active");
 
   } else {
 
-    result.className = "invalid";
+    document
+      .getElementById("four")
+      .classList.add("active");
 
-    result.innerHTML = `
-      <strong>❌ الصيغة غير صالحة</strong><br>
-      عدّل اليوزر حسب الشروط الموضحة بالأعلى.
-    `;
   }
+
+  generateUsernames();
 }
 
 
-function clearInput() {
+function createUsername() {
 
-  document.getElementById("username").value = "";
+  let username = "";
 
-  const result =
-    document.getElementById("result");
+  for (let i = 0; i < usernameLength; i++) {
 
-  result.style.display = "none";
-  result.className = "";
-  result.innerHTML = "";
+    const index =
+      Math.floor(
+        Math.random() * characters.length
+      );
 
+    username += characters[index];
+
+  }
+
+  return username;
 }
 
 
-function escapeHTML(text) {
+function generateUsernames() {
 
-  return text
-    .replace(/&/g, "&amp;")
-    .replace(/</g, "&lt;")
-    .replace(/>/g, "&gt;")
-    .replace(/"/g, "&quot;")
-    .replace(/'/g, "&#039;");
+  const results =
+    document.getElementById("results");
 
-}
+  results.innerHTML = "";
+
+  const usernames = new Set();
+
+  // توليد 30 يوزر مختلف
+  while (usernames.size < 30) {
+    usernames.add(createUsername());
+  }
+
+  usernames.forEach(username => {
+
+    const box =
+      document.createElement("div");
+
+    box.className = "username";
+
+    const name =
+      document.createElement("div");
+
+    name.className = "name";
+
+    name.textContent = username;
 
 
-// الفحص عند الضغط على Enter
-document
-  .getElementById("username")
-  .addEventListener("keydown", function(event) {
+    const actions =
+      document.createElement("div");
 
-    if (event.key === "Enter") {
-      checkUsername();
-    }
+    actions.className = "actions";
+
+
+    const copy =
+      document.createElement("button");
+
+    copy.className = "copy";
+
+    copy.textContent = "📋 نسخ";
+
+    copy.onclick = () => copyUsername(username);
+
+
+    const open =
+      document.createElement("button");
+
+    open.className = "open";
+
+    open.textContent = "👻 فتح في Snapchat";
+
+    open.onclick = () => openSnapchat(username);
+
+
+    actions.appendChild(copy);
+    actions.appendChild(open);
+
+    box.appendChild(name);
+    box.appendChild(actions);
+
+    results.appendChild(box);
 
   });
+
+
+  document.getElementById("status").textContent =
+    "تم توليد 30 يوزر " +
+    (usernameLength === 3 ? "ثلاثي" : "رباعي") +
+    " مختلف";
+}
+
+
+async function copyUsername(username) {
+
+  try {
+
+    await navigator.clipboard.writeText(username);
+
+    document.getElementById("status").textContent =
+      "✅ تم نسخ " + username;
+
+  } catch {
+
+    document.getElementById("status").textContent =
+      "❌ تعذر النسخ";
+
+  }
+}
+
+
+function openSnapchat(username) {
+
+  const url =
+    "https://www.snapchat.com/add/" +
+    encodeURIComponent(username);
+
+  window.open(url, "_blank");
+
+}
+
+
+// تشغيل تلقائي
+generateUsernames();
 
 </script>
 
