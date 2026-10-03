@@ -7,89 +7,81 @@
 <title>مولد يوزرات</title>
 
 <style>
-* {
-    box-sizing: border-box;
+body{
+    margin:0;
+    background:#111;
+    color:white;
+    font-family:Arial,sans-serif;
 }
 
-body {
-    margin: 0;
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
+.container{
+    max-width:600px;
+    margin:auto;
+    padding:20px;
 }
 
-.container {
-    max-width: 600px;
-    margin: auto;
-    padding: 20px;
+h1{
+    text-align:center;
 }
 
-h1 {
-    text-align: center;
+.box{
+    background:#1e1e1e;
+    padding:18px;
+    border-radius:16px;
+    margin-top:15px;
 }
 
-.box {
-    background: #1d1d1d;
-    padding: 15px;
-    border-radius: 15px;
-    margin-top: 15px;
+label{
+    display:block;
+    margin:12px 0 6px;
 }
 
-label {
-    display: block;
-    margin: 10px 0 6px;
+select,button{
+    width:100%;
+    padding:14px;
+    border:0;
+    border-radius:12px;
+    font-size:16px;
 }
 
-select,
-button {
-    width: 100%;
-    padding: 13px;
-    border: 0;
-    border-radius: 10px;
-    font-size: 16px;
+select{
+    background:#292929;
+    color:white;
 }
 
-select {
-    background: #292929;
-    color: white;
+button{
+    background:#fffc00;
+    color:#111;
+    font-weight:bold;
+    margin-top:15px;
 }
 
-button {
-    background: #fffc00;
-    color: #111;
-    font-weight: bold;
-    margin-top: 15px;
+.result{
+    background:#202020;
+    padding:12px;
+    margin-top:8px;
+    border-radius:12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    direction:ltr;
 }
 
-.result {
-    background: #202020;
-    border-radius: 12px;
-    padding: 12px;
-    margin-top: 8px;
-
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 8px;
+.username{
+    font-weight:bold;
 }
 
-.username {
-    direction: ltr;
-    font-weight: bold;
-    font-size: 17px;
+.copy{
+    width:auto;
+    padding:8px 12px;
+    margin:0;
+    font-size:13px;
 }
 
-.copy {
-    width: auto;
-    margin: 0;
-    padding: 8px 12px;
-    font-size: 13px;
-}
-
-.status {
-    text-align: center;
-    margin: 15px 0;
-    color: #aaa;
+#status{
+    text-align:center;
+    margin:15px;
+    color:#aaa;
 }
 </style>
 </head>
@@ -98,7 +90,7 @@ button {
 
 <div class="container">
 
-<h1>⚡ مولد يوزرات سريع</h1>
+<h1>⚡ مولد اليوزرات</h1>
 
 <div class="box">
 
@@ -132,89 +124,85 @@ button {
 
 </div>
 
-<div id="status" class="status">
-    جاهز
+<div id="status">
+    جاهز للتوليد
 </div>
 
 <div id="results"></div>
 
 </div>
 
-
 <script>
 
 const letters =
-    "abcdefghijklmnopqrstuvwxyz";
+"abcdefghijklmnopqrstuvwxyz";
 
 const numbers =
-    "0123456789";
+"0123456789";
 
 
-function randomUsername(length, mode) {
+function createUsername(length,mode){
 
-    let characters;
+    let chars;
 
-    if (mode === "letters") {
-        characters = letters;
+    if(mode === "letters"){
+        chars = letters;
     }
-
-    else if (mode === "numbers") {
-        characters = numbers;
+    else if(mode === "numbers"){
+        chars = numbers;
     }
-
-    else {
-        characters = letters + numbers;
+    else{
+        chars = letters + numbers;
     }
 
     let username = "";
 
-    for (let i = 0; i < length; i++) {
+    for(let i=0;i<length;i++){
 
-        const index =
+        username +=
+        chars[
             Math.floor(
-                Math.random() * characters.length
-            );
-
-        username += characters[index];
+                Math.random()*chars.length
+            )
+        ];
     }
 
     return username;
 }
 
 
-function generate() {
+function generate(){
 
     const length =
-        Number(
-            document.getElementById("length").value
-        );
+    Number(
+        document.getElementById("length").value
+    );
 
     const amount =
-        Number(
-            document.getElementById("amount").value
-        );
+    Number(
+        document.getElementById("amount").value
+    );
 
     const mode =
-        document.getElementById("mode").value;
+    document.getElementById("mode").value;
 
     const results =
-        document.getElementById("results");
+    document.getElementById("results");
 
     const status =
-        document.getElementById("status");
+    document.getElementById("status");
 
 
     results.innerHTML = "";
 
 
-    const usernames =
-        new Set();
+    const usernames = new Set();
 
 
-    while (usernames.size < amount) {
+    while(usernames.size < amount){
 
         usernames.add(
-            randomUsername(
+            createUsername(
                 length,
                 mode
             )
@@ -225,10 +213,9 @@ function generate() {
     usernames.forEach(username => {
 
         const item =
-            document.createElement("div");
+        document.createElement("div");
 
-        item.className =
-            "result";
+        item.className = "result";
 
 
         item.innerHTML = `
@@ -239,7 +226,7 @@ function generate() {
 
             <button
                 class="copy"
-                onclick="copy('${username}')">
+                onclick="copyUsername('${username}')">
                 نسخ
             </button>
 
@@ -252,13 +239,13 @@ function generate() {
 
 
     status.textContent =
-        `✅ تم توليد ${amount} يوزر بسرعة`;
+    "✅ تم التوليد بسرعة";
 }
 
 
-async function copy(username) {
+async function copyUsername(username){
 
-    try {
+    try{
 
         await navigator.clipboard.writeText(
             username
@@ -269,14 +256,14 @@ async function copy(username) {
         );
 
     }
-
-    catch {
+    catch{
 
         alert(
-            "انسخ اليوزر يدويًا: @" +
-            username
+            "انسخ @" + username + " يدويًا"
         );
+
     }
+
 }
 
 </script>
