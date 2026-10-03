@@ -3,8 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-  <title>مولد يوزرات سناب</title>
+  <title>فاحص صيغة يوزر</title>
 
   <style>
     * {
@@ -15,7 +14,7 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: linear-gradient(135deg, #111, #252525);
+      background: #111;
       color: white;
       display: flex;
       justify-content: center;
@@ -26,99 +25,101 @@
     .box {
       width: 100%;
       max-width: 500px;
-      background: #181818;
-      border-radius: 22px;
+      background: #1d1d1d;
       padding: 25px;
-      box-shadow: 0 15px 40px rgba(0,0,0,.5);
+      border-radius: 22px;
       text-align: center;
     }
 
     h1 {
       margin-top: 0;
-      font-size: 28px;
     }
 
-    .sub {
+    .info {
       color: #aaa;
-      margin-bottom: 25px;
-    }
-
-    .options {
-      display: flex;
-      gap: 10px;
+      font-size: 14px;
       margin-bottom: 20px;
     }
 
+    input {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #444;
+      border-radius: 12px;
+      background: #292929;
+      color: white;
+      font-size: 18px;
+      text-align: center;
+      outline: none;
+    }
+
+    input:focus {
+      border-color: #fffc00;
+    }
+
+    .buttons {
+      display: flex;
+      gap: 10px;
+      margin-top: 12px;
+    }
+
     button {
-      border: none;
+      flex: 1;
+      border: 0;
       border-radius: 12px;
       padding: 14px;
       font-size: 16px;
       cursor: pointer;
     }
 
-    .length {
-      flex: 1;
-      background: #333;
-      color: white;
-    }
-
-    .length.active {
+    .check {
       background: #fffc00;
       color: #111;
       font-weight: bold;
     }
 
-    .generate {
-      width: 100%;
-      background: #fffc00;
-      color: #111;
-      font-weight: bold;
-      font-size: 18px;
-      margin-bottom: 20px;
-    }
-
-    .generate:active,
-    .copy:active {
-      transform: scale(.97);
-    }
-
-    #results {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-
-    .username {
-      background: #292929;
-      border-radius: 12px;
-      padding: 15px 8px;
-      font-size: 18px;
-      font-weight: bold;
-      letter-spacing: 1px;
-      word-break: break-all;
-    }
-
-    .copy {
-      width: 100%;
+    .clear {
       background: #444;
       color: white;
-      margin-top: 8px;
-      font-size: 14px;
     }
 
-    .status {
-      min-height: 25px;
-      color: #aaa;
-      margin-top: 10px;
-    }
-
-    .note {
-      font-size: 12px;
-      color: #777;
+    #result {
       margin-top: 20px;
-      line-height: 1.7;
+      padding: 18px;
+      border-radius: 14px;
+      display: none;
+      line-height: 1.8;
+    }
+
+    .valid {
+      display: block !important;
+      background: #173d22;
+      border: 1px solid #2e8b57;
+    }
+
+    .invalid {
+      display: block !important;
+      background: #421c1c;
+      border: 1px solid #a33;
+    }
+
+    .rules {
+      margin-top: 22px;
+      text-align: right;
+      background: #292929;
+      padding: 15px;
+      border-radius: 14px;
+      color: #bbb;
+      font-size: 14px;
+      line-height: 2;
+    }
+
+    .ok {
+      color: #5cff8d;
+    }
+
+    .bad {
+      color: #ff7777;
     }
   </style>
 </head>
@@ -127,141 +128,184 @@
 
   <div class="box">
 
-    <h1>👻 مولد يوزرات سناب</h1>
+    <h1>👻 فاحص صيغة اليوزر</h1>
 
-    <div class="sub">
-      توليد احتمالات يوزرات من 3 أو 4 خانات
+    <div class="info">
+      يفحص التنسيق محليًا فقط ولا يتصل بـ Snapchat
     </div>
 
-    <div class="options">
-      <button id="three" class="length" onclick="setLength(3)">
-        3 خانات
+    <input
+      id="username"
+      type="text"
+      placeholder="اكتب اليوزر هنا"
+      autocomplete="off"
+      spellcheck="false"
+    >
+
+    <div class="buttons">
+      <button class="check" onclick="checkUsername()">
+        🔎 فحص
       </button>
 
-      <button id="four" class="length active" onclick="setLength(4)">
-        4 خانات
+      <button class="clear" onclick="clearInput()">
+        🗑️ مسح
       </button>
     </div>
 
-    <button class="generate" onclick="generateUsernames()">
-      🎲 توليد يوزرات
-    </button>
+    <div id="result"></div>
 
-    <div id="results"></div>
-
-    <div class="status" id="status"></div>
-
-    <div class="note">
-      الأداة تولّد تركيبات عشوائية فقط، ولا تسجّل الدخول إلى حسابات
-      أو تتجاوز أنظمة الحماية.
+    <div class="rules">
+      <b>شروط الفحص:</b><br>
+      <span id="lengthRule">⚪ الطول من 3 إلى 4 خانات</span><br>
+      <span id="characterRule">⚪ أحرف إنجليزية وأرقام فقط</span><br>
+      <span id="spaceRule">⚪ بدون مسافات</span><br>
+      <span id="symbolRule">⚪ بدون رموز غير مسموحة</span>
     </div>
 
   </div>
 
 <script>
 
-  let usernameLength = 4;
+function checkUsername() {
 
-  // الأحرف المستخدمة
-  const characters =
-    "abcdefghijklmnopqrstuvwxyz0123456789._";
+  const input =
+    document.getElementById("username");
 
-  function setLength(length) {
+  const result =
+    document.getElementById("result");
 
-    usernameLength = length;
+  const username =
+    input.value.trim();
 
-    document.getElementById("three")
-      .classList.remove("active");
+  const lengthRule =
+    document.getElementById("lengthRule");
 
-    document.getElementById("four")
-      .classList.remove("active");
+  const characterRule =
+    document.getElementById("characterRule");
 
-    if (length === 3) {
-      document.getElementById("three")
-        .classList.add("active");
-    } else {
-      document.getElementById("four")
-        .classList.add("active");
-    }
+  const spaceRule =
+    document.getElementById("spaceRule");
 
-    generateUsernames();
+  const symbolRule =
+    document.getElementById("symbolRule");
+
+
+  // إعادة ضبط
+  result.className = "";
+
+  if (username.length >= 3 && username.length <= 4) {
+    lengthRule.innerHTML =
+      "✅ الطول من 3 إلى 4 خانات";
+  } else {
+    lengthRule.innerHTML =
+      "❌ يجب أن يكون الطول 3 أو 4 خانات";
   }
 
 
-  function randomUsername() {
+  const charactersOK =
+    /^[a-zA-Z0-9]+$/.test(username);
 
-    let username = "";
-
-    for (let i = 0; i < usernameLength; i++) {
-
-      const randomIndex =
-        Math.floor(Math.random() * characters.length);
-
-      username += characters[randomIndex];
-    }
-
-    return username;
+  if (charactersOK) {
+    characterRule.innerHTML =
+      "✅ الأحرف والأرقام مسموحة";
+  } else {
+    characterRule.innerHTML =
+      "❌ يحتوي على أحرف أو رموز غير مسموحة";
   }
 
 
-  function generateUsernames() {
+  const spacesOK =
+    !/\s/.test(username);
 
-    const results =
-      document.getElementById("results");
-
-    results.innerHTML = "";
-
-    const used = new Set();
-
-    while (used.size < 20) {
-      used.add(randomUsername());
-    }
-
-    used.forEach(username => {
-
-      const container =
-        document.createElement("div");
-
-      container.className = "username";
-
-      container.innerHTML = `
-        <div>${username}</div>
-        <button
-          class="copy"
-          onclick="copyUsername('${username}')">
-          📋 نسخ
-        </button>
-      `;
-
-      results.appendChild(container);
-
-    });
-
-    document.getElementById("status").textContent =
-      "تم توليد 20 يوزر عشوائي";
+  if (spacesOK) {
+    spaceRule.innerHTML =
+      "✅ بدون مسافات";
+  } else {
+    spaceRule.innerHTML =
+      "❌ يحتوي على مسافة";
   }
 
 
-  async function copyUsername(username) {
+  const symbolsOK =
+    /^[a-zA-Z0-9]+$/.test(username);
 
-    try {
-
-      await navigator.clipboard.writeText(username);
-
-      document.getElementById("status").textContent =
-        "✅ تم نسخ: " + username;
-
-    } catch (error) {
-
-      document.getElementById("status").textContent =
-        "❌ تعذر النسخ تلقائياً";
-
-    }
+  if (symbolsOK) {
+    symbolRule.innerHTML =
+      "✅ لا توجد رموز غير مسموحة";
+  } else {
+    symbolRule.innerHTML =
+      "❌ توجد رموز غير مسموحة";
   }
 
 
-  // تشغيل الأداة أول مرة
-  generateUsernames();
+  const valid =
+    username.length >= 3 &&
+    username.length <= 4 &&
+    charactersOK &&
+    spacesOK &&
+    symbolsOK;
+
+
+  if (valid) {
+
+    result.className = "valid";
+
+    result.innerHTML = `
+      <strong>✅ الصيغة صالحة</strong><br>
+      اليوزر <b>${escapeHTML(username)}</b>
+      مطابق لشروط الفحص المحلي.
+      <br><br>
+      ⚠️ هذا لا يعني أن اليوزر متاح أو غير مستخدم.
+    `;
+
+  } else {
+
+    result.className = "invalid";
+
+    result.innerHTML = `
+      <strong>❌ الصيغة غير صالحة</strong><br>
+      عدّل اليوزر حسب الشروط الموضحة بالأعلى.
+    `;
+  }
+}
+
+
+function clearInput() {
+
+  document.getElementById("username").value = "";
+
+  const result =
+    document.getElementById("result");
+
+  result.style.display = "none";
+  result.className = "";
+  result.innerHTML = "";
+
+}
+
+
+function escapeHTML(text) {
+
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+// الفحص عند الضغط على Enter
+document
+  .getElementById("username")
+  .addEventListener("keydown", function(event) {
+
+    if (event.key === "Enter") {
+      checkUsername();
+    }
+
+  });
 
 </script>
 
