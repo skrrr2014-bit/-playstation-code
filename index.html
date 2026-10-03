@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>RwL</title>
+<title>RwL Tools</title>
 
 <style>
 *{
@@ -15,27 +14,26 @@
 body{
     margin:0;
     min-height:100vh;
-    background:
-        radial-gradient(circle at top,#3b2b75 0,#17132b 35%,#08080d 75%);
-    color:white;
     padding:18px;
+    color:white;
+    background:
+    radial-gradient(circle at 20% 10%,#6d3cff 0%,transparent 35%),
+    radial-gradient(circle at 90% 80%,#ff2d95 0%,transparent 30%),
+    #08080e;
 }
 
 .container{
-    max-width:560px;
+    max-width:600px;
     margin:auto;
 }
 
 .card{
-    background:rgba(18,18,28,.88);
+    background:rgba(20,20,30,.92);
     border:1px solid rgba(255,255,255,.1);
-    backdrop-filter:blur(18px);
     border-radius:28px;
     padding:22px;
-    box-shadow:0 20px 60px rgba(0,0,0,.45);
+    box-shadow:0 20px 60px rgba(0,0,0,.5);
 }
-
-/* الغلاف */
 
 .cover{
     text-align:center;
@@ -43,35 +41,29 @@ body{
 }
 
 .logo{
-    width:92px;
-    height:92px;
+    width:100px;
+    height:100px;
     margin:auto;
-    border-radius:28px;
+    border-radius:30px;
     display:flex;
-    align-items:center;
     justify-content:center;
-
-    background:linear-gradient(135deg,#8b5cf6,#ec4899);
-    box-shadow:
-        0 10px 35px rgba(139,92,246,.35);
-
-    font-size:28px;
+    align-items:center;
+    background:linear-gradient(135deg,#7c3aed,#ec4899);
+    font-size:30px;
     font-weight:900;
-    letter-spacing:2px;
+    box-shadow:0 12px 40px rgba(124,58,237,.4);
 }
 
 .title{
     font-size:32px;
     font-weight:900;
-    margin-top:17px;
+    margin-top:16px;
 }
 
 .subtitle{
     color:#aaa;
-    margin-top:7px;
+    margin-top:6px;
 }
-
-/* الصفحات */
 
 .page{
     display:none;
@@ -81,49 +73,33 @@ body{
     display:block;
 }
 
-h2{
-    margin-top:0;
-}
-
-/* الأزرار */
-
 .menu{
     display:flex;
     flex-direction:column;
     gap:12px;
 }
 
-.menu button,
-.back,
-.action{
+button{
     border:0;
-    border-radius:16px;
-    padding:16px;
-    font-size:16px;
-    font-weight:800;
     cursor:pointer;
-    transition:.2s;
+    font-weight:bold;
 }
 
-.menu button{
+.menu button,
+.back{
+    padding:17px;
+    border-radius:16px;
+    background:#272733;
     color:white;
-    background:#222231;
-    border:1px solid rgba(255,255,255,.07);
-}
-
-.menu button:hover{
-    transform:translateY(-2px);
-    background:#2c2c40;
+    font-size:17px;
 }
 
 .back{
     width:100%;
-    background:#292936;
-    color:white;
     margin-bottom:16px;
 }
 
-.buttons{
+.actions{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
@@ -131,75 +107,86 @@ h2{
 }
 
 .action{
-    background:#fff;
+    padding:14px;
+    border-radius:14px;
+    background:white;
     color:#111;
+    font-size:15px;
 }
 
-.action.refresh{
-    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+.refresh{
+    background:linear-gradient(135deg,#7c3aed,#ec4899);
     color:white;
 }
-
-/* القائمة */
 
 .list{
     display:flex;
     flex-direction:column;
-    gap:9px;
+    gap:8px;
 }
 
 .item{
-    background:#20202b;
-    border:1px solid rgba(255,255,255,.06);
-    border-radius:14px;
-    padding:14px;
-    display:flex;
-    justify-content:space-between;
+    display:grid;
+    grid-template-columns:1fr auto auto;
     align-items:center;
+    gap:8px;
+    padding:12px;
+    border-radius:14px;
+    background:#242431;
     direction:ltr;
 }
 
-.username{
-    font-size:17px;
-    font-weight:800;
+.name{
+    font-weight:bold;
+    overflow:hidden;
+    text-overflow:ellipsis;
 }
 
-.tag{
-    font-size:12px;
-    color:#b9a7ff;
+.status{
     direction:rtl;
+    font-size:12px;
+    padding:7px 8px;
+    border-radius:9px;
+    background:#403d21;
+    color:#ffe66d;
+    white-space:nowrap;
 }
 
-/* ستور */
+.copyOne{
+    background:#353544;
+    color:white;
+    border-radius:9px;
+    padding:8px 10px;
+}
 
 .code{
-    background:#20202b;
-    border:1px solid rgba(255,255,255,.06);
+    display:grid;
+    grid-template-columns:1fr auto;
+    gap:8px;
+    align-items:center;
+    padding:12px;
+    margin-bottom:8px;
+    background:#242431;
     border-radius:14px;
-    padding:16px;
-    margin-bottom:9px;
+}
+
+.codeText{
+    direction:ltr;
     text-align:center;
-    font-size:18px;
     font-weight:bold;
     letter-spacing:2px;
-    direction:ltr;
+    overflow:hidden;
+    word-break:break-all;
 }
 
 .note{
     margin-top:15px;
-    background:#211f30;
-    color:#bdb7d9;
-    border-radius:14px;
     padding:13px;
+    border-radius:13px;
+    background:#29261a;
+    color:#e8d889;
+    font-size:12px;
     line-height:1.7;
-    font-size:13px;
-}
-
-.counter{
-    text-align:center;
-    color:#888;
-    font-size:13px;
-    margin:10px 0;
 }
 </style>
 </head>
@@ -207,142 +194,79 @@ h2{
 <body>
 
 <div class="container">
-
 <div class="card">
 
 <!-- الرئيسية -->
-
-<div id="home" class="page active">
+<section id="home" class="page active">
 
 <div class="cover">
-
-<div class="logo">
-RwL
-</div>
-
-<div class="title">
-RwL Tools
-</div>
-
-<div class="subtitle">
-Username & Code Generator
-</div>
-
+<div class="logo">RwL</div>
+<div class="title">RwL Tools</div>
+<div class="subtitle">Username Generator</div>
 </div>
 
 <div class="menu">
-
-<button onclick="showPage('tiktok')">
-🎵 يوزرات تيك توك
-</button>
-
-<button onclick="showPage('snap')">
-👻 يوزرات سناب
-</button>
-
-<button onclick="showPage('store')">
-🎟️ تخمين ستور
-</button>
-
+<button onclick="openPage('tiktok')">🎵 يوزرات تيك توك</button>
+<button onclick="openPage('snap')">👻 يوزرات سناب</button>
+<button onclick="openPage('store')">🎟️ تخمين ستور</button>
 </div>
 
-</div>
+</section>
 
 
 <!-- تيك توك -->
+<section id="tiktok" class="page">
 
-<div id="tiktok" class="page">
-
-<button class="back" onclick="showPage('home')">
-← رجوع
-</button>
+<button class="back" onclick="openPage('home')">← رجوع</button>
 
 <h2>🎵 يوزرات تيك توك</h2>
 
-<div class="buttons">
-
-<button class="action refresh"
-onclick="generateTikTok()">
-🔄 تجديد
-</button>
-
-<button class="action"
-onclick="copyTikTok()">
-📋 نسخ
-</button>
-
+<div class="actions">
+<button class="action refresh" onclick="generateTikTok()">🔄 تجديد</button>
+<button class="action" onclick="copyAll(tiktokUsers)">📋 نسخ الكل</button>
 </div>
 
-<div class="counter" id="tikCounter"></div>
+<div id="tikList" class="list"></div>
 
-<div class="list" id="tikList"></div>
-
-</div>
+</section>
 
 
 <!-- سناب -->
+<section id="snap" class="page">
 
-<div id="snap" class="page">
-
-<button class="back" onclick="showPage('home')">
-← رجوع
-</button>
+<button class="back" onclick="openPage('home')">← رجوع</button>
 
 <h2>👻 يوزرات سناب</h2>
 
-<div class="buttons">
-
-<button class="action refresh"
-onclick="generateSnap()">
-🔄 تجديد
-</button>
-
-<button class="action"
-onclick="copySnap()">
-📋 نسخ
-</button>
-
+<div class="actions">
+<button class="action refresh" onclick="generateSnap()">🔄 تجديد</button>
+<button class="action" onclick="copyAll(snapUsers)">📋 نسخ الكل</button>
 </div>
 
-<div class="counter" id="snapCounter"></div>
+<div id="snapList" class="list"></div>
 
-<div class="list" id="snapList"></div>
-
-</div>
+</section>
 
 
 <!-- ستور -->
+<section id="store" class="page">
 
-<div id="store" class="page">
-
-<button class="back" onclick="showPage('home')">
-← رجوع
-</button>
+<button class="back" onclick="openPage('home')">← رجوع</button>
 
 <h2>🎟️ تخمين ستور</h2>
 
-<div class="buttons">
-
-<button class="action refresh"
-onclick="generateCodes()">
-🔄 تجديد
-</button>
-
-<button class="action"
-onclick="copyCodes()">
-📋 نسخ
-</button>
-
+<div class="actions">
+<button class="action refresh" onclick="generateCodes()">🔄 تجديد</button>
+<button class="action" onclick="copyAll(storeCodes)">📋 نسخ الكل</button>
 </div>
 
-<div id="codes"></div>
+<div id="codeList"></div>
 
 <div class="note">
-هذه رموز عشوائية تجريبية من 12 خانة.
-ليست أكواد Store حقيقية ولا يوجد ضمان أنها قابلة للاسترداد.
+الرموز هنا عشوائية من 12 حرفًا ورقمًا، وليست أكواد Store مؤكدة الصلاحية.
 </div>
 
-</div>
+</section>
 
 </div>
 </div>
@@ -350,98 +274,61 @@ onclick="copyCodes()">
 
 <script>
 
-/* =========================
-   الإعدادات
-========================= */
-
 const letters =
 "abcdefghijklmnopqrstuvwxyz";
 
-const numbers =
-"0123456789";
+const chars =
+"abcdefghijklmnopqrstuvwxyz0123456789";
 
-let tikUsers = [];
-let snapUsers = [];
-let storeCodes = [];
+let tiktokUsers=[];
+let snapUsers=[];
+let storeCodes=[];
 
 
-/* =========================
-   الانتقال بين الصفحات
-========================= */
+/* الانتقال */
 
-function showPage(page){
+function openPage(page){
 
     document
     .querySelectorAll(".page")
-    .forEach(p =>
-        p.classList.remove("active")
-    );
+    .forEach(x=>x.classList.remove("active"));
 
     document
     .getElementById(page)
     .classList.add("active");
 
-    if(page === "tiktok"){
+    if(page==="tiktok")
         generateTikTok();
-    }
 
-    if(page === "snap"){
+    if(page==="snap")
         generateSnap();
-    }
 
-    if(page === "store"){
+    if(page==="store")
         generateCodes();
-    }
 }
 
 
-/* =========================
-   مولد اليوزرات
-   أغلبها 4 خانات
-   وبعضها أطول
-========================= */
+/* توليد يوزر */
 
-function randomUsername(){
+function makeUsername(){
 
-    /*
-       70% رباعي
-       20% خماسي
-       10% أطول
-    */
+    let lengths=[4,4,4,4,4,5,5,6,7,8];
 
-    const chance =
-        Math.random();
-
-    let length;
-
-    if(chance < 0.70){
-        length = 4;
-    }
-    else if(chance < 0.90){
-        length = 5;
-    }
-    else{
-        length =
-            Math.floor(Math.random()*5)+6;
-    }
+    let length =
+        lengths[
+            Math.floor(Math.random()*lengths.length)
+        ];
 
     let username =
         letters[
-            Math.floor(
-                Math.random()*letters.length
-            )
+            Math.floor(Math.random()*letters.length)
         ];
-
-    const chars =
-        letters + numbers;
 
     for(let i=1;i<length;i++){
 
         username +=
             chars[
-                Math.floor(
-                    Math.random()*chars.length
-                )
+                Math.floor(Math.random()*chars.length)
             ];
     }
 
@@ -449,52 +336,46 @@ function randomUsername(){
 }
 
 
-/* =========================
-   إنشاء قائمة بدون تكرار
-========================= */
+/* قائمة يوزرات */
 
-function createUsers(amount){
+function makeUsers(amount=30){
 
-    const set =
-        new Set();
+    let set=new Set();
 
-    while(set.size < amount){
-
-        set.add(
-            randomUsername()
-        );
+    while(set.size<amount){
+        set.add(makeUsername());
     }
 
     return [...set];
 }
 
 
-/* =========================
-   عرض اليوزرات
-========================= */
+/* عرض اليوزرات */
 
-function renderUsers(list, elementId){
+function renderUsers(users,id){
 
-    const box =
-        document.getElementById(elementId);
+    const box=document.getElementById(id);
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
-    list.forEach(username => {
+    users.forEach(user=>{
 
-        const row =
-            document.createElement("div");
+        const row=document.createElement("div");
 
-        row.className = "item";
+        row.className="item";
 
-        row.innerHTML = `
-            <span class="username">
-                @${username}
+        row.innerHTML=`
+            <span class="name">@${user}</span>
+
+            <span class="status">
+                🟡 غير متحقق
             </span>
 
-            <span class="tag">
-                مرشح
-            </span>
+            <button
+                class="copyOne"
+                onclick="copyOne('${user}')">
+                📋
+            </button>
         `;
 
         box.appendChild(row);
@@ -502,105 +383,44 @@ function renderUsers(list, elementId){
 }
 
 
-/* =========================
-   تيك توك
-========================= */
+/* تيك */
 
 function generateTikTok(){
 
-    tikUsers =
-        createUsers(30);
+    tiktokUsers=makeUsers(30);
 
     renderUsers(
-        tikUsers,
+        tiktokUsers,
         "tikList"
     );
-
-    document
-    .getElementById("tikCounter")
-    .textContent =
-        tikUsers.length +
-        " يوزر";
 }
 
 
-/* =========================
-   سناب
-========================= */
+/* سناب */
 
 function generateSnap(){
 
-    snapUsers =
-        createUsers(30);
+    snapUsers=makeUsers(30);
 
     renderUsers(
         snapUsers,
         "snapList"
     );
-
-    document
-    .getElementById("snapCounter")
-    .textContent =
-        snapUsers.length +
-        " يوزر";
 }
 
 
-/* =========================
-   نسخ تيك
-========================= */
+/* كود ستور */
 
-function copyTikTok(){
+function makeCode(){
 
-    if(!tikUsers.length) return;
-
-    navigator.clipboard.writeText(
-        tikUsers
-        .map(x => "@" + x)
-        .join("\n")
-    );
-
-    alert("✅ تم نسخ يوزرات تيك توك");
-}
-
-
-/* =========================
-   نسخ سناب
-========================= */
-
-function copySnap(){
-
-    if(!snapUsers.length) return;
-
-    navigator.clipboard.writeText(
-        snapUsers
-        .map(x => "@" + x)
-        .join("\n")
-    );
-
-    alert("✅ تم نسخ يوزرات سناب");
-}
-
-
-/* =========================
-   ستور
-========================= */
-
-function randomCode(){
-
-    const chars =
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    let code = "";
+    let code="";
 
     for(let i=0;i<12;i++){
 
         code +=
             chars[
-                Math.floor(
-                    Math.random()*chars.length
-                )
-            ];
+                Math.floor(Math.random()*chars.length)
+            ].toUpperCase();
     }
 
     return code;
@@ -609,54 +429,66 @@ function randomCode(){
 
 function generateCodes(){
 
-    storeCodes = [];
+    let set=new Set();
 
-    const used =
-        new Set();
-
-    while(used.size < 5){
-
-        used.add(
-            randomCode()
-        );
+    while(set.size<10){
+        set.add(makeCode());
     }
 
-    storeCodes =
-        [...used];
+    storeCodes=[...set];
 
-    const box =
-        document.getElementById("codes");
+    const box=
+        document.getElementById("codeList");
 
-    box.innerHTML = "";
+    box.innerHTML="";
 
-    storeCodes.forEach(code => {
+    storeCodes.forEach(code=>{
 
-        const div =
+        const row=
             document.createElement("div");
 
-        div.className = "code";
+        row.className="code";
 
-        div.textContent =
-            code;
+        row.innerHTML=`
+            <span class="codeText">
+                ${code}
+            </span>
 
-        box.appendChild(div);
+            <button
+                class="copyOne"
+                onclick="copyOne('${code}')">
+                📋 نسخ
+            </button>
+        `;
+
+        box.appendChild(row);
     });
 }
 
 
-/* =========================
-   نسخ الأكواد
-========================= */
+/* نسخ عنصر واحد */
 
-function copyCodes(){
+function copyOne(text){
 
-    if(!storeCodes.length) return;
+    navigator.clipboard
+    .writeText(text)
+    .then(()=>{
+        alert("✅ تم النسخ");
+    });
+}
 
-    navigator.clipboard.writeText(
-        storeCodes.join("\n")
-    );
 
-    alert("✅ تم نسخ الأكواد");
+/* نسخ الكل */
+
+function copyAll(list){
+
+    if(!list.length) return;
+
+    navigator.clipboard
+    .writeText(list.join("\n"))
+    .then(()=>{
+        alert("✅ تم نسخ الكل");
+    });
 }
 
 
