@@ -1,97 +1,445 @@
-from flask import Flask, render_template, request, jsonify, send_file
-import random
-import string
-import os
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 
-app = Flask(__name__)
+<title>TikTok Hunter</title>
 
-RESULTS_DIR = "results"
-RESULTS_FILE = os.path.join(RESULTS_DIR, "available.txt")
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 
-os.makedirs(RESULTS_DIR, exist_ok=True)
+body{
+ margin:0;
+ min-height:100vh;
+ font-family:Arial,sans-serif;
+ color:#fff;
+ background:
+ radial-gradient(circle at 10% 0%,#ec489955,transparent 30%),
+ radial-gradient(circle at 100% 20%,#7c3aed55,transparent 30%),
+ linear-gradient(145deg,#050507,#11111b,#050507);
+}
 
+.app{
+ width:min(94%,540px);
+ margin:auto;
+ padding:18px 0 35px;
+}
 
-def generate_username(length, mode="mixed"):
-    if mode == "letters":
-        chars = string.ascii_lowercase
-    elif mode == "numbers":
-        chars = string.digits
-    else:
-        chars = string.ascii_lowercase + string.digits
+.hero{
+ text-align:center;
+ padding:30px 15px;
+ border-radius:28px;
+ background:#ffffff0d;
+ border:1px solid #ffffff18;
+ box-shadow:0 20px 60px #0008;
+ backdrop-filter:blur(15px);
+}
 
-    return "".join(random.choice(chars) for _ in range(length))
+.logo{
+ width:78px;height:78px;
+ margin:auto;
+ display:flex;
+ align-items:center;
+ justify-content:center;
+ border-radius:24px;
+ font-size:38px;
+ background:linear-gradient(135deg,#ff2d55,#7c3aed);
+ box-shadow:0 12px 35px #ec489955;
+}
 
+h1{margin:16px 0 5px;font-size:29px}
+.sub{color:#aaa;font-size:13px}
 
-@app.route("/")
-def index():
-    return render_template("index.html")
+.card{
+ margin-top:14px;
+ padding:17px;
+ border-radius:22px;
+ background:#ffffff09;
+ border:1px solid #ffffff12;
+ backdrop-filter:blur(14px);
+}
 
+.row{
+ display:grid;
+ grid-template-columns:1fr 1fr;
+ gap:9px;
+}
 
-@app.post("/generate")
-def generate():
-    data = request.get_json(silent=True) or {}
+label{
+ display:block;
+ margin-bottom:7px;
+ color:#bbb;
+ font-size:12px;
+}
 
-    try:
-        length = int(data.get("length", 4))
-        amount = int(data.get("amount", 100))
-    except (TypeError, ValueError):
-        return jsonify({"error": "قيم غير صحيحة"}), 400
+select,input{
+ width:100%;
+ padding:13px;
+ border-radius:13px;
+ outline:none;
+ border:1px solid #ffffff18;
+ background:#181722;
+ color:#fff;
+ font-size:14px;
+}
 
-    length = max(3, min(length, 5))
-    amount = max(1, min(amount, 5000))
+button{
+ width:100%;
+ margin-top:11px;
+ padding:14px;
+ border:0;
+ border-radius:14px;
+ color:#fff;
+ font-size:14px;
+ font-weight:bold;
+ background:linear-gradient(135deg,#ec4899,#7c3aed);
+}
 
-    mode = data.get("mode", "mixed")
+.stop{background:linear-gradient(135deg,#ef4444,#991b1b)}
+.download{background:#292735}
 
-    usernames = []
-    used = set()
+.stats{
+ display:grid;
+ grid-template-columns:repeat(3,1fr);
+ gap:7px;
+}
 
-    while len(usernames) < amount:
-        username = generate_username(length, mode)
+.stat{
+ text-align:center;
+ padding:12px 4px;
+ border-radius:14px;
+ background:#ffffff08;
+}
 
-        if username not in used:
-            used.add(username)
-            usernames.append(username)
+.num{font-size:20px;font-weight:bold}
+.txt{font-size:10px;color:#999;margin-top:3px}
 
-    return jsonify({
-        "success": True,
-        "usernames": usernames
-    })
+.progress{
+ height:7px;
+ margin-top:13px;
+ border-radius:20px;
+ overflow:hidden;
+ background:#24222e;
+}
 
+.bar{
+ height:100%;
+ width:0%;
+ background:linear-gradient(90deg,#ec4899,#8b5cf6);
+ transition:.1s;
+}
 
-@app.post("/save")
-def save():
-    data = request.get_json(silent=True) or {}
-    username = str(data.get("username", "")).strip().lower()
+.results{
+ max-height:430px;
+ overflow:auto;
+}
 
-    allowed = string.ascii_lowercase + string.digits + "_."
+.result{
+ display:flex;
+ align-items:center;
+ gap:7px;
+ margin-bottom:7px;
+ padding:11px;
+ border-radius:14px;
+ background:#ffffff07;
+ border:1px solid #ffffff0d;
+}
 
-    if not username or len(username) > 24:
-        return jsonify({"success": False}), 400
+.user{
+ flex:1;
+ direction:ltr;
+ font-weight:bold;
+ overflow:hidden;
+ text-overflow:ellipsis;
+}
 
-    if any(c not in allowed for c in username):
-        return jsonify({"success": False}), 400
+.badge{
+ padding:5px 8px;
+ border-radius:15px;
+ font-size:10px;
+ color:#facc15;
+ background:#3b3210;
+}
 
-    with open(RESULTS_FILE, "a", encoding="utf-8") as f:
-        f.write(username + "\n")
+.copy{
+ width:auto;
+ margin:0;
+ padding:7px 9px;
+ background:#292735;
+ font-size:10px;
+}
 
-    return jsonify({"success": True})
+.notice{
+ margin-top:12px;
+ text-align:center;
+ color:#777;
+ font-size:10px;
+ line-height:1.7;
+}
+</style>
+</head>
 
+<body>
 
-@app.get("/download")
-def download():
-    if not os.path.exists(RESULTS_FILE):
-        open(RESULTS_FILE, "w", encoding="utf-8").close()
+<div class="app">
 
-    return send_file(
-        RESULTS_FILE,
-        as_attachment=True,
-        download_name="available.txt"
-    )
+<div class="hero">
+ <div class="logo">♬</div>
+ <h1>TikTok Hunter</h1>
+ <div class="sub">Fast Username Generator</div>
+</div>
 
+<div class="card">
 
-if __name__ == "__main__":
-    app.run(
-        host="0.0.0.0",
-        port=5000,
-        debug=False
-    )
+<div class="row">
+
+<div>
+<label>طول اليوزر</label>
+<select id="length">
+<option value="3">3 — ثلاثي</option>
+<option value="4" selected>4 — رباعي</option>
+<option value="5">5 — خماسي</option>
+</select>
+</div>
+
+<div>
+<label>عدد اليوزرات</label>
+<input id="amount" type="number" value="100" min="1" max="10000">
+</div>
+
+</div>
+
+<div style="margin-top:13px">
+<label>النمط</label>
+
+<select id="mode">
+<option value="mixed">حروف + أرقام</option>
+<option value="letters">حروف فقط</option>
+<option value="numbers">أرقام فقط</option>
+</select>
+</div>
+
+<button id="start">🚀 ابدأ</button>
+<button id="stop" class="stop" style="display:none">⛔ إيقاف</button>
+
+<div class="progress">
+ <div id="bar" class="bar"></div>
+</div>
+
+</div>
+
+<div class="card">
+
+<div class="stats">
+
+<div class="stat">
+ <div id="generated" class="num">0</div>
+ <div class="txt">تم التوليد</div>
+</div>
+
+<div class="stat">
+ <div id="unique" class="num">0</div>
+ <div class="txt">بدون تكرار</div>
+</div>
+
+<div class="stat">
+ <div id="shown" class="num">0</div>
+ <div class="txt">النتائج</div>
+</div>
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3 style="margin-top:0">📋 النتائج</h3>
+
+<div id="results" class="results">
+ <div id="empty" style="text-align:center;color:#777;padding:30px">
+ لم يبدأ التوليد
+ </div>
+</div>
+
+<button class="download" id="download">
+💾 تحميل TXT
+</button>
+
+</div>
+
+<div class="notice">
+هذه النسخة لا تستخدم API ولا تدّعي أن اليوزر متاح.
+«غير مؤكد» تعني أن الاسم تم توليده فقط ولم يتم التحقق منه مع TikTok.
+</div>
+
+</div>
+
+<script>
+const start=document.getElementById("start");
+const stop=document.getElementById("stop");
+const results=document.getElementById("results");
+const bar=document.getElementById("bar");
+
+let running=false;
+let allUsers=[];
+
+function randomUser(length,mode){
+
+ let chars;
+
+ if(mode==="letters"){
+   chars="abcdefghijklmnopqrstuvwxyz";
+ }else if(mode==="numbers"){
+   chars="0123456789";
+ }else{
+   chars="abcdefghijklmnopqrstuvwxyz0123456789";
+ }
+
+ let out="";
+
+ for(let i=0;i<length;i++){
+   out+=chars[Math.floor(Math.random()*chars.length)];
+ }
+
+ return out;
+}
+
+function addUser(user){
+
+ const empty=document.getElementById("empty");
+
+ if(empty) empty.remove();
+
+ const row=document.createElement("div");
+ row.className="result";
+
+ row.innerHTML=`
+   <span class="user">@${user}</span>
+   <span class="badge">غير مؤكد</span>
+   <button class="copy">نسخ</button>
+ `;
+
+ row.querySelector(".copy").onclick=()=>{
+   navigator.clipboard.writeText("@"+user);
+ };
+
+ results.prepend(row);
+}
+
+async function startHunter(){
+
+ running=true;
+ allUsers=[];
+
+ start.style.display="none";
+ stop.style.display="block";
+
+ results.innerHTML=`
+ <div id="empty"
+ style="text-align:center;color:#777;padding:30px">
+ جاري التوليد...
+ </div>`;
+
+ document.getElementById("generated").textContent="0";
+ document.getElementById("unique").textContent="0";
+ document.getElementById("shown").textContent="0";
+
+ const length=Number(
+   document.getElementById("length").value
+ );
+
+ const amount=Math.min(
+   Math.max(
+     Number(document.getElementById("amount").value)||100,
+     1
+   ),
+   10000
+ );
+
+ const mode=document.getElementById("mode").value;
+
+ const used=new Set();
+
+ for(let i=0;i<amount && running;i++){
+
+   let user;
+
+   do{
+     user=randomUser(length,mode);
+   }while(used.has(user));
+
+   used.add(user);
+   allUsers.push(user);
+
+   addUser(user);
+
+   document.getElementById("generated")
+     .textContent=i+1;
+
+   document.getElementById("unique")
+     .textContent=used.size;
+
+   document.getElementById("shown")
+     .textContent=allUsers.length;
+
+   bar.style.width=
+     ((i+1)/amount*100)+"%";
+
+   /*
+    * دفعات صغيرة حتى لا تتجمد صفحة الجوال.
+    */
+   if(i%50===0){
+     await new Promise(r=>setTimeout(r,0));
+   }
+ }
+
+ finish();
+}
+
+function finish(){
+
+ running=false;
+
+ start.style.display="block";
+ stop.style.display="none";
+}
+
+stop.onclick=()=>{
+ running=false;
+ finish();
+};
+
+start.onclick=startHunter;
+
+document.getElementById("download").onclick=()=>{
+
+ if(!allUsers.length){
+   alert("ولد يوزرات أولاً");
+   return;
+ }
+
+ const text=allUsers.join("\n");
+
+ const blob=new Blob(
+   [text],
+   {type:"text/plain;charset=utf-8"}
+ );
+
+ const url=URL.createObjectURL(blob);
+
+ const a=document.createElement("a");
+
+ a.href=url;
+ a.download="tiktok_usernames.txt";
+
+ document.body.appendChild(a);
+ a.click();
+ a.remove();
+
+ URL.revokeObjectURL(url);
+};
+</script>
+
+</body>
+</html>
