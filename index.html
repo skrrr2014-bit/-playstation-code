@@ -3,7 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>مولد يوزرات Snapchat</title>
+
+<title>مولد يوزرات</title>
 
 <style>
 * {
@@ -13,50 +14,51 @@
 
 body {
   margin: 0;
-  min-height: 100vh;
-  background: #101010;
+  background: #0f0f0f;
   color: white;
   padding: 18px;
 }
 
 .container {
-  max-width: 650px;
+  max-width: 700px;
   margin: auto;
 }
 
 .card {
-  background: #1c1c1c;
+  background: #1b1b1b;
   border-radius: 22px;
   padding: 22px;
-  box-shadow: 0 12px 35px rgba(0,0,0,.4);
 }
 
 h1 {
   text-align: center;
-  margin: 0 0 8px;
+  margin-top: 0;
 }
 
-.description {
+.sub {
   text-align: center;
   color: #999;
-  margin-bottom: 22px;
-  font-size: 14px;
+  margin-bottom: 20px;
 }
 
-.options {
+.row {
   display: flex;
   gap: 10px;
   margin-bottom: 12px;
 }
 
-.length {
-  flex: 1;
+button,
+select {
   border: 0;
   border-radius: 12px;
-  padding: 14px;
+  padding: 13px;
+  font-size: 15px;
+}
+
+.length {
+  flex: 1;
   background: #333;
   color: white;
-  font-size: 16px;
 }
 
 .length.active {
@@ -65,114 +67,67 @@ h1 {
   font-weight: bold;
 }
 
-.generate {
-  width: 100%;
-  border: 0;
-  border-radius: 12px;
-  padding: 15px;
-  background: #fffc00;
-  color: #111;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 18px;
-}
-
-.generate:active,
-button:active {
-  transform: scale(.98);
-}
-
-.settings {
-  background: #292929;
-  border-radius: 14px;
-  padding: 14px;
-  margin-bottom: 18px;
-}
-
-.settings label {
-  display: block;
-  margin-bottom: 8px;
-  color: #ccc;
-}
-
 select {
   width: 100%;
-  padding: 12px;
-  border: 0;
-  border-radius: 10px;
-  background: #404040;
+  background: #333;
   color: white;
-  font-size: 15px;
+  margin-bottom: 12px;
+}
+
+.generate {
+  width: 100%;
+  background: #fffc00;
+  color: #111;
+  font-weight: bold;
+  font-size: 18px;
 }
 
 #results {
+  margin-top: 20px;
   display: grid;
-  gap: 10px;
+  gap: 8px;
 }
 
-.username {
+.item {
   background: #292929;
-  border-radius: 15px;
-  padding: 14px;
-}
-
-.top {
+  border-radius: 12px;
+  padding: 12px;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
 }
 
 .name {
-  font-size: 21px;
-  font-weight: bold;
-  letter-spacing: 1px;
-  direction: ltr;
-}
-
-.score {
-  font-size: 12px;
-  color: #aaa;
-}
-
-.actions {
-  display: flex;
-  gap: 8px;
-  margin-top: 11px;
-}
-
-.actions button {
   flex: 1;
-  border: 0;
-  border-radius: 10px;
-  padding: 11px;
-  font-size: 14px;
+  direction: ltr;
+  text-align: left;
+  font-weight: bold;
+  font-size: 18px;
 }
 
-.copy {
+.item button {
   background: #444;
   color: white;
+  padding: 10px;
 }
 
 .open {
-  background: #fffc00;
-  color: #111;
-  font-weight: bold;
+  background: #fffc00 !important;
+  color: #111 !important;
 }
 
 .status {
   text-align: center;
   color: #aaa;
-  margin: 14px 0;
-  min-height: 20px;
+  margin-top: 15px;
 }
 
 .note {
-  margin-top: 18px;
   color: #777;
   font-size: 12px;
   line-height: 1.8;
   text-align: center;
+  margin-top: 18px;
 }
 </style>
 </head>
@@ -183,13 +138,13 @@ select {
 
 <div class="card">
 
-<h1>👻 مولد يوزرات Snapchat</h1>
+<h1>👻 مولّد اليوزرات</h1>
 
-<div class="description">
-يولد ويصفي اقتراحات ثلاثية أو رباعية تلقائيًا
+<div class="sub">
+توليد تلقائي لاقتراحات ثلاثية ورباعية
 </div>
 
-<div class="options">
+<div class="row">
 
 <button
 id="three"
@@ -207,34 +162,36 @@ onclick="setLength(4)">
 
 </div>
 
-<div class="settings">
+<select id="amount">
 
-<label>نوع الترشيحات</label>
+<option value="50">50 يوزر</option>
+<option value="100">100 يوزر</option>
+<option value="250">250 يوزر</option>
+<option value="500">500 يوزر</option>
+<option value="1000">1000 يوزر</option>
+
+</select>
 
 <select id="style">
-<option value="balanced">
-متوازنة
+
+<option value="mixed">
+مزيج حروف وأرقام
 </option>
 
 <option value="letters">
-حروف أكثر
+حروف فقط
 </option>
 
 <option value="numbers">
-أرقام أكثر
+أرقام فقط
 </option>
 
-<option value="mixed">
-مزيج عشوائي
-</option>
 </select>
-
-</div>
 
 <button
 class="generate"
 onclick="generate()">
-🎲 توليد أفضل الاقتراحات
+🎲 توليد
 </button>
 
 <div
@@ -245,9 +202,8 @@ class="status">
 <div id="results"></div>
 
 <div class="note">
-⭐ درجة الترشيح هي ترتيب داخلي لجودة الشكل فقط،
-وليست نسبة توفر اليوزر.<br>
-⚠️ لا يمكن للأداة تأكيد التوفر بدون تحقق رسمي من Snapchat.
+⚠️ هذه الأداة تولّد اقتراحات فقط ولا تؤكد توفر اليوزر.
+استخدم زر «فتح» للتحقق من اليوزر يدويًا.
 </div>
 
 </div>
@@ -257,7 +213,7 @@ class="status">
 
 <script>
 
-let usernameLength = 4;
+let length = 4;
 
 const letters =
 "abcdefghijklmnopqrstuvwxyz";
@@ -266,9 +222,9 @@ const numbers =
 "0123456789";
 
 
-function setLength(length) {
+function setLength(value) {
 
-  usernameLength = length;
+  length = value;
 
   document
     .getElementById("three")
@@ -278,41 +234,34 @@ function setLength(length) {
     .getElementById("four")
     .classList.remove("active");
 
-  if (length === 3) {
-
-    document
-      .getElementById("three")
-      .classList.add("active");
-
-  } else {
-
-    document
-      .getElementById("four")
-      .classList.add("active");
-
-  }
+  document
+    .getElementById(
+      value === 3 ? "three" : "four"
+    )
+    .classList.add("active");
 
   generate();
 }
 
 
-function randomFrom(text) {
+function randomChar(source) {
 
-  return text[
-    Math.floor(Math.random() * text.length)
+  return source[
+    Math.floor(
+      Math.random() * source.length
+    )
   ];
-
 }
 
 
-function makeUsername() {
+function createUsername() {
 
   const type =
     document.getElementById("style").value;
 
-  let result = "";
+  let username = "";
 
-  for (let i = 0; i < usernameLength; i++) {
+  for (let i = 0; i < length; i++) {
 
     let source;
 
@@ -320,92 +269,32 @@ function makeUsername() {
 
       source = letters;
 
-    }
-
-    else if (type === "numbers") {
+    } else if (type === "numbers") {
 
       source = numbers;
 
-    }
-
-    else if (type === "mixed") {
+    } else {
 
       source =
-        Math.random() < .5
+        Math.random() < 0.65
         ? letters
         : numbers;
 
     }
 
-    else {
-
-      // متوازن
-      source =
-        Math.random() < .7
-        ? letters
-        : numbers;
-
-    }
-
-    result += randomFrom(source);
-
+    username += randomChar(source);
   }
 
-  return result;
-}
-
-
-/*
-  تقييم شكلي فقط.
-  لا يمثل احتمالية توفر اليوزر.
-*/
-function scoreUsername(username) {
-
-  let score = 50;
-
-  const unique =
-    new Set(username).size;
-
-  if (unique === username.length) {
-    score += 15;
-  }
-
-  if (unique === username.length - 1) {
-    score += 8;
-  }
-
-  // مكافأة بعض الأنماط المتناسقة
-  if (
-    username.length >= 3 &&
-    username[0] === username[2]
-  ) {
-    score += 10;
-  }
-
-  if (
-    username.length === 4 &&
-    username[1] === username[3]
-  ) {
-    score += 10;
-  }
-
-  // عدم الإكثار من الأرقام
-  const digitCount =
-    (username.match(/[0-9]/g) || []).length;
-
-  if (digitCount === 0) {
-    score += 5;
-  }
-
-  if (digitCount === username.length) {
-    score -= 5;
-  }
-
-  return Math.max(1, Math.min(99, score));
+  return username;
 }
 
 
 function generate() {
+
+  const amount =
+    Number(
+      document.getElementById("amount").value
+    );
 
   const results =
     document.getElementById("results");
@@ -417,76 +306,38 @@ function generate() {
 
   const usernames = new Set();
 
-  while (usernames.size < 30) {
+  while (usernames.size < amount) {
 
-    usernames.add(makeUsername());
+    usernames.add(createUsername());
 
   }
 
-  const list =
-    [...usernames].map(username => {
 
-      return {
-        username,
-        score: scoreUsername(username)
-      };
+  usernames.forEach(username => {
 
-    });
-
-  list.sort(
-    (a, b) => b.score - a.score
-  );
-
-
-  list.forEach(item => {
-
-    const box =
+    const item =
       document.createElement("div");
 
-    box.className = "username";
+    item.className = "item";
 
-    const top =
-      document.createElement("div");
-
-    top.className = "top";
 
     const name =
       document.createElement("div");
 
     name.className = "name";
 
-    name.textContent =
-      item.username;
-
-    const score =
-      document.createElement("div");
-
-    score.className = "score";
-
-    score.textContent =
-      "⭐ " + item.score + "/99";
-
-    top.appendChild(name);
-    top.appendChild(score);
-
-
-    const actions =
-      document.createElement("div");
-
-    actions.className = "actions";
+    name.textContent = username;
 
 
     const copy =
       document.createElement("button");
 
-    copy.className = "copy";
+    copy.textContent = "📋";
 
-    copy.textContent =
-      "📋 نسخ";
+    copy.title = "نسخ";
 
-    copy.onclick = function() {
-      copyUsername(item.username);
-    };
+    copy.onclick = () =>
+      copyUsername(username);
 
 
     const open =
@@ -494,27 +345,23 @@ function generate() {
 
     open.className = "open";
 
-    open.textContent =
-      "👻 فتح";
+    open.textContent = "👻 فتح";
 
-    open.onclick = function() {
-      openSnapchat(item.username);
-    };
+    open.onclick = () =>
+      openSnapchat(username);
 
 
-    actions.appendChild(copy);
-    actions.appendChild(open);
+    item.appendChild(name);
+    item.appendChild(copy);
+    item.appendChild(open);
 
-    box.appendChild(top);
-    box.appendChild(actions);
-
-    results.appendChild(box);
+    results.appendChild(item);
 
   });
 
 
   status.textContent =
-    "تم توليد 30 اقتراحًا وترتيبها حسب شكل اليوزر";
+    `تم توليد ${amount} يوزر`;
 }
 
 
@@ -543,11 +390,9 @@ function openSnapchat(username) {
     encodeURIComponent(username);
 
   window.open(url, "_blank");
-
 }
 
 
-// تشغيل أولي
 generate();
 
 </script>
