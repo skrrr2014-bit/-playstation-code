@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +7,6 @@
 <title>RwL Store Checker</title>
 
 <style>
-
 * {
   box-sizing: border-box;
 }
@@ -17,290 +15,105 @@ body {
   margin: 0;
   min-height: 100vh;
   padding: 20px;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   background:
     radial-gradient(circle at 15% 20%, rgba(55,90,255,.20), transparent 35%),
     radial-gradient(circle at 85% 80%, rgba(145,40,220,.20), transparent 35%),
     #020205;
-
   font-family: Arial, sans-serif;
   color: white;
 }
 
-body::before,
-body::after {
-  content: "";
-  position: fixed;
-
-  width: 420px;
-  height: 420px;
-
-  border-radius: 50%;
-
-  filter: blur(100px);
-
-  pointer-events: none;
-}
-
-body::before {
-  background: rgba(50,90,255,.18);
-  top: -180px;
-  left: -150px;
-  animation: glow1 8s infinite alternate;
-}
-
-body::after {
-  background: rgba(150,40,220,.16);
-  right: -150px;
-  bottom: -180px;
-  animation: glow2 9s infinite alternate;
-}
-
-@keyframes glow1 {
-  from {
-    transform: translate(0,0);
-  }
-
-  to {
-    transform: translate(120px,80px);
-  }
-}
-
-@keyframes glow2 {
-  from {
-    transform: translate(0,0);
-  }
-
-  to {
-    transform: translate(-100px,-70px);
-  }
-}
-
-.stars {
-  position: fixed;
-  inset: 0;
-
-  pointer-events: none;
-
-  background-image:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,.7) 1px,
-      transparent 1px
-    );
-
-  background-size: 55px 55px;
-
-  opacity: .12;
-
-  animation: stars 15s linear infinite;
-}
-
-@keyframes stars {
-  from {
-    transform: translateY(0);
-  }
-
-  to {
-    transform: translateY(55px);
-  }
-}
-
 .card {
-  position: relative;
-  z-index: 2;
-
   width: min(100%, 370px);
-
   padding: 28px;
-
   border-radius: 28px;
-
-  background:
-    linear-gradient(
-      145deg,
-      rgba(32,32,42,.97),
-      rgba(7,7,11,.98)
-    );
-
+  background: linear-gradient(145deg, rgba(32,32,42,.97), rgba(7,7,11,.98));
   border: 1px solid rgba(255,255,255,.13);
-
-  box-shadow:
-    0 30px 90px rgba(0,0,0,.8),
-    inset 0 1px 0 rgba(255,255,255,.08);
-
-  backdrop-filter: blur(20px);
-
-  animation: floating 5s ease-in-out infinite;
-}
-
-@keyframes floating {
-
-  0%,100% {
-    transform: translateY(0);
-  }
-
-  50% {
-    transform: translateY(-6px);
-  }
-
+  box-shadow: 0 30px 90px rgba(0,0,0,.8);
 }
 
 .brand {
-
   text-align: center;
-
   font-size: 48px;
-
   font-weight: 900;
-
   letter-spacing: 8px;
-
-  background:
-    linear-gradient(
-      90deg,
-      #fff,
-      #80aaff,
-      #fff,
-      #c58cff,
-      #fff
-    );
-
+  background: linear-gradient(90deg,#fff,#80aaff,#fff,#c58cff,#fff);
   background-size: 300%;
-
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
   animation: shine 4s linear infinite;
 }
 
 @keyframes shine {
-
-  from {
-    background-position: 0%;
-  }
-
-  to {
-    background-position: 300%;
-  }
-
+  from { background-position: 0%; }
+  to { background-position: 300%; }
 }
 
 .subtitle {
-
   text-align: center;
-
   color: #888;
-
   font-size: 10px;
-
   letter-spacing: 3px;
-
-  margin-top: 4px;
-  margin-bottom: 23px;
+  margin: 4px 0 23px;
 }
 
 .label {
-
   display: block;
-
   color: #bbb;
-
   font-size: 12px;
-
   margin-bottom: 8px;
 }
 
 #codeInput {
-
   width: 100%;
   height: 54px;
-
   padding: 0 14px;
-
   border-radius: 14px;
-
   border: 1px solid #34343e;
-
   outline: none;
-
   background: #030305;
-
   color: white;
-
   text-align: center;
-
   direction: ltr;
-
   font-size: 16px;
-
   font-weight: bold;
-
   letter-spacing: 2px;
-
-  transition: .25s;
 }
 
 #codeInput:focus {
-
   border-color: #637cff;
-
-  box-shadow:
-    0 0 22px rgba(80,110,255,.20);
+  box-shadow: 0 0 22px rgba(80,110,255,.20);
 }
 
 .status {
-
   min-height: 58px;
-
   display: flex;
-
   align-items: center;
   justify-content: center;
-
   text-align: center;
-
   margin-top: 12px;
-
   padding: 12px;
-
   border-radius: 14px;
-
   background: #08080c;
-
   border: 1px solid #25252d;
-
   color: #999;
-
   font-size: 12px;
-
   line-height: 1.6;
 }
 
 button {
-
   width: 100%;
-
   min-height: 47px;
-
   margin-top: 9px;
-
   padding: 11px;
-
   border: 0;
-
   border-radius: 12px;
-
   font-size: 14px;
-
   font-weight: bold;
-
   cursor: pointer;
-
   transition: .2s;
 }
 
@@ -309,103 +122,46 @@ button:active {
 }
 
 .check {
-
-  background:
-    linear-gradient(
-      90deg,
-      #00c6ff,
-      #4169ff
-    );
-
+  background: linear-gradient(90deg,#00c6ff,#4169ff);
   color: white;
-
-  box-shadow:
-    0 8px 28px rgba(40,100,255,.22);
 }
 
 .copy {
-
   background: #292930;
-
   color: white;
 }
 
-.redeem {
-
-  background:
-    linear-gradient(
-      90deg,
-      #fff,
-      #dce6ff,
-      #fff
-    );
-
-  color: #050507;
-}
-
 .clear {
-
   background: transparent;
-
   border: 1px solid #30303a;
-
   color: #999;
 }
 
 .info {
-
   margin-top: 17px;
-
   padding-top: 14px;
-
   border-top: 1px solid rgba(255,255,255,.08);
-
   text-align: center;
-
   font-size: 9px;
-
   line-height: 1.8;
-
   color: #666;
 }
-
-.footer {
-
-  margin-top: 12px;
-
-  text-align: center;
-
-  font-size: 8px;
-
-  color: #555;
-
-  letter-spacing: 3px;
-}
-
 </style>
 </head>
 
-
 <body>
-
-<div class="stars"></div>
-
 
 <div class="card">
 
-  <div class="brand">
-    RwL
-  </div>
+  <div class="brand">RwL</div>
 
   <div class="subtitle">
     PLAYSTATION STORE CHECKER
   </div>
 
-
   <label class="label">
     أدخل رمز PlayStation Store
   </label>
-
 
   <input
     id="codeInput"
@@ -417,295 +173,139 @@ button:active {
     placeholder="XXXXXXXXXXXX"
   >
 
-
-  <div
-    id="status"
-    class="status"
-    aria-live="polite">
-
+  <div id="status" class="status">
     بانتظار إدخال الرمز
-
   </div>
 
-
-  <button
-    class="check"
-    type="button"
-    onclick="prepareCode()">
-
-    نسخ الكود والتحقق رسميًا
+  <button class="check" onclick="checkCode()">
+    التحقق من الكود
   </button>
 
-
-  <button
-    class="copy"
-    type="button"
-    onclick="copyCode()">
-
+  <button class="copy" onclick="copyCode()">
     نسخ الرمز
   </button>
 
-
-  <button
-    class="redeem"
-    type="button"
-    onclick="openStore()">
-
-    فتح PlayStation Store
-  </button>
-
-
-  <button
-    class="clear"
-    type="button"
-    onclick="clearCode()">
-
+  <button class="clear" onclick="clearCode()">
     مسح
   </button>
 
-
   <div class="info">
-
-    أدخل رمزك ثم اضغط «نسخ الكود والتحقق رسميًا».<br>
-    سيتم نسخ الكود وفتح PlayStation Store للتحقق منه.
-
-  </div>
-
-
-  <div class="footer">
-    RwL • STORE • CHECKER
+    يتم تنظيف الكود تلقائيًا وفحص صيغته فقط.
   </div>
 
 </div>
 
-
 <script>
 
-/* =========================
-   العناصر
-========================= */
+const input = document.getElementById("codeInput");
+const status = document.getElementById("status");
 
-const input =
-  document.getElementById("codeInput");
+/* تنظيف تلقائي:
+   A-Z + 0-9 فقط
+*/
+input.addEventListener("input", function () {
 
-const status =
-  document.getElementById("status");
+  input.value = input.value
+    .toUpperCase()
+    .replace(/[^A-Z0-9]/g, "")
+    .slice(0, 12);
 
-
-/* =========================
-   تنظيف الكود
-========================= */
-
-input.addEventListener(
-  "input",
-  function () {
-
-    input.value =
-      input.value
-        .toUpperCase()
-        .replace(/[^A-Z0-9]/g, "")
-        .slice(0, 12);
-
-  }
-);
+});
 
 
-/* =========================
-   نسخ الكود والتحقق الرسمي
-========================= */
+/* التحقق من الصيغة */
+function checkCode() {
 
-function prepareCode() {
+  const code = input.value;
 
-  const code =
-    input.value.trim();
+  if (code.length === 0) {
 
-
-  if (code.length !== 12) {
-
-    setStatus(
-      "❌ يجب أن يكون الرمز 12 خانة.",
-      "#ff7777"
-    );
-
-    return;
-  }
-
-
-  copyCode(false);
-
-
-  setStatus(
-    "✓ تم نسخ الرمز. افتح صفحة PlayStation والصقه للتحقق.",
-    "#8cffb0"
-  );
-
-
-  setTimeout(function () {
-
-    openStore();
-
-  }, 500);
-
-}
-
-
-/* =========================
-   نسخ
-========================= */
-
-function copyCode(showMessage = true) {
-
-  const code =
-    input.value.trim();
-
-
-  if (!code) {
-
-    setStatus(
-      "اكتب رمزًا أولًا.",
+    showStatus(
+      "⚠️ أدخل الكود أولًا.",
       "#ffcc66"
     );
 
     return;
   }
 
+  if (code.length < 12) {
 
-  if (
-    navigator.clipboard &&
-    window.isSecureContext
-  ) {
-
-    navigator.clipboard
-      .writeText(code)
-      .then(function () {
-
-        if (showMessage) {
-
-          setStatus(
-            "✓ تم نسخ الرمز.",
-            "#8cffb0"
-          );
-
-        }
-
-      })
-      .catch(function () {
-
-        fallbackCopy(
-          code,
-          showMessage
-        );
-
-      });
-
-  } else {
-
-    fallbackCopy(
-      code,
-      showMessage
-    );
-
-  }
-
-}
-
-
-/* =========================
-   النسخ الاحتياطي
-========================= */
-
-function fallbackCopy(
-  code,
-  showMessage
-) {
-
-  const textarea =
-    document.createElement("textarea");
-
-  textarea.value = code;
-
-  textarea.style.position =
-    "fixed";
-
-  textarea.style.opacity =
-    "0";
-
-  document.body.appendChild(
-    textarea
-  );
-
-  textarea.select();
-
-  try {
-
-    document.execCommand("copy");
-
-    if (showMessage) {
-
-      setStatus(
-        "✓ تم نسخ الرمز.",
-        "#8cffb0"
-      );
-
-    }
-
-  } catch (error) {
-
-    setStatus(
-      "تعذر نسخ الرمز.",
+    showStatus(
+      "❌ الكود ناقص — يجب أن يكون 12 خانة.",
       "#ff7777"
     );
 
+    return;
   }
 
-  document.body.removeChild(
-    textarea
+  if (!/^[A-Z0-9]{12}$/.test(code)) {
+
+    showStatus(
+      "❌ الكود يحتوي على أحرف أو رموز غير مسموحة.",
+      "#ff7777"
+    );
+
+    return;
+  }
+
+  showStatus(
+    "✓ صيغة الكود صحيحة: 12 خانة A-Z / 0-9",
+    "#8cffb0"
   );
 
 }
 
 
-/* =========================
-   فتح PlayStation Store
-========================= */
+/* نسخ الكود */
+function copyCode() {
 
-function openStore() {
+  const code = input.value;
 
-  window.open(
-    "https://store.playstation.com/",
-    "_blank"
-  );
+  if (!code) {
+
+    showStatus(
+      "⚠️ أدخل الكود أولًا.",
+      "#ffcc66"
+    );
+
+    return;
+  }
+
+  navigator.clipboard.writeText(code)
+    .then(function () {
+
+      showStatus(
+        "✓ تم نسخ الكود.",
+        "#8cffb0"
+      );
+
+    })
+    .catch(function () {
+
+      const area = document.createElement("textarea");
+
+      area.value = code;
+      document.body.appendChild(area);
+      area.select();
+      document.execCommand("copy");
+      area.remove();
+
+      showStatus(
+        "✓ تم نسخ الكود.",
+        "#8cffb0"
+      );
+
+    });
 
 }
 
 
-/* =========================
-   الحالة
-========================= */
-
-function setStatus(
-  message,
-  color
-) {
-
-  status.textContent =
-    message;
-
-  status.style.color =
-    color;
-
-}
-
-
-/* =========================
-   مسح
-========================= */
-
+/* مسح */
 function clearCode() {
 
   input.value = "";
 
-  setStatus(
+  showStatus(
     "بانتظار إدخال الرمز",
     "#999"
   );
@@ -715,22 +315,23 @@ function clearCode() {
 }
 
 
-/* =========================
-   Enter
-========================= */
+/* رسالة الحالة */
+function showStatus(message, color) {
 
-input.addEventListener(
-  "keydown",
-  function(event) {
+  status.textContent = message;
+  status.style.color = color;
 
-    if (event.key === "Enter") {
+}
 
-      prepareCode();
 
-    }
+/* زر Enter */
+input.addEventListener("keydown", function(event) {
 
+  if (event.key === "Enter") {
+    checkCode();
   }
-);
+
+});
 
 </script>
 
