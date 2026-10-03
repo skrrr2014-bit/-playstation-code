@@ -3,185 +3,134 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Snap Username Finder</title>
+<title>أداتي</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
+* {
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
 }
 
-body{
-    margin:0;
-    min-height:100vh;
-    background:linear-gradient(135deg,#fff700,#ffeb3b,#ffffff);
-    display:flex;
-    justify-content:center;
-    padding:25px 12px;
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: linear-gradient(135deg, #111, #242424);
+    color: white;
+    padding: 20px;
 }
 
-.container{
-    width:100%;
-    max-width:650px;
+.container {
+    max-width: 500px;
+    margin: auto;
 }
 
-.card{
-    background:rgba(255,255,255,.94);
-    border-radius:25px;
-    padding:22px;
-    box-shadow:0 15px 40px rgba(0,0,0,.15);
+.card {
+    background: #1c1c1c;
+    border-radius: 22px;
+    padding: 22px;
+    box-shadow: 0 10px 35px rgba(0,0,0,.4);
 }
 
-h1{
-    text-align:center;
-    margin:5px 0 8px;
-    font-size:28px;
+h1 {
+    text-align: center;
+    margin-top: 5px;
 }
 
-.subtitle{
-    text-align:center;
-    color:#666;
-    margin-bottom:22px;
+.menu {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
 }
 
-.controls{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
+.menu button,
+.back,
+.refresh {
+    border: none;
+    border-radius: 14px;
+    padding: 16px;
+    font-size: 17px;
+    font-weight: bold;
+    cursor: pointer;
 }
 
-label{
-    font-weight:bold;
-    margin-bottom:5px;
-    display:block;
+.menu button {
+    background: #292929;
+    color: white;
 }
 
-select,input{
-    width:100%;
-    padding:13px;
-    border:1px solid #ddd;
-    border-radius:12px;
-    font-size:16px;
-    background:white;
+.menu button:hover {
+    background: #3a3a3a;
 }
 
-.full{
-    grid-column:1 / -1;
+.back {
+    background: #444;
+    color: white;
+    margin-bottom: 15px;
+    width: 100%;
 }
 
-button{
-    width:100%;
-    border:0;
-    padding:14px;
-    border-radius:13px;
-    font-size:17px;
-    font-weight:bold;
-    cursor:pointer;
+.refresh {
+    background: #fff;
+    color: #111;
+    width: 100%;
+    margin-top: 15px;
 }
 
-.generate{
-    background:#111;
-    color:white;
-    margin-top:15px;
+.page {
+    display: none;
 }
 
-.generate:active{
-    transform:scale(.98);
+.page.active {
+    display: block;
 }
 
-.actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin-top:10px;
+.list {
+    display: flex;
+    flex-direction: column;
+    gap: 9px;
+    margin-top: 15px;
 }
 
-.copy{
-    background:#eee;
+.item {
+    background: #292929;
+    border-radius: 12px;
+    padding: 13px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    direction: ltr;
 }
 
-.clear{
-    background:#eee;
+.username {
+    font-weight: bold;
 }
 
-.results{
-    margin-top:20px;
+.status {
+    font-size: 13px;
+    color: #8cff8c;
 }
 
-.result{
-    background:#f7f7f7;
-    border-radius:15px;
-    padding:13px;
-    margin-bottom:9px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:10px;
+.code {
+    background: #292929;
+    border-radius: 12px;
+    padding: 17px 10px;
+    text-align: center;
+    font-size: 19px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    direction: ltr;
+    margin-top: 15px;
+    word-break: break-all;
 }
 
-.username{
-    direction:ltr;
-    font-weight:bold;
-    font-size:17px;
-}
-
-.status{
-    white-space:nowrap;
-    padding:7px 10px;
-    border-radius:10px;
-    font-size:13px;
-    font-weight:bold;
-}
-
-.waiting{
-    background:#fff3cd;
-    color:#856404;
-}
-
-.check{
-    background:#111;
-    color:white;
-    width:auto;
-    padding:8px 12px;
-    font-size:13px;
-}
-
-.empty{
-    text-align:center;
-    color:#777;
-    padding:25px;
-}
-
-.note{
-    margin-top:18px;
-    padding:13px;
-    background:#fff8d7;
-    border-radius:12px;
-    color:#665900;
-    font-size:13px;
-    line-height:1.7;
-}
-
-.counter{
-    text-align:center;
-    margin-top:12px;
-    color:#666;
-    font-size:14px;
-}
-
-@media(max-width:500px){
-    .controls{
-        grid-template-columns:1fr;
-    }
-
-    .full{
-        grid-column:auto;
-    }
-
-    .result{
-        flex-wrap:wrap;
-    }
+.note {
+    margin-top: 15px;
+    background: #302d1c;
+    color: #ffe98a;
+    border-radius: 12px;
+    padding: 12px;
+    font-size: 13px;
+    line-height: 1.6;
 }
 </style>
 </head>
@@ -192,222 +141,198 @@ button{
 
 <div class="card">
 
-<h1>👻 Snap Username Finder</h1>
+<!-- القائمة الرئيسية -->
+<div id="home" class="page active">
 
-<div class="subtitle">
-مولّد أسماء مستخدمين مع تحقق يدوي رسمي
-</div>
+<h1>⚡ الأدوات</h1>
 
-<div class="controls">
+<div class="menu">
 
-<div>
-<label>طول اليوزر</label>
-<select id="length">
-<option value="3">3 أحرف</option>
-<option value="4" selected>4 أحرف</option>
-</select>
-</div>
-
-<div>
-<label>العدد</label>
-<select id="amount">
-<option value="10">10</option>
-<option value="25">25</option>
-<option value="50" selected>50</option>
-<option value="100">100</option>
-</select>
-</div>
-
-<div class="full">
-<label>نوع اليوزر</label>
-<select id="mode">
-<option value="mixed">حروف + أرقام</option>
-<option value="letters">حروف فقط</option>
-<option value="numbers">أرقام + حروف</option>
-</select>
-</div>
-
-</div>
-
-<button class="generate" onclick="generateUsers()">
-⚡ توليد اليوزرات
+<button onclick="showPage('tiktok')">
+🎵 يوزرات تيك
 </button>
 
-<div class="actions">
-<button class="copy" onclick="copyAll()">
-📋 نسخ الكل
+<button onclick="showPage('snap')">
+👻 يوزرات سناب
 </button>
 
-<button class="clear" onclick="clearResults()">
-🗑️ مسح
+<button onclick="showPage('store')">
+🎟️ تخمين ستور
 </button>
+
 </div>
 
-<div class="counter" id="counter"></div>
+</div>
 
-<div class="results" id="results">
-<div class="empty">
-اضغط «توليد اليوزرات» للبدء
+
+<!-- يوزرات تيك -->
+<div id="tiktok" class="page">
+
+<button class="back" onclick="showPage('home')">
+← رجوع
+</button>
+
+<h2>🎵 يوزرات تيك</h2>
+
+<div class="list">
+
+<div class="item">
+<span class="username">@v7x</span>
+<span class="status">جاهز</span>
 </div>
+
+<div class="item">
+<span class="username">@q8m</span>
+<span class="status">جاهز</span>
 </div>
+
+<div class="item">
+<span class="username">@k4z</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@n7q</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@x5v</span>
+<span class="status">جاهز</span>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- يوزرات سناب -->
+<div id="snap" class="page">
+
+<button class="back" onclick="showPage('home')">
+← رجوع
+</button>
+
+<h2>👻 يوزرات سناب</h2>
+
+<div class="list">
+
+<div class="item">
+<span class="username">@z7q</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@m4x</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@q9v</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@k7n</span>
+<span class="status">جاهز</span>
+</div>
+
+<div class="item">
+<span class="username">@x3m</span>
+<span class="status">جاهز</span>
+</div>
+
+</div>
+
+</div>
+
+
+<!-- تخمين ستور -->
+<div id="store" class="page">
+
+<button class="back" onclick="showPage('home')">
+← رجوع
+</button>
+
+<h2>🎟️ تخمين ستور</h2>
+
+<div id="codes"></div>
+
+<button class="refresh" onclick="generateCodes()">
+🔄 تجديد
+</button>
 
 <div class="note">
-⚠️ الحالة الظاهرة بجانب اليوزر هي «بانتظار التحقق».
-اضغط 🔎 للتحقق عبر Snapchat مباشرة.
-لن أعرض «متاح» أو «غير متاح» بشكل وهمي.
+هذه رموز عشوائية تجريبية مكوّنة من 12 حرفًا ورقمًا،
+وليست أكواد Store حقيقية أو مضمونة.
+</div>
+
 </div>
 
 </div>
 </div>
+
 
 <script>
 
-const letters = "abcdefghijklmnopqrstuvwxyz";
-const numbers = "0123456789";
+function showPage(page) {
 
-let generatedUsers = [];
+    document.querySelectorAll(".page")
+    .forEach(p => p.classList.remove("active"));
 
-/* توليد يوزر مطابق لقواعد سناب:
-   يبدأ بحرف وينتهي بحرف أو رقم */
-function randomUsername(length, mode){
+    document.getElementById(page)
+    .classList.add("active");
 
-    let first = letters[Math.floor(Math.random()*letters.length)];
-
-    let chars = "";
-
-    if(mode === "letters"){
-        chars = letters;
+    if (page === "store") {
+        generateCodes();
     }
-    else{
-        chars = letters + numbers;
-    }
-
-    let username = first;
-
-    for(let i=1;i<length;i++){
-        username += chars[Math.floor(Math.random()*chars.length)];
-    }
-
-    return username;
 }
 
 
-function generateUsers(){
+/* توليد رمز عشوائي تجريبي من 12 خانة */
 
-    const length =
-        Number(document.getElementById("length").value);
+function randomCode() {
 
-    const amount =
-        Number(document.getElementById("amount").value);
+    const characters =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
-    const mode =
-        document.getElementById("mode").value;
+    let code = "";
 
-    generatedUsers = [];
+    for (let i = 0; i < 12; i++) {
 
-    const used = new Set();
+        code += characters[
+            Math.floor(
+                Math.random() * characters.length
+            )
+        ];
 
-    while(generatedUsers.length < amount){
-
-        const username =
-            randomUsername(length, mode);
-
-        if(!used.has(username)){
-            used.add(username);
-            generatedUsers.push(username);
-        }
     }
 
-    displayUsers();
+    return code;
 }
 
 
-function displayUsers(){
+/* إنشاء مجموعة الرموز */
 
-    const results =
-        document.getElementById("results");
+function generateCodes() {
 
-    results.innerHTML = "";
+    const box =
+        document.getElementById("codes");
 
-    generatedUsers.forEach(username => {
+    box.innerHTML = "";
 
-        const row =
+    for (let i = 0; i < 5; i++) {
+
+        const code =
             document.createElement("div");
 
-        row.className = "result";
+        code.className = "code";
 
-        row.innerHTML = `
+        code.textContent =
+            randomCode();
 
-            <div class="username">
-                ${username}
-            </div>
-
-            <div class="status waiting">
-                🟡 بانتظار التحقق
-            </div>
-
-            <button
-                class="check"
-                onclick="checkUsername('${username}')">
-                🔎 تحقق
-            </button>
-
-        `;
-
-        results.appendChild(row);
-    });
-
-    document.getElementById("counter").textContent =
-        generatedUsers.length + " يوزر";
-}
-
-
-/*
-   يفتح صفحة اليوزر على Snapchat.
-   إذا كان الحساب موجودًا ستظهر لك صفحة الحساب.
-   وإذا لم يكن موجودًا ستقدر تتأكد من Snapchat نفسه.
-*/
-function checkUsername(username){
-
-    const url =
-        "https://www.snapchat.com/add/" +
-        encodeURIComponent(username);
-
-    window.open(url, "_blank");
-}
-
-
-function copyAll(){
-
-    if(generatedUsers.length === 0){
-        alert("ولّد اليوزرات أولًا");
-        return;
+        box.appendChild(code);
     }
-
-    const text =
-        generatedUsers.join("\n");
-
-    navigator.clipboard.writeText(text)
-    .then(() => {
-        alert("✅ تم نسخ جميع اليوزرات");
-    })
-    .catch(() => {
-        alert("تعذر النسخ تلقائيًا");
-    });
-}
-
-
-function clearResults(){
-
-    generatedUsers = [];
-
-    document.getElementById("results").innerHTML = `
-        <div class="empty">
-            تم المسح 🗑️
-        </div>
-    `;
-
-    document.getElementById("counter").textContent = "";
 }
 
 </script>
