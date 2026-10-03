@@ -3,143 +3,104 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>RwL Plus</title>
-
 <style>
 * {
   box-sizing: border-box;
 }
-
 body {
   margin: 0;
   min-height: 100vh;
   overflow: hidden;
-
   display: flex;
   justify-content: center;
   align-items: center;
-
   background: #020205;
-
   font-family: Arial, sans-serif;
   color: white;
 }
-
 body::before,
 body::after {
   content: "";
   position: fixed;
-
   width: 500px;
   height: 500px;
-
   border-radius: 50%;
-
   filter: blur(100px);
   opacity: .25;
-
   animation: moveGlow 8s infinite alternate ease-in-out;
 }
-
 body::before {
   background: #3d5afe;
   top: -220px;
   left: -180px;
 }
-
 body::after {
   background: #8e24aa;
   bottom: -250px;
   right: -200px;
-
   animation-delay: 2s;
 }
-
 @keyframes moveGlow {
   0% {
     transform: translate(0,0) scale(1);
   }
-
   50% {
     transform: translate(80px,40px) scale(1.2);
   }
-
   100% {
     transform: translate(-30px,100px) scale(.9);
   }
 }
-
 .stars {
   position: fixed;
   inset: 0;
-
   background-image:
     radial-gradient(circle, rgba(255,255,255,.7) 1px, transparent 1px);
-
   background-size: 55px 55px;
-
   opacity: .15;
-
   animation: starsMove 15s linear infinite;
 }
-
 @keyframes starsMove {
   from {
     transform: translateY(0);
   }
-
   to {
     transform: translateY(55px);
   }
 }
-
 .card {
   position: relative;
   z-index: 2;
-
   width: 310px;
-
   padding: 25px;
-
   text-align: center;
-
   border-radius: 28px;
-
   background:
     linear-gradient(
       145deg,
       rgba(35,35,45,.95),
       rgba(8,8,12,.96)
     );
-
   border: 1px solid rgba(255,255,255,.13);
-
   box-shadow:
     0 30px 90px rgba(0,0,0,.8),
     inset 0 1px 0 rgba(255,255,255,.1);
-
   backdrop-filter: blur(20px);
-
   animation: cardFloat 5s ease-in-out infinite;
 }
-
 @keyframes cardFloat {
   0%,100% {
     transform: translateY(0);
   }
-
   50% {
     transform: translateY(-7px);
   }
 }
-
 .brand {
   font-size: 48px;
   font-weight: 900;
-
   letter-spacing: 8px;
-
   background:
     linear-gradient(
       90deg,
@@ -149,118 +110,76 @@ body::after {
       #c58cff,
       #ffffff
     );
-
   background-size: 300%;
-
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-
   animation: shine 4s linear infinite;
 }
-
 @keyframes shine {
   0% {
     background-position: 0%;
   }
-
   100% {
     background-position: 300%;
   }
 }
-
 .plus {
   display: inline-flex;
-
   align-items: center;
-
   gap: 8px;
-
   margin-top: 5px;
   margin-bottom: 20px;
-
   font-size: 11px;
-
   letter-spacing: 2px;
-
   color: #ddd;
 }
-
 .plus-icon {
   width: 25px;
   height: 25px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   border-radius: 7px;
-
   background:
     linear-gradient(
       135deg,
       #fff,
       #aaa
     );
-
   color: #111;
-
   font-size: 20px;
-
   font-weight: 900;
 }
-
 .code-box {
   position: relative;
-
   padding: 16px 8px;
-
   border-radius: 14px;
-
   background: #030305;
-
   border: 1px solid #30303a;
-
   overflow: hidden;
-
   margin-bottom: 10px;
 }
-
 #code {
   direction: ltr;
-
   font-size: 17px;
-
   font-weight: bold;
-
   letter-spacing: 2px;
-
   white-space: nowrap;
 }
-
 button {
   width: 100%;
-
   border: 0;
-
   border-radius: 11px;
-
   padding: 11px;
-
   margin-top: 7px;
-
   font-size: 14px;
-
   font-weight: bold;
-
   cursor: pointer;
-
   transition: .25s;
 }
-
 button:active {
   transform: scale(.96);
 }
-
 .generate {
   background: linear-gradient(
     90deg,
@@ -268,131 +187,96 @@ button:active {
     #d9e4ff,
     #ffffff
   );
-
   color: #080808;
 }
-
 .copy {
   background: #292930;
   color: white;
 }
-
 .paste {
   background: linear-gradient(
     90deg,
     #00c6ff,
     #0072ff
   );
-
   color: white;
-
   box-shadow:
     0 8px 30px rgba(0,114,255,.25);
 }
-
 .website {
   background: linear-gradient(
     90deg,
     #075cff,
     #5126d8
   );
-
   color: white;
 }
-
 .footer {
   margin-top: 15px;
-
   font-size: 9px;
-
   color: #777;
-
   letter-spacing: 3px;
 }
 </style>
 </head>
-
 <body>
-
 <div class="stars"></div>
-
 <div class="card">
-
   <div class="brand">RwL</div>
-
   <div class="plus">
     <span class="plus-icon">+</span>
     PLAYSTATION PLUS
   </div>
-
   <div class="code-box">
     <div id="code">اضغط توليد</div>
   </div>
-
   <button
     class="generate"
     onclick="generateCode()">
     توليد كود
   </button>
-
   <button
     class="copy"
     onclick="copyCode()">
     نسخ
   </button>
-
   <!-- الزر الجديد -->
   <button
     class="paste"
     onclick="goToPaste()">
     انتقل للصق
   </button>
-
   <button
     class="website"
     onclick="openPlayStationWebsite()">
     موقع PlayStation
   </button>
-
   <div class="footer">
     RwL • PLUS • 12 CHARACTERS
   </div>
-
 </div>
-
 <script>
-
 function generateCode() {
-
   const characters =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
   let code = "";
-
   for (let i = 0; i < 12; i++) {
-
     code += characters.charAt(
       Math.floor(
         Math.random() * characters.length
       )
     );
   }
-
   document.getElementById("code")
     .textContent = code;
 }
-
-
 function copyCode() {
-
   const code =
     document.getElementById("code")
       .textContent;
-
   if (code === "اضغط توليد") {
     return;
   }
-
   navigator.clipboard
     .writeText(code)
     .then(() => {
@@ -402,30 +286,19 @@ function copyCode() {
       alert("تعذر نسخ الكود");
     });
 }
-
-
 /*
   زر انتقل للصق
   يفتح موقع PlayStation الرسمي
   في المتصفح.
 */
-
 function goToPaste() {
-
   window.location.href =
     "https://www.playstation.com/";
-
 }
-
-
 function openPlayStationWebsite() {
-
   window.location.href =
     "https://www.playstation.com/";
-
 }
-
 </script>
-
 </body>
 </html>
