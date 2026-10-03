@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>مولد يوزرات</title>
+<title>فاحص يوزرات Snapchat</title>
 
 <style>
 * {
@@ -14,30 +14,33 @@
 
 body {
   margin: 0;
-  background: #0f0f0f;
+  min-height: 100vh;
+  background: #101010;
   color: white;
   padding: 18px;
 }
 
 .container {
-  max-width: 700px;
+  max-width: 650px;
   margin: auto;
 }
 
 .card {
-  background: #1b1b1b;
+  background: #1c1c1c;
   border-radius: 22px;
   padding: 22px;
+  box-shadow: 0 12px 35px rgba(0,0,0,.4);
 }
 
 h1 {
   text-align: center;
-  margin-top: 0;
+  margin: 0 0 8px;
 }
 
 .sub {
   text-align: center;
   color: #999;
+  font-size: 14px;
   margin-bottom: 20px;
 }
 
@@ -47,18 +50,14 @@ h1 {
   margin-bottom: 12px;
 }
 
-button,
-select {
-  border: 0;
-  border-radius: 12px;
-  padding: 13px;
-  font-size: 15px;
-}
-
 .length {
   flex: 1;
+  border: 0;
+  border-radius: 12px;
+  padding: 14px;
   background: #333;
   color: white;
+  font-size: 16px;
 }
 
 .length.active {
@@ -67,34 +66,52 @@ select {
   font-weight: bold;
 }
 
-select {
+select,
+input {
   width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 13px;
   background: #333;
   color: white;
+  font-size: 15px;
   margin-bottom: 12px;
 }
 
 .generate {
   width: 100%;
+  border: 0;
+  border-radius: 12px;
+  padding: 15px;
   background: #fffc00;
   color: #111;
-  font-weight: bold;
   font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.status {
+  text-align: center;
+  color: #aaa;
+  margin: 16px 0;
+  min-height: 20px;
 }
 
 #results {
-  margin-top: 20px;
   display: grid;
-  gap: 8px;
+  gap: 9px;
 }
 
 .item {
   background: #292929;
-  border-radius: 12px;
-  padding: 12px;
+  border-radius: 14px;
+  padding: 13px;
+}
+
+.top {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 10px;
 }
 
 .name {
@@ -102,24 +119,76 @@ select {
   direction: ltr;
   text-align: left;
   font-weight: bold;
-  font-size: 18px;
+  font-size: 19px;
 }
 
-.item button {
+.badge {
+  padding: 5px 9px;
+  border-radius: 8px;
+  font-size: 12px;
+}
+
+.pending {
+  background: #444;
+  color: #ccc;
+}
+
+.available {
+  background: #174d2a;
+  color: #6cff9a;
+}
+
+.unavailable {
+  background: #4a2020;
+  color: #ff8b8b;
+}
+
+.error {
+  background: #4a3b16;
+  color: #ffd76a;
+}
+
+.actions {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.actions button {
+  flex: 1;
+  border: 0;
+  border-radius: 10px;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.copy {
   background: #444;
   color: white;
-  padding: 10px;
 }
 
 .open {
-  background: #fffc00 !important;
-  color: #111 !important;
+  background: #fffc00;
+  color: #111;
+  font-weight: bold;
 }
 
-.status {
-  text-align: center;
-  color: #aaa;
-  margin-top: 15px;
+.api-box {
+  margin-top: 20px;
+  padding: 15px;
+  border-radius: 14px;
+  background: #242424;
+}
+
+.api-title {
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+
+.api-note {
+  color: #999;
+  font-size: 12px;
+  line-height: 1.7;
 }
 
 .note {
@@ -138,11 +207,12 @@ select {
 
 <div class="card">
 
-<h1>👻 مولّد اليوزرات</h1>
+<h1>👻 فاحص يوزرات Snapchat</h1>
 
 <div class="sub">
-توليد تلقائي لاقتراحات ثلاثية ورباعية
+يولد اليوزرات تلقائيًا ثم يرسلها إلى API للتحقق
 </div>
+
 
 <div class="row">
 
@@ -162,20 +232,21 @@ onclick="setLength(4)">
 
 </div>
 
+
 <select id="amount">
 
+<option value="10">10 يوزرات</option>
+<option value="25">25 يوزر</option>
 <option value="50">50 يوزر</option>
 <option value="100">100 يوزر</option>
-<option value="250">250 يوزر</option>
-<option value="500">500 يوزر</option>
-<option value="1000">1000 يوزر</option>
 
 </select>
 
-<select id="style">
+
+<select id="mode">
 
 <option value="mixed">
-مزيج حروف وأرقام
+حروف وأرقام
 </option>
 
 <option value="letters">
@@ -188,22 +259,51 @@ onclick="setLength(4)">
 
 </select>
 
+
 <button
 class="generate"
-onclick="generate()">
-🎲 توليد
+onclick="startCheck()">
+🚀 ابدأ التحقق
 </button>
+
 
 <div
 id="status"
 class="status">
+جاهز
 </div>
+
 
 <div id="results"></div>
 
+
+<div class="api-box">
+
+<div class="api-title">
+⚙️ إعداد API
+</div>
+
+<div class="api-note">
+ضع هنا عنوان API رسمي ومصرح لك باستخدامه.
+لا تضع مفاتيح سرية داخل HTML إذا كانت الخدمة تتطلب
+مفتاحًا خاصًا؛ استخدم خادمًا وسيطًا آمنًا.
+</div>
+
+<br>
+
+<input
+id="apiUrl"
+type="url"
+placeholder="https://example.com/api/check"
+value=""
+>
+
+</div>
+
+
 <div class="note">
-⚠️ هذه الأداة تولّد اقتراحات فقط ولا تؤكد توفر اليوزر.
-استخدم زر «فتح» للتحقق من اليوزر يدويًا.
+⚠️ الأداة لا تعتبر اليوزر متاحًا إلا إذا أعاد الـAPI
+استجابة صريحة بذلك. بدون API ستظهر النتائج كـ«غير متحقق».
 </div>
 
 </div>
@@ -213,7 +313,13 @@ class="status">
 
 <script>
 
-let length = 4;
+/*
+==================================================
+إعدادات الأداة
+==================================================
+*/
+
+let usernameLength = 4;
 
 const letters =
 "abcdefghijklmnopqrstuvwxyz";
@@ -222,9 +328,15 @@ const numbers =
 "0123456789";
 
 
-function setLength(value) {
+/*
+==================================================
+تغيير الطول
+==================================================
+*/
 
-  length = value;
+function setLength(length) {
+
+  usernameLength = length;
 
   document
     .getElementById("three")
@@ -234,15 +346,21 @@ function setLength(value) {
     .getElementById("four")
     .classList.remove("active");
 
+
   document
     .getElementById(
-      value === 3 ? "three" : "four"
+      length === 3 ? "three" : "four"
     )
     .classList.add("active");
 
-  generate();
 }
 
+
+/*
+==================================================
+توليد حرف عشوائي
+==================================================
+*/
 
 function randomChar(source) {
 
@@ -251,29 +369,44 @@ function randomChar(source) {
       Math.random() * source.length
     )
   ];
+
 }
 
 
-function createUsername() {
+/*
+==================================================
+توليد يوزر
+==================================================
+*/
 
-  const type =
-    document.getElementById("style").value;
+function generateUsername() {
+
+  const mode =
+    document.getElementById("mode").value;
 
   let username = "";
 
-  for (let i = 0; i < length; i++) {
+  for (
+    let i = 0;
+    i < usernameLength;
+    i++
+  ) {
 
     let source;
 
-    if (type === "letters") {
+    if (mode === "letters") {
 
       source = letters;
 
-    } else if (type === "numbers") {
+    }
+
+    else if (mode === "numbers") {
 
       source = numbers;
 
-    } else {
+    }
+
+    else {
 
       source =
         Math.random() < 0.65
@@ -283,18 +416,54 @@ function createUsername() {
     }
 
     username += randomChar(source);
+
   }
 
   return username;
 }
 
 
-function generate() {
+/*
+==================================================
+توليد مجموعة بدون تكرار
+==================================================
+*/
+
+function generateUniqueUsernames(amount) {
+
+  const set = new Set();
+
+  while (set.size < amount) {
+
+    set.add(
+      generateUsername()
+    );
+
+  }
+
+  return [...set];
+}
+
+
+/*
+==================================================
+بدء العملية
+==================================================
+*/
+
+async function startCheck() {
 
   const amount =
     Number(
       document.getElementById("amount").value
     );
+
+  const apiUrl =
+    document
+      .getElementById("apiUrl")
+      .value
+      .trim();
+
 
   const results =
     document.getElementById("results");
@@ -302,86 +471,317 @@ function generate() {
   const status =
     document.getElementById("status");
 
+
   results.innerHTML = "";
 
-  const usernames = new Set();
 
-  while (usernames.size < amount) {
+  const usernames =
+    generateUniqueUsernames(amount);
 
-    usernames.add(createUsername());
 
-  }
-
+  /*
+    إنشاء النتائج أولًا
+  */
 
   usernames.forEach(username => {
 
-    const item =
-      document.createElement("div");
-
-    item.className = "item";
-
-
-    const name =
-      document.createElement("div");
-
-    name.className = "name";
-
-    name.textContent = username;
-
-
-    const copy =
-      document.createElement("button");
-
-    copy.textContent = "📋";
-
-    copy.title = "نسخ";
-
-    copy.onclick = () =>
-      copyUsername(username);
-
-
-    const open =
-      document.createElement("button");
-
-    open.className = "open";
-
-    open.textContent = "👻 فتح";
-
-    open.onclick = () =>
-      openSnapchat(username);
-
-
-    item.appendChild(name);
-    item.appendChild(copy);
-    item.appendChild(open);
-
-    results.appendChild(item);
+    createResultItem(username);
 
   });
 
 
+  if (!apiUrl) {
+
+    status.textContent =
+      "⚠️ تم التوليد، لكن لم يتم إدخال API للتحقق.";
+
+    return;
+
+  }
+
+
+  /*
+    التحقق عبر API
+  */
+
+  let completed = 0;
+
+
+  for (const username of usernames) {
+
+    await checkUsername(
+      username,
+      apiUrl
+    );
+
+    completed++;
+
+    status.textContent =
+      `جاري التحقق: ${completed} / ${amount}`;
+
+  }
+
+
   status.textContent =
-    `تم توليد ${amount} يوزر`;
+    "✅ انتهى التحقق";
+
 }
 
+
+/*
+==================================================
+إنشاء عنصر نتيجة
+==================================================
+*/
+
+function createResultItem(username) {
+
+  const results =
+    document.getElementById("results");
+
+
+  const item =
+    document.createElement("div");
+
+  item.className = "item";
+
+  item.id =
+    "item-" + username;
+
+
+  const top =
+    document.createElement("div");
+
+  top.className = "top";
+
+
+  const name =
+    document.createElement("div");
+
+  name.className = "name";
+
+  name.textContent =
+    username;
+
+
+  const badge =
+    document.createElement("span");
+
+  badge.className =
+    "badge pending";
+
+  badge.textContent =
+    "جاري التحقق";
+
+
+  top.appendChild(name);
+  top.appendChild(badge);
+
+
+  const actions =
+    document.createElement("div");
+
+  actions.className = "actions";
+
+
+  const copy =
+    document.createElement("button");
+
+  copy.className = "copy";
+
+  copy.textContent =
+    "📋 نسخ";
+
+  copy.onclick =
+    () => copyUsername(username);
+
+
+  const open =
+    document.createElement("button");
+
+  open.className = "open";
+
+  open.textContent =
+    "👻 فتح";
+
+  open.onclick =
+    () => openSnapchat(username);
+
+
+  actions.appendChild(copy);
+  actions.appendChild(open);
+
+
+  item.appendChild(top);
+  item.appendChild(actions);
+
+  results.appendChild(item);
+
+}
+
+
+/*
+==================================================
+فحص يوزر عبر API
+==================================================
+
+مهم:
+هذا القالب يفترض أن الـAPI يقبل:
+
+POST /api/check
+
+JSON:
+
+{
+  "username": "abcd"
+}
+
+ويعيد مثلًا:
+
+{
+  "available": true
+}
+
+أو:
+
+{
+  "available": false
+}
+
+عدّل هذا الجزء فقط إذا كانت مواصفات
+الـAPI الرسمي مختلفة.
+==================================================
+*/
+
+async function checkUsername(
+  username,
+  apiUrl
+) {
+
+  const item =
+    document.getElementById(
+      "item-" + username
+    );
+
+  const badge =
+    item.querySelector(".badge");
+
+
+  try {
+
+    const response =
+      await fetch(
+        apiUrl,
+        {
+          method: "POST",
+
+          headers: {
+            "Content-Type":
+              "application/json"
+          },
+
+          body: JSON.stringify({
+            username: username
+          })
+        }
+      );
+
+
+    if (!response.ok) {
+      throw new Error(
+        "HTTP " + response.status
+      );
+    }
+
+
+    const data =
+      await response.json();
+
+
+    if (data.available === true) {
+
+      badge.className =
+        "badge available";
+
+      badge.textContent =
+        "✅ متاح";
+
+    }
+
+    else if (
+      data.available === false
+    ) {
+
+      badge.className =
+        "badge unavailable";
+
+      badge.textContent =
+        "❌ غير متاح";
+
+    }
+
+    else {
+
+      badge.className =
+        "badge error";
+
+      badge.textContent =
+        "⚠️ استجابة غير معروفة";
+
+    }
+
+
+  } catch (error) {
+
+    badge.className =
+      "badge error";
+
+    badge.textContent =
+      "⚠️ تعذر التحقق";
+
+  }
+
+}
+
+
+/*
+==================================================
+نسخ
+==================================================
+*/
 
 async function copyUsername(username) {
 
   try {
 
-    await navigator.clipboard.writeText(username);
+    await navigator.clipboard.writeText(
+      username
+    );
 
-    document.getElementById("status").textContent =
-      "✅ تم نسخ " + username;
+    document.getElementById(
+      "status"
+    ).textContent =
+      "📋 تم نسخ " + username;
 
-  } catch {
+  }
 
-    document.getElementById("status").textContent =
+  catch {
+
+    document.getElementById(
+      "status"
+    ).textContent =
       "❌ تعذر النسخ";
 
   }
+
 }
 
+
+/*
+==================================================
+فتح Snapchat
+==================================================
+*/
 
 function openSnapchat(username) {
 
@@ -389,11 +789,12 @@ function openSnapchat(username) {
     "https://www.snapchat.com/add/" +
     encodeURIComponent(username);
 
-  window.open(url, "_blank");
+  window.open(
+    url,
+    "_blank"
+  );
+
 }
-
-
-generate();
 
 </script>
 
