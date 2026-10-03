@@ -1,33 +1,608 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<meta name="theme-color" content="#111318">
-<title>مولد 12 خانة</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RWL • Random Code Generator</title>
+
 <style>
-body{margin:0;min-height:100vh;background:#0b0d11;color:#fff;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;display:flex;align-items:center;justify-content:center;padding:20px}
-.card{width:min(520px,100%);background:#151922;border:1px solid #2b3140;border-radius:24px;padding:24px}
-h1{margin:0 0 8px}.sub{color:#aeb6c5;line-height:1.6}
-.out{direction:ltr;text-align:center;background:#0b0d11;border:1px solid #303746;border-radius:16px;padding:18px 8px;font-size:25px;font-weight:700;letter-spacing:2px;word-break:break-all}
-.row{display:flex;gap:10px;margin-top:14px}button{border:0;border-radius:14px;padding:15px;font-size:17px;font-weight:700;cursor:pointer;flex:1}
-.gen{background:#fff;color:#111}.copy{background:#273044;color:#fff}.ps{width:100%;margin-top:12px;background:#2767ff;color:#fff}
-.note{font-size:12px;color:#7f8899;text-align:center;margin-top:14px}
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  min-height:100vh;
+  color:#f4f3ff;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
+  background:
+    radial-gradient(circle at 50% 10%,#38206d,transparent 35%),
+    radial-gradient(circle at 10% 80%,#092d6b,transparent 30%),
+    #020617;
+}
+
+.wrap{
+  width:min(1100px,94%);
+  margin:25px auto;
+}
+
+.top{
+  display:flex;
+  justify-content:space-between;
+}
+
+.ps{
+  font-size:42px;
+  font-weight:900;
+  text-shadow:0 0 25px #7d5cff;
+}
+
+.gear{
+  background:#090e27;
+  border:1px solid #5865ff;
+  color:white;
+  border-radius:14px;
+  font-size:23px;
+  padding:10px 15px;
+}
+
+.rwl{
+  text-align:center;
+  font-size:clamp(80px,15vw,155px);
+  font-weight:900;
+  font-style:italic;
+  letter-spacing:12px;
+  color:#ddd8ff;
+  text-shadow:
+    0 0 10px white,
+    0 0 35px #7158ff,
+    0 0 70px #df4cff;
+}
+
+h1{
+  text-align:center;
+  font-size:clamp(28px,5vw,48px);
+  margin:10px 0;
+}
+
+.sub{
+  text-align:center;
+  color:#c0c6ff;
+  letter-spacing:2px;
+}
+
+.card{
+  margin-top:35px;
+  padding:30px;
+  border:1px solid #4c59ff;
+  border-radius:28px;
+  background:#07102bcc;
+  box-shadow:0 0 45px #4b42ff30;
+  backdrop-filter:blur(15px);
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1.2fr 1fr;
+  gap:25px;
+}
+
+.section{
+  padding:5px 20px;
+  border-left:1px solid #7880ff33;
+}
+
+.section:last-child{
+  border:0;
+}
+
+.label{
+  font-weight:bold;
+  font-size:19px;
+  margin-bottom:13px;
+}
+
+.length{
+  display:flex;
+  gap:8px;
+}
+
+input{
+  background:#080e2b;
+  color:white;
+  border:1px solid #4d54ff;
+  border-radius:14px;
+  padding:14px;
+  font-size:20px;
+  text-align:center;
+}
+
+.length input{
+  width:100%;
+}
+
+.smallbtn,
+.copy{
+  border:1px solid #5865ff;
+  background:#11194a;
+  color:white;
+  border-radius:14px;
+  padding:0 17px;
+  font-size:22px;
+}
+
+.check{
+  display:block;
+  margin:12px 0;
+  color:#d7dbff;
+}
+
+.check input{
+  width:18px;
+  height:18px;
+  vertical-align:middle;
+  accent-color:#9a5cff;
+}
+
+.modes{
+  display:flex;
+  border:1px solid #35428d;
+  border-radius:15px;
+  overflow:hidden;
+}
+
+.mode{
+  flex:1;
+  padding:14px;
+  background:transparent;
+  color:#c2c8ff;
+  border:0;
+}
+
+.mode.active{
+  background:linear-gradient(135deg,#5a4aff,#c34cff);
+  color:white;
+}
+
+.generate{
+  width:100%;
+  margin:30px 0 22px;
+  padding:17px;
+  border-radius:17px;
+  border:1px solid #cbd0ff;
+  color:white;
+  font-size:21px;
+  font-weight:bold;
+  background:linear-gradient(90deg,#4c8dff,#604bff,#df4cff);
+  box-shadow:0 0 30px #8255ff55;
+}
+
+.result{
+  display:flex;
+  gap:10px;
+}
+
+.result input{
+  flex:1;
+  direction:ltr;
+  text-align:left;
+}
+
+.copy{
+  height:53px;
+  cursor:pointer;
+}
+
+.playstation{
+  width:100%;
+  margin-top:15px;
+  padding:16px;
+  border:0;
+  border-radius:16px;
+  color:white;
+  font-size:19px;
+  font-weight:bold;
+  background:#087cff;
+  cursor:pointer;
+}
+
+.footer{
+  text-align:center;
+  color:#7d84c0;
+  letter-spacing:5px;
+  margin-top:25px;
+}
+
+.note{
+  position:fixed;
+  left:18px;
+  bottom:18px;
+  color:#caa8ff;
+  font-style:italic;
+}
+
+@media(max-width:800px){
+  .grid{
+    grid-template-columns:1fr;
+  }
+
+  .section{
+    border:0;
+    border-bottom:1px solid #7880ff33;
+    padding:18px 0;
+  }
+
+  .note{
+    display:none;
+  }
+}
 </style>
 </head>
+
 <body>
-<main class="card">
-<h1>مولد نص عشوائي من 12 خانة</h1>
-<p class="sub">يولد حروفًا إنجليزية وأرقامًا عشوائية للنسخ. هذه سلاسل تجريبية وليست رموزًا حقيقية أو قابلة للاسترداد في PlayStation Store.</p>
-<div id="out" class="out">A7K2M9Q4X8LP</div>
-<div class="row"><button class="gen" onclick="generate()">توليد جديد</button><button class="copy" onclick="copyCode()">نسخ</button></div>
-<button class="ps" onclick="location.href='https://apps.apple.com/sa/app/playstation-app/id410896080'">فتح PlayStation</button>
-<div id="status" class="note">جاهز</div>
-</main>
+
+<div class="wrap">
+
+  <div class="top">
+    <div class="ps">◉</div>
+    <button class="gear">⚙</button>
+  </div>
+
+  <div class="rwl">RWL</div>
+
+  <h1>مولّد الأكواد العشوائية</h1>
+
+  <div class="sub">
+    بسيط ✦ سريع ✦ آمن
+  </div>
+
+  <div class="card">
+
+    <div class="grid">
+
+      <div class="section">
+
+        <div class="label">✦ الطول</div>
+
+        <div class="length">
+
+          <button class="smallbtn" id="minus">−</button>
+
+          <input
+            id="length"
+            type="number"
+            min="4"
+            max="64"
+            value="16"
+          >
+
+          <button class="smallbtn" id="plus">+</button>
+
+        </div>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="label">✓ يتضمن</div>
+
+        <label class="check">
+          <input id="upper" type="checkbox" checked>
+          أحرف كبيرة (A-Z)
+        </label>
+
+        <label class="check">
+          <input id="lower" type="checkbox" checked>
+          أحرف صغيرة (a-z)
+        </label>
+
+        <label class="check">
+          <input id="numbers" type="checkbox" checked>
+          أرقام (0-9)
+        </label>
+
+        <label class="check">
+          <input id="symbols" type="checkbox" checked>
+          رموز (!@#...)
+        </label>
+
+      </div>
+
+
+      <div class="section">
+
+        <div class="label">✦ الخيارات</div>
+
+        <div class="modes">
+
+          <button
+            class="mode active"
+            id="rwlMode">
+            RWL Mode
+          </button>
+
+          <button
+            class="mode"
+            id="normalMode">
+            عادي
+          </button>
+
+        </div>
+
+        <p style="color:#9098c8">
+          وضع RWL يضمن وجود RWL داخل الكود.
+        </p>
+
+      </div>
+
+    </div>
+
+
+    <button
+      class="generate"
+      id="generate">
+      ✦ توليد كود جديد →
+    </button>
+
+
+    <div class="label">
+      ⌘ الكود الخاص بك
+    </div>
+
+
+    <div class="result">
+
+      <input
+        id="result"
+        readonly>
+
+      <button
+        class="copy"
+        id="copy">
+        ▣
+      </button>
+
+    </div>
+
+
+    <button
+      class="playstation"
+      id="playstation">
+      🎮 فتح تطبيق PlayStation
+    </button>
+
+  </div>
+
+
+  <div class="footer">
+    RWL • CODE GENERATOR
+  </div>
+
+</div>
+
+
+<div class="note">
+  Good Vibes<br>
+  Only ♡
+</div>
+
+
 <script>
-const chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-function generate(){let s="",a=new Uint32Array(12);crypto.getRandomValues(a);for(let i=0;i<12;i++)s+=chars[a[i]%chars.length];document.getElementById("out").textContent=s;document.getElementById("status").textContent="تم التوليد";}
-async function copyCode(){let t=document.getElementById("out").textContent;try{await navigator.clipboard.writeText(t)}catch(e){let x=document.createElement("textarea");x.value=t;document.body.appendChild(x);x.select();document.execCommand("copy");x.remove()}document.getElementById("status").textContent="تم النسخ ✓";}
+
+const $ = id => document.getElementById(id);
+
+const chars = {
+  upper:"ABCDEFGHIJKLMNOPQRSTUVWXYZ",
+  lower:"abcdefghijklmnopqrstuvwxyz",
+  numbers:"0123456789",
+  symbols:"!@#$%^&*()_+-=[]{}<>?"
+};
+
+let rwlMode = true;
+
+
+function randomNumber(max){
+
+  const array = new Uint32Array(1);
+
+  crypto.getRandomValues(array);
+
+  return array[0] % max;
+
+}
+
+
+function generateCode(){
+
+  let length =
+    Math.max(
+      4,
+      Math.min(
+        64,
+        Number($("length").value) || 16
+      )
+    );
+
+  $("length").value = length;
+
+
+  let pool = "";
+
+  if($("upper").checked)
+    pool += chars.upper;
+
+  if($("lower").checked)
+    pool += chars.lower;
+
+  if($("numbers").checked)
+    pool += chars.numbers;
+
+  if($("symbols").checked)
+    pool += chars.symbols;
+
+
+  if(!pool){
+
+    alert("اختر نوعاً واحداً على الأقل.");
+
+    return;
+
+  }
+
+
+  let code = "";
+
+
+  if(rwlMode){
+
+    code = "RWL".slice(
+      0,
+      Math.min(3,length)
+    );
+
+  }
+
+
+  while(code.length < length){
+
+    code += pool[
+      randomNumber(pool.length)
+    ];
+
+  }
+
+
+  if(rwlMode && length >= 3){
+
+    code = "RWL" + code.slice(3);
+
+  }
+
+
+  $("result").value = code;
+
+}
+
+
+$("minus").onclick = function(){
+
+  $("length").value =
+    Math.max(
+      4,
+      Number($("length").value) - 1
+    );
+
+};
+
+
+$("plus").onclick = function(){
+
+  $("length").value =
+    Math.min(
+      64,
+      Number($("length").value) + 1
+    );
+
+};
+
+
+$("generate").onclick =
+  generateCode;
+
+
+$("rwlMode").onclick = function(){
+
+  rwlMode = true;
+
+  $("rwlMode").classList.add("active");
+
+  $("normalMode").classList.remove("active");
+
+  generateCode();
+
+};
+
+
+$("normalMode").onclick = function(){
+
+  rwlMode = false;
+
+  $("normalMode").classList.add("active");
+
+  $("rwlMode").classList.remove("active");
+
+  generateCode();
+
+};
+
+
+$("copy").onclick = async function(){
+
+  const code =
+    $("result").value;
+
+  try{
+
+    await navigator.clipboard.writeText(code);
+
+  }catch(error){
+
+    $("result").select();
+
+    document.execCommand("copy");
+
+  }
+
+
+  $("copy").textContent = "✓";
+
+  setTimeout(
+    () => {
+      $("copy").textContent = "▣";
+    },
+    900
+  );
+
+};
+
+
+/*
+  زر PlayStation:
+  يحاول فتح تطبيق PlayStation.
+  إذا لم يفتح التطبيق، ينتقل إلى صفحة
+  PlayStation الرسمية في App Store.
+*/
+
+$("playstation").onclick = function(){
+
+  const appStore =
+    "https://apps.apple.com/sa/app/playstation-app/id410896080";
+
+  const start =
+    Date.now();
+
+  window.location.href =
+    "playstation://";
+
+  setTimeout(
+    function(){
+
+      if(Date.now() - start < 1800){
+
+        window.location.href =
+          appStore;
+
+      }
+
+    },
+    1200
+  );
+
+};
+
+
+generateCode();
+
 </script>
+
 </body>
 </html>
