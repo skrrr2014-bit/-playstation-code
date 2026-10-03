@@ -1,337 +1,267 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>RwL Store Checker</title>
+  <title>مولد يوزرات سناب</title>
 
-<style>
-* {
-  box-sizing: border-box;
-}
+  <style>
+    * {
+      box-sizing: border-box;
+      font-family: Arial, sans-serif;
+    }
 
-body {
-  margin: 0;
-  min-height: 100vh;
-  padding: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background:
-    radial-gradient(circle at 15% 20%, rgba(55,90,255,.20), transparent 35%),
-    radial-gradient(circle at 85% 80%, rgba(145,40,220,.20), transparent 35%),
-    #020205;
-  font-family: Arial, sans-serif;
-  color: white;
-}
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #111, #252525);
+      color: white;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
 
-.card {
-  width: min(100%, 370px);
-  padding: 28px;
-  border-radius: 28px;
-  background: linear-gradient(145deg, rgba(32,32,42,.97), rgba(7,7,11,.98));
-  border: 1px solid rgba(255,255,255,.13);
-  box-shadow: 0 30px 90px rgba(0,0,0,.8);
-}
+    .box {
+      width: 100%;
+      max-width: 500px;
+      background: #181818;
+      border-radius: 22px;
+      padding: 25px;
+      box-shadow: 0 15px 40px rgba(0,0,0,.5);
+      text-align: center;
+    }
 
-.brand {
-  text-align: center;
-  font-size: 48px;
-  font-weight: 900;
-  letter-spacing: 8px;
-  background: linear-gradient(90deg,#fff,#80aaff,#fff,#c58cff,#fff);
-  background-size: 300%;
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  animation: shine 4s linear infinite;
-}
+    h1 {
+      margin-top: 0;
+      font-size: 28px;
+    }
 
-@keyframes shine {
-  from { background-position: 0%; }
-  to { background-position: 300%; }
-}
+    .sub {
+      color: #aaa;
+      margin-bottom: 25px;
+    }
 
-.subtitle {
-  text-align: center;
-  color: #888;
-  font-size: 10px;
-  letter-spacing: 3px;
-  margin: 4px 0 23px;
-}
+    .options {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 20px;
+    }
 
-.label {
-  display: block;
-  color: #bbb;
-  font-size: 12px;
-  margin-bottom: 8px;
-}
+    button {
+      border: none;
+      border-radius: 12px;
+      padding: 14px;
+      font-size: 16px;
+      cursor: pointer;
+    }
 
-#codeInput {
-  width: 100%;
-  height: 54px;
-  padding: 0 14px;
-  border-radius: 14px;
-  border: 1px solid #34343e;
-  outline: none;
-  background: #030305;
-  color: white;
-  text-align: center;
-  direction: ltr;
-  font-size: 16px;
-  font-weight: bold;
-  letter-spacing: 2px;
-}
+    .length {
+      flex: 1;
+      background: #333;
+      color: white;
+    }
 
-#codeInput:focus {
-  border-color: #637cff;
-  box-shadow: 0 0 22px rgba(80,110,255,.20);
-}
+    .length.active {
+      background: #fffc00;
+      color: #111;
+      font-weight: bold;
+    }
 
-.status {
-  min-height: 58px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  margin-top: 12px;
-  padding: 12px;
-  border-radius: 14px;
-  background: #08080c;
-  border: 1px solid #25252d;
-  color: #999;
-  font-size: 12px;
-  line-height: 1.6;
-}
+    .generate {
+      width: 100%;
+      background: #fffc00;
+      color: #111;
+      font-weight: bold;
+      font-size: 18px;
+      margin-bottom: 20px;
+    }
 
-button {
-  width: 100%;
-  min-height: 47px;
-  margin-top: 9px;
-  padding: 11px;
-  border: 0;
-  border-radius: 12px;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: .2s;
-}
+    .generate:active,
+    .copy:active {
+      transform: scale(.97);
+    }
 
-button:active {
-  transform: scale(.96);
-}
+    #results {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
 
-.check {
-  background: linear-gradient(90deg,#00c6ff,#4169ff);
-  color: white;
-}
+    .username {
+      background: #292929;
+      border-radius: 12px;
+      padding: 15px 8px;
+      font-size: 18px;
+      font-weight: bold;
+      letter-spacing: 1px;
+      word-break: break-all;
+    }
 
-.copy {
-  background: #292930;
-  color: white;
-}
+    .copy {
+      width: 100%;
+      background: #444;
+      color: white;
+      margin-top: 8px;
+      font-size: 14px;
+    }
 
-.clear {
-  background: transparent;
-  border: 1px solid #30303a;
-  color: #999;
-}
+    .status {
+      min-height: 25px;
+      color: #aaa;
+      margin-top: 10px;
+    }
 
-.info {
-  margin-top: 17px;
-  padding-top: 14px;
-  border-top: 1px solid rgba(255,255,255,.08);
-  text-align: center;
-  font-size: 9px;
-  line-height: 1.8;
-  color: #666;
-}
-</style>
+    .note {
+      font-size: 12px;
+      color: #777;
+      margin-top: 20px;
+      line-height: 1.7;
+    }
+  </style>
 </head>
 
 <body>
 
-<div class="card">
+  <div class="box">
 
-  <div class="brand">RwL</div>
+    <h1>👻 مولد يوزرات سناب</h1>
 
-  <div class="subtitle">
-    PLAYSTATION STORE CHECKER
+    <div class="sub">
+      توليد احتمالات يوزرات من 3 أو 4 خانات
+    </div>
+
+    <div class="options">
+      <button id="three" class="length" onclick="setLength(3)">
+        3 خانات
+      </button>
+
+      <button id="four" class="length active" onclick="setLength(4)">
+        4 خانات
+      </button>
+    </div>
+
+    <button class="generate" onclick="generateUsernames()">
+      🎲 توليد يوزرات
+    </button>
+
+    <div id="results"></div>
+
+    <div class="status" id="status"></div>
+
+    <div class="note">
+      الأداة تولّد تركيبات عشوائية فقط، ولا تسجّل الدخول إلى حسابات
+      أو تتجاوز أنظمة الحماية.
+    </div>
+
   </div>
-
-  <label class="label">
-    أدخل رمز PlayStation Store
-  </label>
-
-  <input
-    id="codeInput"
-    type="text"
-    maxlength="12"
-    autocomplete="off"
-    autocapitalize="characters"
-    spellcheck="false"
-    placeholder="XXXXXXXXXXXX"
-  >
-
-  <div id="status" class="status">
-    بانتظار إدخال الرمز
-  </div>
-
-  <button class="check" onclick="checkCode()">
-    التحقق من الكود
-  </button>
-
-  <button class="copy" onclick="copyCode()">
-    نسخ الرمز
-  </button>
-
-  <button class="clear" onclick="clearCode()">
-    مسح
-  </button>
-
-  <div class="info">
-    يتم تنظيف الكود تلقائيًا وفحص صيغته فقط.
-  </div>
-
-</div>
 
 <script>
 
-const input = document.getElementById("codeInput");
-const status = document.getElementById("status");
+  let usernameLength = 4;
 
-/* تنظيف تلقائي:
-   A-Z + 0-9 فقط
-*/
-input.addEventListener("input", function () {
+  // الأحرف المستخدمة
+  const characters =
+    "abcdefghijklmnopqrstuvwxyz0123456789._";
 
-  input.value = input.value
-    .toUpperCase()
-    .replace(/[^A-Z0-9]/g, "")
-    .slice(0, 12);
+  function setLength(length) {
 
-});
+    usernameLength = length;
 
+    document.getElementById("three")
+      .classList.remove("active");
 
-/* التحقق من الصيغة */
-function checkCode() {
+    document.getElementById("four")
+      .classList.remove("active");
 
-  const code = input.value;
+    if (length === 3) {
+      document.getElementById("three")
+        .classList.add("active");
+    } else {
+      document.getElementById("four")
+        .classList.add("active");
+    }
 
-  if (code.length === 0) {
-
-    showStatus(
-      "⚠️ أدخل الكود أولًا.",
-      "#ffcc66"
-    );
-
-    return;
+    generateUsernames();
   }
 
-  if (code.length < 12) {
 
-    showStatus(
-      "❌ الكود ناقص — يجب أن يكون 12 خانة.",
-      "#ff7777"
-    );
+  function randomUsername() {
 
-    return;
+    let username = "";
+
+    for (let i = 0; i < usernameLength; i++) {
+
+      const randomIndex =
+        Math.floor(Math.random() * characters.length);
+
+      username += characters[randomIndex];
+    }
+
+    return username;
   }
 
-  if (!/^[A-Z0-9]{12}$/.test(code)) {
 
-    showStatus(
-      "❌ الكود يحتوي على أحرف أو رموز غير مسموحة.",
-      "#ff7777"
-    );
+  function generateUsernames() {
 
-    return;
-  }
+    const results =
+      document.getElementById("results");
 
-  showStatus(
-    "✓ صيغة الكود صحيحة: 12 خانة A-Z / 0-9",
-    "#8cffb0"
-  );
+    results.innerHTML = "";
 
-}
+    const used = new Set();
 
+    while (used.size < 20) {
+      used.add(randomUsername());
+    }
 
-/* نسخ الكود */
-function copyCode() {
+    used.forEach(username => {
 
-  const code = input.value;
+      const container =
+        document.createElement("div");
 
-  if (!code) {
+      container.className = "username";
 
-    showStatus(
-      "⚠️ أدخل الكود أولًا.",
-      "#ffcc66"
-    );
+      container.innerHTML = `
+        <div>${username}</div>
+        <button
+          class="copy"
+          onclick="copyUsername('${username}')">
+          📋 نسخ
+        </button>
+      `;
 
-    return;
-  }
-
-  navigator.clipboard.writeText(code)
-    .then(function () {
-
-      showStatus(
-        "✓ تم نسخ الكود.",
-        "#8cffb0"
-      );
-
-    })
-    .catch(function () {
-
-      const area = document.createElement("textarea");
-
-      area.value = code;
-      document.body.appendChild(area);
-      area.select();
-      document.execCommand("copy");
-      area.remove();
-
-      showStatus(
-        "✓ تم نسخ الكود.",
-        "#8cffb0"
-      );
+      results.appendChild(container);
 
     });
 
-}
-
-
-/* مسح */
-function clearCode() {
-
-  input.value = "";
-
-  showStatus(
-    "بانتظار إدخال الرمز",
-    "#999"
-  );
-
-  input.focus();
-
-}
-
-
-/* رسالة الحالة */
-function showStatus(message, color) {
-
-  status.textContent = message;
-  status.style.color = color;
-
-}
-
-
-/* زر Enter */
-input.addEventListener("keydown", function(event) {
-
-  if (event.key === "Enter") {
-    checkCode();
+    document.getElementById("status").textContent =
+      "تم توليد 20 يوزر عشوائي";
   }
 
-});
+
+  async function copyUsername(username) {
+
+    try {
+
+      await navigator.clipboard.writeText(username);
+
+      document.getElementById("status").textContent =
+        "✅ تم نسخ: " + username;
+
+    } catch (error) {
+
+      document.getElementById("status").textContent =
+        "❌ تعذر النسخ تلقائياً";
+
+    }
+  }
+
+
+  // تشغيل الأداة أول مرة
+  generateUsernames();
 
 </script>
 
