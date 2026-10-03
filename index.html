@@ -7,81 +7,74 @@
 <title>مولد يوزرات</title>
 
 <style>
-body{
-    margin:0;
-    background:#111;
-    color:white;
-    font-family:Arial,sans-serif;
+body {
+    margin: 0;
+    background: #111;
+    color: white;
+    font-family: Arial, sans-serif;
 }
 
-.container{
-    max-width:600px;
-    margin:auto;
-    padding:20px;
+.container {
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
 }
 
-h1{
-    text-align:center;
+h1 {
+    text-align: center;
 }
 
-.box{
-    background:#1e1e1e;
-    padding:18px;
-    border-radius:16px;
-    margin-top:15px;
+button, select {
+    width: 100%;
+    padding: 13px;
+    border: none;
+    border-radius: 10px;
+    font-size: 16px;
 }
 
-label{
-    display:block;
-    margin:12px 0 6px;
+select {
+    background: #292929;
+    color: white;
+    margin-bottom: 10px;
 }
 
-select,button{
-    width:100%;
-    padding:14px;
-    border:0;
-    border-radius:12px;
-    font-size:16px;
+.generate {
+    background: #fffc00;
+    color: #111;
+    font-weight: bold;
+    margin: 10px 0 20px;
 }
 
-select{
-    background:#292929;
-    color:white;
+.result {
+    background: #202020;
+    padding: 10px;
+    margin-bottom: 8px;
+    border-radius: 12px;
+
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    direction: ltr;
 }
 
-button{
-    background:#fffc00;
-    color:#111;
-    font-weight:bold;
-    margin-top:15px;
+.username {
+    font-weight: bold;
+    font-size: 17px;
 }
 
-.result{
-    background:#202020;
-    padding:12px;
-    margin-top:8px;
-    border-radius:12px;
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    direction:ltr;
+.copy {
+    width: auto;
+    background: #333;
+    color: white;
+    padding: 8px 12px;
+    font-size: 13px;
 }
 
-.username{
-    font-weight:bold;
-}
-
-.copy{
-    width:auto;
-    padding:8px 12px;
-    margin:0;
-    font-size:13px;
-}
-
-#status{
-    text-align:center;
-    margin:15px;
-    color:#aaa;
+#status {
+    text-align: center;
+    color: #aaa;
+    margin-bottom: 12px;
 }
 </style>
 </head>
@@ -92,41 +85,23 @@ button{
 
 <h1>⚡ مولد اليوزرات</h1>
 
-<div class="box">
-
-<label>طول اليوزر</label>
-
 <select id="length">
     <option value="3">3 خانات</option>
     <option value="4" selected>4 خانات</option>
 </select>
 
-<label>عدد اليوزرات</label>
-
 <select id="amount">
-    <option value="10">10</option>
-    <option value="25" selected>25</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
+    <option value="10">10 يوزرات</option>
+    <option value="25">25 يوزر</option>
+    <option value="50">50 يوزر</option>
+    <option value="100">100 يوزر</option>
 </select>
 
-<label>نوع اليوزر</label>
-
-<select id="mode">
-    <option value="mixed">حروف + أرقام</option>
-    <option value="letters">حروف فقط</option>
-    <option value="numbers">أرقام فقط</option>
-</select>
-
-<button onclick="generate()">
-    ⚡ توليد اليوزرات
+<button class="generate" onclick="generate()">
+    🎲 توليد اليوزرات
 </button>
 
-</div>
-
-<div id="status">
-    جاهز للتوليد
-</div>
+<div id="status">جاهز</div>
 
 <div id="results"></div>
 
@@ -134,92 +109,62 @@ button{
 
 <script>
 
-const letters =
-"abcdefghijklmnopqrstuvwxyz";
-
-const numbers =
-"0123456789";
+const chars =
+"abcdefghijklmnopqrstuvwxyz0123456789";
 
 
-function createUsername(length,mode){
-
-    let chars;
-
-    if(mode === "letters"){
-        chars = letters;
-    }
-    else if(mode === "numbers"){
-        chars = numbers;
-    }
-    else{
-        chars = letters + numbers;
-    }
+function makeUsername(length) {
 
     let username = "";
 
-    for(let i=0;i<length;i++){
+    for (let i = 0; i < length; i++) {
 
-        username +=
-        chars[
+        const random =
             Math.floor(
-                Math.random()*chars.length
-            )
-        ];
+                Math.random() * chars.length
+            );
+
+        username += chars[random];
     }
 
     return username;
 }
 
 
-function generate(){
+function generate() {
 
     const length =
-    Number(
-        document.getElementById("length").value
-    );
+        Number(
+            document.getElementById("length").value
+        );
 
     const amount =
-    Number(
-        document.getElementById("amount").value
-    );
-
-    const mode =
-    document.getElementById("mode").value;
+        Number(
+            document.getElementById("amount").value
+        );
 
     const results =
-    document.getElementById("results");
-
-    const status =
-    document.getElementById("status");
-
+        document.getElementById("results");
 
     results.innerHTML = "";
 
-
     const usernames = new Set();
 
-
-    while(usernames.size < amount){
+    while (usernames.size < amount) {
 
         usernames.add(
-            createUsername(
-                length,
-                mode
-            )
+            makeUsername(length)
         );
     }
 
-
     usernames.forEach(username => {
 
-        const item =
-        document.createElement("div");
+        const row =
+            document.createElement("div");
 
-        item.className = "result";
+        row.className = "result";
 
-
-        item.innerHTML = `
-
+        row.innerHTML = `
             <span class="username">
                 @${username}
             </span>
@@ -227,43 +172,43 @@ function generate(){
             <button
                 class="copy"
                 onclick="copyUsername('${username}')">
-                نسخ
+                📋 نسخ
             </button>
-
         `;
 
-
-        results.appendChild(item);
-
+        results.appendChild(row);
     });
 
-
-    status.textContent =
-    "✅ تم التوليد بسرعة";
+    document.getElementById("status").textContent =
+        `✅ تم توليد ${amount} يوزر`;
 }
 
 
-async function copyUsername(username){
+async function copyUsername(username) {
 
-    try{
+    try {
 
-        await navigator.clipboard.writeText(
-            username
-        );
+        await navigator.clipboard.writeText(username);
 
-        alert(
-            "✅ تم نسخ @" + username
-        );
+        alert("✅ تم نسخ @" + username);
 
+    } catch {
+
+        const textarea =
+            document.createElement("textarea");
+
+        textarea.value = username;
+
+        document.body.appendChild(textarea);
+
+        textarea.select();
+
+        document.execCommand("copy");
+
+        textarea.remove();
+
+        alert("✅ تم النسخ");
     }
-    catch{
-
-        alert(
-            "انسخ @" + username + " يدويًا"
-        );
-
-    }
-
 }
 
 </script>
