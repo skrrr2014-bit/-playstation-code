@@ -1,21 +1,26 @@
+# ============================================
+# TikTok 3-Character Username Checker
+# يعمل على Google Colab
+# ============================================
+
 import requests
 import random
 import string
 import time
+import re
 
-# =========================
-# الإعدادات
-# =========================
-
+# عدد الثلاثيات التي تريد فحصها
 NUMBER_TO_CHECK = 100
+
+# ثانيتان بين كل طلب
 DELAY = 2
 
-# ثلاثيات فقط: حروف + أرقام
-CHARS = string.ascii_lowercase + string.digits
+# حروف + أرقام
+CHARACTERS = string.ascii_lowercase + string.digits
 
 
 def generate_username():
-    return ''.join(random.choices(CHARS, k=3))
+    return ''.join(random.choices(CHARACTERS, k=3))
 
 
 def check_username(username):
@@ -28,7 +33,8 @@ def check_username(username):
             "AppleWebKit/605.1.15 "
             "(KHTML, like Gecko) "
             "Version/17.0 Mobile/15E148 Safari/604.1"
-        )
+        ),
+        "Accept-Language": "en-US,en;q=0.9"
     }
 
     try:
@@ -39,75 +45,119 @@ def check_username(username):
             allow_redirects=True
         )
 
-        if response.status_code == 404:
-            return "NOT FOUND"
+        text = response.text.lower()
 
-        if response.status_code == 200:
-            return "FOUND"
-
-        if response.status_code == 429:
-            return "RATE LIMITED"
-
-        if response.status_code == 403:
+        # TikTok رفض/حدد الطلبات
+        if response.status_code in (403, 429):
             return "BLOCKED"
 
-        return f"UNKNOWN ({response.status_code})"
+        # بعض صفحات TikTok ترجع 404
+        if response.status_code == 404:
+            return "NOT_FOUND"
+
+        # محاولة التعرف على صفحة الحساب غير الموجودة
+        not_found_phrases = [
+            "couldn't find this account",
+            "couldn’t find this account",
+            "account doesn't exist",
+            "account does not exist"
+        ]
+
+        if any(x in text for x in not_found_phrases):
+            return "NOT_FOUND"
+
+        # إذا ظهرت صفحة حساب عادية
+        if response.status_code == 200:
+            return "FOUND_OR_UNKNOWN"
+
+        return f"UNKNOWN_{response.status_code}"
+
+    except requests.exceptions.Timeout:
+        return "TIMEOUT"
 
     except requests.exceptions.RequestException:
         return "ERROR"
 
 
-def main():
+# ============================================
+# بدء الفحص
+# ============================================
 
-    checked = set()
-    results = []
+checked = set()
+possible = []
 
-    print("=" * 45)
-    print(" TikTok Random 3-Letter Username Checker")
-    print("=" * 45)
-    print()
+print("=" * 50)
+print(" TikTok 3-Character Username Checker")
+print("=" * 50)
+print()
 
-    while len(checked) < NUMBER_TO_CHECK:
+for number in range(1, NUMBER_TO_CHECK + 1):
 
+    # منع التكرار
+    while True:
         username = generate_username()
 
-        if username in checked:
-            continue
-
-        checked.add(username)
-
-        print(
-            f"[{len(checked)}/{NUMBER_TO_CHECK}] "
-            f"@{username} -> ",
-            end="",
-            flush=True
-        )
-
-        status = check_username(username)
-
-        print(status)
-
-        if status == "NOT FOUND":
-            print(f"⭐ مرشح غير موجود: @{username}")
-            results.append(username)
-
-        if status == "RATE LIMITED":
-            print("تم الوصول إلى حد الطلبات. أوقف الفحص مؤقتًا.")
+        if username not in checked:
+            checked.add(username)
             break
 
-        time.sleep(DELAY)
+    print(
+        f"[{number}/{NUMBER_TO_CHECK}] "
+        f"@{username} -> ",
+        end="",
+        flush=True
+    )
 
-    with open("possible_usernames.txt", "w", encoding="utf-8") as f:
-        for username in results:
-            f.write("@" + username + "\n")
+    result = check_username(username)
+
+    print(result)
+
+    if result == "NOT_FOUND":
+        print(f"⭐ مرشح يحتاج تحقق: @{username}")
+        possible.append(username)
+
+    # إذا TikTok بدأ يمنع الطلبات، نوقف
+    if result == "BLOCKED":
+        print()
+        print("⚠️ TikTok حدّد الطلبات.")
+        print("تم إيقاف الفحص بدل محاولة تجاوز الحماية.")
+        break
+
+    time.sleep(DELAY)
+
+
+# ============================================
+# عرض النتائج
+# ============================================
+
+print()
+print("=" * 50)
+print("النتائج")
+print("=" * 50)
+
+if possible:
+
+    for username in possible:
+        print("@" + username)
+
+    # حفظ النتائج
+    with open(
+        "possible_usernames.txt",
+        "w",
+        encoding="utf-8"
+    ) as file:
+
+        for username in possible:
+            file.write("@" + username + "\n")
 
     print()
-    print("=" * 45)
-    print("انتهى الفحص")
-    print(f"تم العثور على {len(results)} مرشح غير موجود.")
-    print("النتائج محفوظة في possible_usernames.txt")
-    print("=" * 45)
+    print("تم حفظ النتائج في:")
+    print("possible_usernames.txt")
 
+else:
 
-if __name__ == "__main__":
-    main()
+    print("لم يظهر أي ثلاثي كـ NOT_FOUND.")
+
+print()
+print("مهم: NOT_FOUND لا يعني أن اليوزر متاح للحجز 100%.")
+print("التأكيد النهائي يكون من داخل TikTok.")
