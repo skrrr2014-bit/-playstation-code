@@ -4,118 +4,184 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>مولد يوزرات Snapchat</title>
+<title>Snap Username Finder</title>
 
 <style>
-* {
-    box-sizing: border-box;
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
-body {
-    margin: 0;
-    background: #111;
-    color: white;
-    font-family: Arial, sans-serif;
+body{
+    margin:0;
+    min-height:100vh;
+    background:linear-gradient(135deg,#fff700,#ffeb3b,#ffffff);
+    display:flex;
+    justify-content:center;
+    padding:25px 12px;
 }
 
-.container {
-    max-width: 650px;
-    margin: auto;
-    padding: 20px;
+.container{
+    width:100%;
+    max-width:650px;
 }
 
-h1 {
-    text-align: center;
-    margin-bottom: 8px;
+.card{
+    background:rgba(255,255,255,.94);
+    border-radius:25px;
+    padding:22px;
+    box-shadow:0 15px 40px rgba(0,0,0,.15);
 }
 
-.subtitle {
-    text-align: center;
-    color: #aaa;
-    margin-bottom: 20px;
+h1{
+    text-align:center;
+    margin:5px 0 8px;
+    font-size:28px;
 }
 
-.box {
-    background: #1d1d1d;
-    padding: 16px;
-    border-radius: 16px;
+.subtitle{
+    text-align:center;
+    color:#666;
+    margin-bottom:22px;
 }
 
-label {
-    display: block;
-    margin: 10px 0 6px;
+.controls{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
 }
 
-select,
-button {
-    border: 0;
-    border-radius: 11px;
-    padding: 12px;
-    font-size: 15px;
+label{
+    font-weight:bold;
+    margin-bottom:5px;
+    display:block;
 }
 
-select {
-    width: 100%;
-    background: #292929;
-    color: white;
-    margin-bottom: 8px;
+select,input{
+    width:100%;
+    padding:13px;
+    border:1px solid #ddd;
+    border-radius:12px;
+    font-size:16px;
+    background:white;
 }
 
-.generate {
-    width: 100%;
-    background: #fffc00;
-    color: #111;
-    font-weight: bold;
-    margin-top: 10px;
+.full{
+    grid-column:1 / -1;
 }
 
-#status {
-    text-align: center;
-    color: #aaa;
-    margin: 18px 0 10px;
+button{
+    width:100%;
+    border:0;
+    padding:14px;
+    border-radius:13px;
+    font-size:17px;
+    font-weight:bold;
+    cursor:pointer;
 }
 
-.result {
-    background: #202020;
-    padding: 12px;
-    border-radius: 13px;
-    margin-bottom: 9px;
-
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    direction: ltr;
+.generate{
+    background:#111;
+    color:white;
+    margin-top:15px;
 }
 
-.username {
-    flex: 1;
-    font-weight: bold;
-    overflow: hidden;
-    text-overflow: ellipsis;
+.generate:active{
+    transform:scale(.98);
 }
 
-.action {
-    width: auto;
-    margin: 0;
-    padding: 8px 10px;
-    color: white;
-    background: #333;
-    font-size: 13px;
+.actions{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin-top:10px;
 }
 
-.snap {
-    background: #fffc00;
-    color: #111;
+.copy{
+    background:#eee;
 }
 
-.note {
-    margin-top: 15px;
-    background: #1d1d1d;
-    padding: 14px;
-    border-radius: 13px;
-    color: #aaa;
-    font-size: 13px;
-    line-height: 1.7;
+.clear{
+    background:#eee;
+}
+
+.results{
+    margin-top:20px;
+}
+
+.result{
+    background:#f7f7f7;
+    border-radius:15px;
+    padding:13px;
+    margin-bottom:9px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    gap:10px;
+}
+
+.username{
+    direction:ltr;
+    font-weight:bold;
+    font-size:17px;
+}
+
+.status{
+    white-space:nowrap;
+    padding:7px 10px;
+    border-radius:10px;
+    font-size:13px;
+    font-weight:bold;
+}
+
+.waiting{
+    background:#fff3cd;
+    color:#856404;
+}
+
+.check{
+    background:#111;
+    color:white;
+    width:auto;
+    padding:8px 12px;
+    font-size:13px;
+}
+
+.empty{
+    text-align:center;
+    color:#777;
+    padding:25px;
+}
+
+.note{
+    margin-top:18px;
+    padding:13px;
+    background:#fff8d7;
+    border-radius:12px;
+    color:#665900;
+    font-size:13px;
+    line-height:1.7;
+}
+
+.counter{
+    text-align:center;
+    margin-top:12px;
+    color:#666;
+    font-size:14px;
+}
+
+@media(max-width:500px){
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .full{
+        grid-column:auto;
+    }
+
+    .result{
+        flex-wrap:wrap;
+    }
 }
 </style>
 </head>
@@ -124,134 +190,146 @@ select {
 
 <div class="container">
 
-<h1>⚡ مولد يوزرات Snapchat</h1>
+<div class="card">
+
+<h1>👻 Snap Username Finder</h1>
 
 <div class="subtitle">
-    توليد سريع + نسخ + فتح Snapchat للتحقق
+مولّد أسماء مستخدمين مع تحقق يدوي رسمي
 </div>
 
-<div class="box">
+<div class="controls">
 
+<div>
 <label>طول اليوزر</label>
-
 <select id="length">
-    <option value="3">3 خانات</option>
-    <option value="4" selected>4 خانات</option>
+<option value="3">3 أحرف</option>
+<option value="4" selected>4 أحرف</option>
 </select>
+</div>
 
-<label>عدد اليوزرات</label>
-
+<div>
+<label>العدد</label>
 <select id="amount">
-    <option value="10">10</option>
-    <option value="25">25</option>
-    <option value="50">50</option>
-    <option value="100">100</option>
+<option value="10">10</option>
+<option value="25">25</option>
+<option value="50" selected>50</option>
+<option value="100">100</option>
 </select>
+</div>
 
+<div class="full">
 <label>نوع اليوزر</label>
-
 <select id="mode">
-    <option value="mixed">حروف + أرقام</option>
-    <option value="letters">حروف فقط</option>
-    <option value="numbers">أرقام فقط</option>
+<option value="mixed">حروف + أرقام</option>
+<option value="letters">حروف فقط</option>
+<option value="numbers">أرقام + حروف</option>
 </select>
+</div>
 
-<button class="generate" onclick="generate()">
-    🎲 توليد اليوزرات
+</div>
+
+<button class="generate" onclick="generateUsers()">
+⚡ توليد اليوزرات
 </button>
 
+<div class="actions">
+<button class="copy" onclick="copyAll()">
+📋 نسخ الكل
+</button>
+
+<button class="clear" onclick="clearResults()">
+🗑️ مسح
+</button>
 </div>
 
-<div id="status">
-    جاهز
-</div>
+<div class="counter" id="counter"></div>
 
-<div id="results"></div>
+<div class="results" id="results">
+<div class="empty">
+اضغط «توليد اليوزرات» للبدء
+</div>
+</div>
 
 <div class="note">
-    🔎 للتحقق الحقيقي، اضغط «تحقق» بجانب اليوزر.
-    سيتم فتح Snapchat لتبحث عن الاسم بنفسك.
-    الأداة لا تعرض نتيجة متاحة/غير متاحة من عندها بشكل وهمي.
+⚠️ الحالة الظاهرة بجانب اليوزر هي «بانتظار التحقق».
+اضغط 🔎 للتحقق عبر Snapchat مباشرة.
+لن أعرض «متاح» أو «غير متاح» بشكل وهمي.
 </div>
 
 </div>
-
+</div>
 
 <script>
 
-const letters =
-    "abcdefghijklmnopqrstuvwxyz";
+const letters = "abcdefghijklmnopqrstuvwxyz";
+const numbers = "0123456789";
 
-const numbers =
-    "0123456789";
+let generatedUsers = [];
 
+/* توليد يوزر مطابق لقواعد سناب:
+   يبدأ بحرف وينتهي بحرف أو رقم */
+function randomUsername(length, mode){
 
-function createUsername(length, mode) {
+    let first = letters[Math.floor(Math.random()*letters.length)];
 
-    let chars;
+    let chars = "";
 
-    if (mode === "letters") {
+    if(mode === "letters"){
         chars = letters;
     }
-
-    else if (mode === "numbers") {
-        chars = numbers;
-    }
-
-    else {
+    else{
         chars = letters + numbers;
     }
 
-    let username = "";
+    let username = first;
 
-    for (let i = 0; i < length; i++) {
-
-        const index =
-            Math.floor(
-                Math.random() * chars.length
-            );
-
-        username += chars[index];
+    for(let i=1;i<length;i++){
+        username += chars[Math.floor(Math.random()*chars.length)];
     }
 
     return username;
 }
 
 
-function generate() {
+function generateUsers(){
 
     const length =
-        Number(
-            document.getElementById("length").value
-        );
+        Number(document.getElementById("length").value);
 
     const amount =
-        Number(
-            document.getElementById("amount").value
-        );
+        Number(document.getElementById("amount").value);
 
     const mode =
         document.getElementById("mode").value;
+
+    generatedUsers = [];
+
+    const used = new Set();
+
+    while(generatedUsers.length < amount){
+
+        const username =
+            randomUsername(length, mode);
+
+        if(!used.has(username)){
+            used.add(username);
+            generatedUsers.push(username);
+        }
+    }
+
+    displayUsers();
+}
+
+
+function displayUsers(){
 
     const results =
         document.getElementById("results");
 
     results.innerHTML = "";
 
-    const usernames = new Set();
-
-    while (usernames.size < amount) {
-
-        usernames.add(
-            createUsername(
-                length,
-                mode
-            )
-        );
-    }
-
-
-    usernames.forEach(username => {
+    generatedUsers.forEach(username => {
 
         const row =
             document.createElement("div");
@@ -260,41 +338,36 @@ function generate() {
 
         row.innerHTML = `
 
-            <span class="username">
-                @${username}
-            </span>
+            <div class="username">
+                ${username}
+            </div>
+
+            <div class="status waiting">
+                🟡 بانتظار التحقق
+            </div>
 
             <button
-                class="action snap"
-                onclick="checkOnSnapchat('${username}')">
+                class="check"
+                onclick="checkUsername('${username}')">
                 🔎 تحقق
-            </button>
-
-            <button
-                class="action"
-                onclick="copyUsername('${username}')">
-                📋 نسخ
             </button>
 
         `;
 
         results.appendChild(row);
-
     });
 
-
-    document.getElementById("status").textContent =
-        `✅ تم توليد ${amount} يوزر`;
+    document.getElementById("counter").textContent =
+        generatedUsers.length + " يوزر";
 }
 
 
-function checkOnSnapchat(username) {
-
-    /*
-      فتح صفحة Snapchat الرسمية.
-      إذا لم يفتح الرابط مباشرة داخل التطبيق،
-      يمكن البحث عن اليوزر داخل Snapchat يدويًا.
-    */
+/*
+   يفتح صفحة اليوزر على Snapchat.
+   إذا كان الحساب موجودًا ستظهر لك صفحة الحساب.
+   وإذا لم يكن موجودًا ستقدر تتأكد من Snapchat نفسه.
+*/
+function checkUsername(username){
 
     const url =
         "https://www.snapchat.com/add/" +
@@ -304,43 +377,37 @@ function checkOnSnapchat(username) {
 }
 
 
-async function copyUsername(username) {
+function copyAll(){
 
-    try {
-
-        await navigator.clipboard.writeText(
-            username
-        );
-
-        const oldTitle =
-            document.title;
-
-        document.title =
-            "✅ تم النسخ";
-
-        setTimeout(() => {
-            document.title = oldTitle;
-        }, 900);
-
+    if(generatedUsers.length === 0){
+        alert("ولّد اليوزرات أولًا");
+        return;
     }
 
-    catch {
+    const text =
+        generatedUsers.join("\n");
 
-        const textarea =
-            document.createElement("textarea");
+    navigator.clipboard.writeText(text)
+    .then(() => {
+        alert("✅ تم نسخ جميع اليوزرات");
+    })
+    .catch(() => {
+        alert("تعذر النسخ تلقائيًا");
+    });
+}
 
-        textarea.value = username;
 
-        document.body.appendChild(textarea);
+function clearResults(){
 
-        textarea.select();
+    generatedUsers = [];
 
-        document.execCommand("copy");
+    document.getElementById("results").innerHTML = `
+        <div class="empty">
+            تم المسح 🗑️
+        </div>
+    `;
 
-        textarea.remove();
-
-        alert("✅ تم نسخ @" + username);
-    }
+    document.getElementById("counter").textContent = "";
 }
 
 </script>
