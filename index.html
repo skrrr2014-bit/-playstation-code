@@ -3,134 +3,203 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>أداتي</title>
+
+<title>RwL</title>
 
 <style>
-* {
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+*{
+    box-sizing:border-box;
+    font-family:Arial,sans-serif;
 }
 
-body {
-    margin: 0;
-    min-height: 100vh;
-    background: linear-gradient(135deg, #111, #242424);
-    color: white;
-    padding: 20px;
+body{
+    margin:0;
+    min-height:100vh;
+    background:
+        radial-gradient(circle at top,#3b2b75 0,#17132b 35%,#08080d 75%);
+    color:white;
+    padding:18px;
 }
 
-.container {
-    max-width: 500px;
-    margin: auto;
+.container{
+    max-width:560px;
+    margin:auto;
 }
 
-.card {
-    background: #1c1c1c;
-    border-radius: 22px;
-    padding: 22px;
-    box-shadow: 0 10px 35px rgba(0,0,0,.4);
+.card{
+    background:rgba(18,18,28,.88);
+    border:1px solid rgba(255,255,255,.1);
+    backdrop-filter:blur(18px);
+    border-radius:28px;
+    padding:22px;
+    box-shadow:0 20px 60px rgba(0,0,0,.45);
 }
 
-h1 {
-    text-align: center;
-    margin-top: 5px;
+/* الغلاف */
+
+.cover{
+    text-align:center;
+    padding:18px 0 28px;
 }
 
-.menu {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+.logo{
+    width:92px;
+    height:92px;
+    margin:auto;
+    border-radius:28px;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    box-shadow:
+        0 10px 35px rgba(139,92,246,.35);
+
+    font-size:28px;
+    font-weight:900;
+    letter-spacing:2px;
+}
+
+.title{
+    font-size:32px;
+    font-weight:900;
+    margin-top:17px;
+}
+
+.subtitle{
+    color:#aaa;
+    margin-top:7px;
+}
+
+/* الصفحات */
+
+.page{
+    display:none;
+}
+
+.page.active{
+    display:block;
+}
+
+h2{
+    margin-top:0;
+}
+
+/* الأزرار */
+
+.menu{
+    display:flex;
+    flex-direction:column;
+    gap:12px;
 }
 
 .menu button,
 .back,
-.refresh {
-    border: none;
-    border-radius: 14px;
-    padding: 16px;
-    font-size: 17px;
-    font-weight: bold;
-    cursor: pointer;
+.action{
+    border:0;
+    border-radius:16px;
+    padding:16px;
+    font-size:16px;
+    font-weight:800;
+    cursor:pointer;
+    transition:.2s;
 }
 
-.menu button {
-    background: #292929;
-    color: white;
+.menu button{
+    color:white;
+    background:#222231;
+    border:1px solid rgba(255,255,255,.07);
 }
 
-.menu button:hover {
-    background: #3a3a3a;
+.menu button:hover{
+    transform:translateY(-2px);
+    background:#2c2c40;
 }
 
-.back {
-    background: #444;
-    color: white;
-    margin-bottom: 15px;
-    width: 100%;
+.back{
+    width:100%;
+    background:#292936;
+    color:white;
+    margin-bottom:16px;
 }
 
-.refresh {
-    background: #fff;
-    color: #111;
-    width: 100%;
-    margin-top: 15px;
+.buttons{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:15px 0;
 }
 
-.page {
-    display: none;
+.action{
+    background:#fff;
+    color:#111;
 }
 
-.page.active {
-    display: block;
+.action.refresh{
+    background:linear-gradient(135deg,#8b5cf6,#ec4899);
+    color:white;
 }
 
-.list {
-    display: flex;
-    flex-direction: column;
-    gap: 9px;
-    margin-top: 15px;
+/* القائمة */
+
+.list{
+    display:flex;
+    flex-direction:column;
+    gap:9px;
 }
 
-.item {
-    background: #292929;
-    border-radius: 12px;
-    padding: 13px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    direction: ltr;
+.item{
+    background:#20202b;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:14px;
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    direction:ltr;
 }
 
-.username {
-    font-weight: bold;
+.username{
+    font-size:17px;
+    font-weight:800;
 }
 
-.status {
-    font-size: 13px;
-    color: #8cff8c;
+.tag{
+    font-size:12px;
+    color:#b9a7ff;
+    direction:rtl;
 }
 
-.code {
-    background: #292929;
-    border-radius: 12px;
-    padding: 17px 10px;
-    text-align: center;
-    font-size: 19px;
-    font-weight: bold;
-    letter-spacing: 2px;
-    direction: ltr;
-    margin-top: 15px;
-    word-break: break-all;
+/* ستور */
+
+.code{
+    background:#20202b;
+    border:1px solid rgba(255,255,255,.06);
+    border-radius:14px;
+    padding:16px;
+    margin-bottom:9px;
+    text-align:center;
+    font-size:18px;
+    font-weight:bold;
+    letter-spacing:2px;
+    direction:ltr;
 }
 
-.note {
-    margin-top: 15px;
-    background: #302d1c;
-    color: #ffe98a;
-    border-radius: 12px;
-    padding: 12px;
-    font-size: 13px;
-    line-height: 1.6;
+.note{
+    margin-top:15px;
+    background:#211f30;
+    color:#bdb7d9;
+    border-radius:14px;
+    padding:13px;
+    line-height:1.7;
+    font-size:13px;
+}
+
+.counter{
+    text-align:center;
+    color:#888;
+    font-size:13px;
+    margin:10px 0;
 }
 </style>
 </head>
@@ -141,15 +210,30 @@ h1 {
 
 <div class="card">
 
-<!-- القائمة الرئيسية -->
+<!-- الرئيسية -->
+
 <div id="home" class="page active">
 
-<h1>⚡ الأدوات</h1>
+<div class="cover">
+
+<div class="logo">
+RwL
+</div>
+
+<div class="title">
+RwL Tools
+</div>
+
+<div class="subtitle">
+Username & Code Generator
+</div>
+
+</div>
 
 <div class="menu">
 
 <button onclick="showPage('tiktok')">
-🎵 يوزرات تيك
+🎵 يوزرات تيك توك
 </button>
 
 <button onclick="showPage('snap')">
@@ -165,48 +249,39 @@ h1 {
 </div>
 
 
-<!-- يوزرات تيك -->
+<!-- تيك توك -->
+
 <div id="tiktok" class="page">
 
 <button class="back" onclick="showPage('home')">
 ← رجوع
 </button>
 
-<h2>🎵 يوزرات تيك</h2>
+<h2>🎵 يوزرات تيك توك</h2>
 
-<div class="list">
+<div class="buttons">
 
-<div class="item">
-<span class="username">@v7x</span>
-<span class="status">جاهز</span>
-</div>
+<button class="action refresh"
+onclick="generateTikTok()">
+🔄 تجديد
+</button>
 
-<div class="item">
-<span class="username">@q8m</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@k4z</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@n7q</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@x5v</span>
-<span class="status">جاهز</span>
-</div>
+<button class="action"
+onclick="copyTikTok()">
+📋 نسخ
+</button>
 
 </div>
+
+<div class="counter" id="tikCounter"></div>
+
+<div class="list" id="tikList"></div>
 
 </div>
 
 
-<!-- يوزرات سناب -->
+<!-- سناب -->
+
 <div id="snap" class="page">
 
 <button class="back" onclick="showPage('home')">
@@ -215,39 +290,29 @@ h1 {
 
 <h2>👻 يوزرات سناب</h2>
 
-<div class="list">
+<div class="buttons">
 
-<div class="item">
-<span class="username">@z7q</span>
-<span class="status">جاهز</span>
-</div>
+<button class="action refresh"
+onclick="generateSnap()">
+🔄 تجديد
+</button>
 
-<div class="item">
-<span class="username">@m4x</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@q9v</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@k7n</span>
-<span class="status">جاهز</span>
-</div>
-
-<div class="item">
-<span class="username">@x3m</span>
-<span class="status">جاهز</span>
-</div>
+<button class="action"
+onclick="copySnap()">
+📋 نسخ
+</button>
 
 </div>
+
+<div class="counter" id="snapCounter"></div>
+
+<div class="list" id="snapList"></div>
 
 </div>
 
 
-<!-- تخمين ستور -->
+<!-- ستور -->
+
 <div id="store" class="page">
 
 <button class="back" onclick="showPage('home')">
@@ -256,15 +321,25 @@ h1 {
 
 <h2>🎟️ تخمين ستور</h2>
 
-<div id="codes"></div>
+<div class="buttons">
 
-<button class="refresh" onclick="generateCodes()">
+<button class="action refresh"
+onclick="generateCodes()">
 🔄 تجديد
 </button>
 
+<button class="action"
+onclick="copyCodes()">
+📋 نسخ
+</button>
+
+</div>
+
+<div id="codes"></div>
+
 <div class="note">
-هذه رموز عشوائية تجريبية مكوّنة من 12 حرفًا ورقمًا،
-وليست أكواد Store حقيقية أو مضمونة.
+هذه رموز عشوائية تجريبية من 12 خانة.
+ليست أكواد Store حقيقية ولا يوجد ضمان أنها قابلة للاسترداد.
 </div>
 
 </div>
@@ -275,65 +350,319 @@ h1 {
 
 <script>
 
-function showPage(page) {
+/* =========================
+   الإعدادات
+========================= */
 
-    document.querySelectorAll(".page")
-    .forEach(p => p.classList.remove("active"));
+const letters =
+"abcdefghijklmnopqrstuvwxyz";
 
-    document.getElementById(page)
+const numbers =
+"0123456789";
+
+let tikUsers = [];
+let snapUsers = [];
+let storeCodes = [];
+
+
+/* =========================
+   الانتقال بين الصفحات
+========================= */
+
+function showPage(page){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(p =>
+        p.classList.remove("active")
+    );
+
+    document
+    .getElementById(page)
     .classList.add("active");
 
-    if (page === "store") {
+    if(page === "tiktok"){
+        generateTikTok();
+    }
+
+    if(page === "snap"){
+        generateSnap();
+    }
+
+    if(page === "store"){
         generateCodes();
     }
 }
 
 
-/* توليد رمز عشوائي تجريبي من 12 خانة */
+/* =========================
+   مولد اليوزرات
+   أغلبها 4 خانات
+   وبعضها أطول
+========================= */
 
-function randomCode() {
+function randomUsername(){
 
-    const characters =
+    /*
+       70% رباعي
+       20% خماسي
+       10% أطول
+    */
+
+    const chance =
+        Math.random();
+
+    let length;
+
+    if(chance < 0.70){
+        length = 4;
+    }
+    else if(chance < 0.90){
+        length = 5;
+    }
+    else{
+        length =
+            Math.floor(Math.random()*5)+6;
+    }
+
+    let username =
+        letters[
+            Math.floor(
+                Math.random()*letters.length
+            )
+        ];
+
+    const chars =
+        letters + numbers;
+
+    for(let i=1;i<length;i++){
+
+        username +=
+            chars[
+                Math.floor(
+                    Math.random()*chars.length
+                )
+            ];
+    }
+
+    return username;
+}
+
+
+/* =========================
+   إنشاء قائمة بدون تكرار
+========================= */
+
+function createUsers(amount){
+
+    const set =
+        new Set();
+
+    while(set.size < amount){
+
+        set.add(
+            randomUsername()
+        );
+    }
+
+    return [...set];
+}
+
+
+/* =========================
+   عرض اليوزرات
+========================= */
+
+function renderUsers(list, elementId){
+
+    const box =
+        document.getElementById(elementId);
+
+    box.innerHTML = "";
+
+    list.forEach(username => {
+
+        const row =
+            document.createElement("div");
+
+        row.className = "item";
+
+        row.innerHTML = `
+            <span class="username">
+                @${username}
+            </span>
+
+            <span class="tag">
+                مرشح
+            </span>
+        `;
+
+        box.appendChild(row);
+    });
+}
+
+
+/* =========================
+   تيك توك
+========================= */
+
+function generateTikTok(){
+
+    tikUsers =
+        createUsers(30);
+
+    renderUsers(
+        tikUsers,
+        "tikList"
+    );
+
+    document
+    .getElementById("tikCounter")
+    .textContent =
+        tikUsers.length +
+        " يوزر";
+}
+
+
+/* =========================
+   سناب
+========================= */
+
+function generateSnap(){
+
+    snapUsers =
+        createUsers(30);
+
+    renderUsers(
+        snapUsers,
+        "snapList"
+    );
+
+    document
+    .getElementById("snapCounter")
+    .textContent =
+        snapUsers.length +
+        " يوزر";
+}
+
+
+/* =========================
+   نسخ تيك
+========================= */
+
+function copyTikTok(){
+
+    if(!tikUsers.length) return;
+
+    navigator.clipboard.writeText(
+        tikUsers
+        .map(x => "@" + x)
+        .join("\n")
+    );
+
+    alert("✅ تم نسخ يوزرات تيك توك");
+}
+
+
+/* =========================
+   نسخ سناب
+========================= */
+
+function copySnap(){
+
+    if(!snapUsers.length) return;
+
+    navigator.clipboard.writeText(
+        snapUsers
+        .map(x => "@" + x)
+        .join("\n")
+    );
+
+    alert("✅ تم نسخ يوزرات سناب");
+}
+
+
+/* =========================
+   ستور
+========================= */
+
+function randomCode(){
+
+    const chars =
         "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
 
     let code = "";
 
-    for (let i = 0; i < 12; i++) {
+    for(let i=0;i<12;i++){
 
-        code += characters[
-            Math.floor(
-                Math.random() * characters.length
-            )
-        ];
-
+        code +=
+            chars[
+                Math.floor(
+                    Math.random()*chars.length
+                )
+            ];
     }
 
     return code;
 }
 
 
-/* إنشاء مجموعة الرموز */
+function generateCodes(){
 
-function generateCodes() {
+    storeCodes = [];
+
+    const used =
+        new Set();
+
+    while(used.size < 5){
+
+        used.add(
+            randomCode()
+        );
+    }
+
+    storeCodes =
+        [...used];
 
     const box =
         document.getElementById("codes");
 
     box.innerHTML = "";
 
-    for (let i = 0; i < 5; i++) {
+    storeCodes.forEach(code => {
 
-        const code =
+        const div =
             document.createElement("div");
 
-        code.className = "code";
+        div.className = "code";
 
-        code.textContent =
-            randomCode();
+        div.textContent =
+            code;
 
-        box.appendChild(code);
-    }
+        box.appendChild(div);
+    });
 }
+
+
+/* =========================
+   نسخ الأكواد
+========================= */
+
+function copyCodes(){
+
+    if(!storeCodes.length) return;
+
+    navigator.clipboard.writeText(
+        storeCodes.join("\n")
+    );
+
+    alert("✅ تم نسخ الأكواد");
+}
+
+
+/* تشغيل أولي */
+
+generateTikTok();
 
 </script>
 
