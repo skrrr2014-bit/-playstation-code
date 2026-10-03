@@ -2,191 +2,186 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>RwL Tools</title>
 
 <style>
-*{
-    box-sizing:border-box;
-    font-family:Arial,sans-serif;
-}
+*{box-sizing:border-box;font-family:Arial,sans-serif}
 
 body{
-    margin:0;
-    min-height:100vh;
-    padding:18px;
-    color:white;
-    background:
-    radial-gradient(circle at 20% 10%,#6d3cff 0%,transparent 35%),
-    radial-gradient(circle at 90% 80%,#ff2d95 0%,transparent 30%),
-    #08080e;
+margin:0;
+min-height:100vh;
+padding:18px;
+color:white;
+background:
+radial-gradient(circle at 15% 10%,#743cff 0,transparent 32%),
+radial-gradient(circle at 90% 80%,#ff2d95 0,transparent 30%),
+#08080e
 }
 
-.container{
-    max-width:600px;
-    margin:auto;
-}
+.container{max-width:600px;margin:auto}
 
 .card{
-    background:rgba(20,20,30,.92);
-    border:1px solid rgba(255,255,255,.1);
-    border-radius:28px;
-    padding:22px;
-    box-shadow:0 20px 60px rgba(0,0,0,.5);
+background:rgba(20,20,30,.94);
+border:1px solid rgba(255,255,255,.1);
+border-radius:28px;
+padding:22px;
+box-shadow:0 20px 60px #0008
 }
 
-.cover{
-    text-align:center;
-    padding:18px 0 28px;
-}
+.cover{text-align:center;padding:18px 0 28px}
 
 .logo{
-    width:100px;
-    height:100px;
-    margin:auto;
-    border-radius:30px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    background:linear-gradient(135deg,#7c3aed,#ec4899);
-    font-size:30px;
-    font-weight:900;
-    box-shadow:0 12px 40px rgba(124,58,237,.4);
+width:100px;height:100px;margin:auto;
+border-radius:30px;
+display:flex;align-items:center;justify-content:center;
+background:linear-gradient(135deg,#7c3aed,#ec4899);
+font-size:30px;font-weight:900
 }
 
-.title{
-    font-size:32px;
-    font-weight:900;
-    margin-top:16px;
-}
+.title{font-size:32px;font-weight:900;margin-top:16px}
+.subtitle{color:#aaa;margin-top:6px}
 
-.subtitle{
-    color:#aaa;
-    margin-top:6px;
-}
+.page{display:none}
+.page.active{display:block}
 
-.page{
-    display:none;
-}
-
-.page.active{
-    display:block;
-}
-
-.menu{
-    display:flex;
-    flex-direction:column;
-    gap:12px;
-}
+.menu{display:flex;flex-direction:column;gap:12px}
 
 button{
-    border:0;
-    cursor:pointer;
-    font-weight:bold;
+border:0;
+cursor:pointer;
+font-weight:bold
 }
 
-.menu button,
-.back{
-    padding:17px;
-    border-radius:16px;
-    background:#272733;
-    color:white;
-    font-size:17px;
+.menu button,.back{
+padding:17px;
+border-radius:16px;
+background:#272733;
+color:white;
+font-size:17px
 }
 
-.back{
-    width:100%;
-    margin-bottom:16px;
-}
+.back{width:100%;margin-bottom:16px}
 
 .actions{
-    display:grid;
-    grid-template-columns:1fr 1fr;
-    gap:10px;
-    margin:15px 0;
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+margin:15px 0
 }
 
 .action{
-    padding:14px;
-    border-radius:14px;
-    background:white;
-    color:#111;
-    font-size:15px;
+padding:14px;
+border-radius:14px;
+background:white;
+color:#111;
+font-size:15px
 }
 
 .refresh{
-    background:linear-gradient(135deg,#7c3aed,#ec4899);
-    color:white;
+background:linear-gradient(135deg,#7c3aed,#ec4899);
+color:white
 }
 
 .list{
-    display:flex;
-    flex-direction:column;
-    gap:8px;
+display:flex;
+flex-direction:column;
+gap:8px
 }
 
 .item{
-    display:grid;
-    grid-template-columns:1fr auto auto;
-    align-items:center;
-    gap:8px;
-    padding:12px;
-    border-radius:14px;
-    background:#242431;
-    direction:ltr;
+display:grid;
+grid-template-columns:1fr auto auto;
+align-items:center;
+gap:8px;
+padding:12px;
+border-radius:14px;
+background:#242431;
+direction:ltr
 }
 
 .name{
-    font-weight:bold;
-    overflow:hidden;
-    text-overflow:ellipsis;
+font-weight:bold;
+overflow:hidden;
+text-overflow:ellipsis
 }
 
 .status{
-    direction:rtl;
-    font-size:12px;
-    padding:7px 8px;
-    border-radius:9px;
-    background:#403d21;
-    color:#ffe66d;
-    white-space:nowrap;
+direction:rtl;
+font-size:12px;
+padding:7px 8px;
+border-radius:9px;
+background:#403d21;
+color:#ffe66d;
+white-space:nowrap
 }
 
 .copyOne{
-    background:#353544;
-    color:white;
-    border-radius:9px;
-    padding:8px 10px;
+background:#353544;
+color:white;
+border-radius:9px;
+padding:8px 10px
+}
+
+input,select{
+width:100%;
+padding:14px;
+border:0;
+border-radius:13px;
+margin-top:7px;
+background:#292936;
+color:white;
+font-size:16px
+}
+
+label{
+display:block;
+margin-top:12px;
+font-weight:bold
 }
 
 .code{
-    display:grid;
-    grid-template-columns:1fr auto;
-    gap:8px;
-    align-items:center;
-    padding:12px;
-    margin-bottom:8px;
-    background:#242431;
-    border-radius:14px;
+display:grid;
+grid-template-columns:1fr auto;
+gap:8px;
+align-items:center;
+padding:12px;
+margin-bottom:8px;
+background:#242431;
+border-radius:14px
 }
 
 .codeText{
-    direction:ltr;
-    text-align:center;
-    font-weight:bold;
-    letter-spacing:2px;
-    overflow:hidden;
-    word-break:break-all;
+direction:ltr;
+text-align:center;
+font-weight:bold;
+letter-spacing:2px;
+word-break:break-all
 }
 
 .note{
-    margin-top:15px;
-    padding:13px;
-    border-radius:13px;
-    background:#29261a;
-    color:#e8d889;
-    font-size:12px;
-    line-height:1.7;
+margin-top:15px;
+padding:13px;
+border-radius:13px;
+background:#29261a;
+color:#e8d889;
+font-size:12px;
+line-height:1.7
+}
+
+.progress{
+margin:12px 0;
+height:9px;
+background:#292936;
+border-radius:20px;
+overflow:hidden
+}
+
+.progressBar{
+height:100%;
+width:0%;
+background:linear-gradient(90deg,#7c3aed,#ec4899);
+transition:.2s
 }
 </style>
 </head>
@@ -206,24 +201,44 @@ button{
 </div>
 
 <div class="menu">
-<button onclick="openPage('tiktok')">🎵 يوزرات تيك توك</button>
-<button onclick="openPage('snap')">👻 يوزرات سناب</button>
-<button onclick="openPage('store')">🎟️ تخمين ستور</button>
-</div>
 
+<button onclick="openPage('tiktok')">
+🎵 يوزرات تيك توك
+</button>
+
+<button onclick="openPage('snap')">
+👻 يوزرات سناب
+</button>
+
+<button onclick="openPage('hunter')">
+🎯 صائد اليوزرات
+</button>
+
+<button onclick="openPage('store')">
+🎟️ تخمين ستور
+</button>
+
+</div>
 </section>
 
 
 <!-- تيك توك -->
 <section id="tiktok" class="page">
 
-<button class="back" onclick="openPage('home')">← رجوع</button>
+<button class="back" onclick="openPage('home')">
+← رجوع
+</button>
 
 <h2>🎵 يوزرات تيك توك</h2>
 
 <div class="actions">
-<button class="action refresh" onclick="generateTikTok()">🔄 تجديد</button>
-<button class="action" onclick="copyAll(tiktokUsers)">📋 نسخ الكل</button>
+<button class="action refresh" onclick="generateTikTok()">
+🔄 تجديد
+</button>
+
+<button class="action" onclick="copyAll(tiktokUsers)">
+📋 نسخ الكل
+</button>
 </div>
 
 <div id="tikList" class="list"></div>
@@ -234,13 +249,20 @@ button{
 <!-- سناب -->
 <section id="snap" class="page">
 
-<button class="back" onclick="openPage('home')">← رجوع</button>
+<button class="back" onclick="openPage('home')">
+← رجوع
+</button>
 
 <h2>👻 يوزرات سناب</h2>
 
 <div class="actions">
-<button class="action refresh" onclick="generateSnap()">🔄 تجديد</button>
-<button class="action" onclick="copyAll(snapUsers)">📋 نسخ الكل</button>
+<button class="action refresh" onclick="generateSnap()">
+🔄 تجديد
+</button>
+
+<button class="action" onclick="copyAll(snapUsers)">
+📋 نسخ الكل
+</button>
 </div>
 
 <div id="snapList" class="list"></div>
@@ -248,22 +270,85 @@ button{
 </section>
 
 
+<!-- صائد اليوزرات -->
+<section id="hunter" class="page">
+
+<button class="back" onclick="openPage('home')">
+← رجوع
+</button>
+
+<h2>🎯 صائد اليوزرات</h2>
+
+<label>طول اليوزر</label>
+
+<select id="hunterLength">
+<option value="4">4 خانات</option>
+<option value="5">5 خانات</option>
+<option value="6">6 خانات</option>
+<option value="7">7 خانات</option>
+<option value="8">8 خانات</option>
+</select>
+
+<label>عدد اليوزرات</label>
+
+<select id="hunterAmount">
+<option value="25">25</option>
+<option value="50">50</option>
+<option value="100">100</option>
+<option value="200">200</option>
+</select>
+
+<div class="actions">
+
+<button class="action refresh" onclick="huntUsers()">
+🎯 صيد
+</button>
+
+<button class="action" onclick="copyAll(huntedUsers)">
+📋 نسخ الكل
+</button>
+
+</div>
+
+<div class="progress">
+<div id="progressBar" class="progressBar"></div>
+</div>
+
+<div id="hunterList" class="list"></div>
+
+<div class="note">
+هذه الأداة تولّد تركيبات أسماء محليًا.
+«🟡 مرشح» لا تعني أن اليوزر متاح فعليًا.
+</div>
+
+</section>
+
+
 <!-- ستور -->
 <section id="store" class="page">
 
-<button class="back" onclick="openPage('home')">← رجوع</button>
+<button class="back" onclick="openPage('home')">
+← رجوع
+</button>
 
 <h2>🎟️ تخمين ستور</h2>
 
 <div class="actions">
-<button class="action refresh" onclick="generateCodes()">🔄 تجديد</button>
-<button class="action" onclick="copyAll(storeCodes)">📋 نسخ الكل</button>
+
+<button class="action refresh" onclick="generateCodes()">
+🔄 تجديد
+</button>
+
+<button class="action" onclick="copyAll(storeCodes)">
+📋 نسخ الكل
+</button>
+
 </div>
 
 <div id="codeList"></div>
 
 <div class="note">
-الرموز هنا عشوائية من 12 حرفًا ورقمًا، وليست أكواد Store مؤكدة الصلاحية.
+الرموز عشوائية من 12 حرفًا ورقمًا وليست أكواد Store مؤكدة.
 </div>
 
 </section>
@@ -274,65 +359,47 @@ button{
 
 <script>
 
-const letters =
-"abcdefghijklmnopqrstuvwxyz";
-
-const chars =
-"abcdefghijklmnopqrstuvwxyz0123456789";
+const letters="abcdefghijklmnopqrstuvwxyz";
+const chars="abcdefghijklmnopqrstuvwxyz0123456789";
 
 let tiktokUsers=[];
 let snapUsers=[];
+let huntedUsers=[];
 let storeCodes=[];
 
 
-/* الانتقال */
+/* التنقل */
 
 function openPage(page){
 
-    document
-    .querySelectorAll(".page")
-    .forEach(x=>x.classList.remove("active"));
+document.querySelectorAll(".page")
+.forEach(x=>x.classList.remove("active"));
 
-    document
-    .getElementById(page)
-    .classList.add("active");
+document.getElementById(page)
+.classList.add("active");
 
-    if(page==="tiktok")
-        generateTikTok();
+if(page==="tiktok") generateTikTok();
+if(page==="snap") generateSnap();
+if(page==="store") generateCodes();
 
-    if(page==="snap")
-        generateSnap();
-
-    if(page==="store")
-        generateCodes();
 }
 
 
 /* توليد يوزر */
 
-function makeUsername(){
+function makeUsername(length){
 
-    let lengths=[4,4,4,4,4,5,5,6,7,8];
+let username=
+letters[Math.floor(Math.random()*letters.length)];
 
-    let length =
-        lengths[
-            Math.floor(Math.random()*lengths.length)
-        ];
+for(let i=1;i<length;i++){
 
-    let username =
-        letters[
-            Math.floor(Math.random()*letters.length)
-        ];
+username+=
+chars[Math.floor(Math.random()*chars.length)];
 
-    for(let i=1;i<length;i++){
+}
 
-        username +=
-            chars[
-                Math.floor(Math.random()*chars.length)
-            ];
-    }
-
-    return username;
+return username;
 }
 
 
@@ -340,46 +407,58 @@ function makeUsername(){
 
 function makeUsers(amount=30){
 
-    let set=new Set();
+let set=new Set();
 
-    while(set.size<amount){
-        set.add(makeUsername());
-    }
+while(set.size<amount){
 
-    return [...set];
+let length;
+
+let r=Math.random();
+
+if(r<0.70) length=4;
+else if(r<0.90) length=5;
+else length=Math.floor(Math.random()*5)+6;
+
+set.add(makeUsername(length));
+
+}
+
+return [...set];
+
 }
 
 
-/* عرض اليوزرات */
+/* عرض */
 
-function renderUsers(users,id){
+function renderUsers(users,id,status="🟡 مرشح"){
 
-    const box=document.getElementById(id);
+const box=document.getElementById(id);
 
-    box.innerHTML="";
+box.innerHTML="";
 
-    users.forEach(user=>{
+users.forEach(user=>{
 
-        const row=document.createElement("div");
+const row=document.createElement("div");
 
-        row.className="item";
+row.className="item";
 
-        row.innerHTML=`
-            <span class="name">@${user}</span>
+row.innerHTML=`
 
-            <span class="status">
-                🟡 غير متحقق
-            </span>
+<span class="name">@${user}</span>
 
-            <button
-                class="copyOne"
-                onclick="copyOne('${user}')">
-                📋
-            </button>
-        `;
+<span class="status">${status}</span>
 
-        box.appendChild(row);
-    });
+<button class="copyOne"
+onclick="copyOne('${user}')">
+📋
+</button>
+
+`;
+
+box.appendChild(row);
+
+});
+
 }
 
 
@@ -387,12 +466,10 @@ function renderUsers(users,id){
 
 function generateTikTok(){
 
-    tiktokUsers=makeUsers(30);
+tiktokUsers=makeUsers(30);
 
-    renderUsers(
-        tiktokUsers,
-        "tikList"
-    );
+renderUsers(tiktokUsers,"tikList");
+
 }
 
 
@@ -400,99 +477,166 @@ function generateTikTok(){
 
 function generateSnap(){
 
-    snapUsers=makeUsers(30);
+snapUsers=makeUsers(30);
 
-    renderUsers(
-        snapUsers,
-        "snapList"
-    );
+renderUsers(snapUsers,"snapList");
+
 }
 
 
-/* كود ستور */
+/* صائد اليوزرات */
+
+function huntUsers(){
+
+const length=
+Number(document.getElementById("hunterLength").value);
+
+const amount=
+Number(document.getElementById("hunterAmount").value);
+
+const set=new Set();
+
+while(set.size<amount){
+
+set.add(makeUsername(length));
+
+}
+
+huntedUsers=[...set];
+
+const box=
+document.getElementById("hunterList");
+
+box.innerHTML="";
+
+const bar=
+document.getElementById("progressBar");
+
+bar.style.width="0%";
+
+let i=0;
+
+const timer=setInterval(()=>{
+
+if(i>=huntedUsers.length){
+
+clearInterval(timer);
+
+bar.style.width="100%";
+
+return;
+
+}
+
+const user=huntedUsers[i];
+
+const row=document.createElement("div");
+
+row.className="item";
+
+row.innerHTML=`
+
+<span class="name">@${user}</span>
+
+<span class="status">🟡 مرشح</span>
+
+<button class="copyOne"
+onclick="copyOne('${user}')">
+📋
+</button>
+
+`;
+
+box.appendChild(row);
+
+i++;
+
+bar.style.width=
+((i/huntedUsers.length)*100)+"%";
+
+},15);
+
+}
+
+
+/* ستور */
 
 function makeCode(){
 
-    let code="";
+let code="";
 
-    for(let i=0;i<12;i++){
+for(let i=0;i<12;i++){
 
-        code +=
-            chars[
-                Math.floor(Math.random()*chars.length)
-            ].toUpperCase();
-    }
+code+=
+chars[Math.floor(Math.random()*chars.length)]
+.toUpperCase();
 
-    return code;
+}
+
+return code;
+
 }
 
 
 function generateCodes(){
 
-    let set=new Set();
+let set=new Set();
 
-    while(set.size<10){
-        set.add(makeCode());
-    }
+while(set.size<10){
+set.add(makeCode());
+}
 
-    storeCodes=[...set];
+storeCodes=[...set];
 
-    const box=
-        document.getElementById("codeList");
+const box=document.getElementById("codeList");
 
-    box.innerHTML="";
+box.innerHTML="";
 
-    storeCodes.forEach(code=>{
+storeCodes.forEach(code=>{
 
-        const row=
-            document.createElement("div");
+const row=document.createElement("div");
 
-        row.className="code";
+row.className="code";
 
-        row.innerHTML=`
-            <span class="codeText">
-                ${code}
-            </span>
+row.innerHTML=`
 
-            <button
-                class="copyOne"
-                onclick="copyOne('${code}')">
-                📋 نسخ
-            </button>
-        `;
+<span class="codeText">${code}</span>
 
-        box.appendChild(row);
-    });
+<button class="copyOne"
+onclick="copyOne('${code}')">
+📋
+</button>
+
+`;
+
+box.appendChild(row);
+
+});
+
 }
 
 
-/* نسخ عنصر واحد */
+/* نسخ */
 
 function copyOne(text){
 
-    navigator.clipboard
-    .writeText(text)
-    .then(()=>{
-        alert("✅ تم النسخ");
-    });
+navigator.clipboard.writeText(text)
+.then(()=>alert("✅ تم النسخ"));
+
 }
 
-
-/* نسخ الكل */
 
 function copyAll(list){
 
-    if(!list.length) return;
+if(!list.length)return;
 
-    navigator.clipboard
-    .writeText(list.join("\n"))
-    .then(()=>{
-        alert("✅ تم نسخ الكل");
-    });
+navigator.clipboard.writeText(list.join("\n"))
+.then(()=>alert("✅ تم نسخ الكل"));
+
 }
 
 
-/* تشغيل أولي */
+/* تشغيل */
 
 generateTikTok();
 
