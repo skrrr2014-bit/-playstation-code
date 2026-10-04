@@ -1,50 +1,79 @@
-using UnityEngine;
+from pathlib import Path
 
-public class DatingSystem : MonoBehaviour
-{
-    public string playerName = "Lina";
-    public int datingPrice = 500;
-    public int affection = 0;
-    public bool married = false;
+html = r'''<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Love Life - لعبة رومانسية</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,Tahoma,sans-serif;background:radial-gradient(circle at top,#3b2858,#120d20 65%);color:#fff;min-height:100vh}
+.app{max-width:1050px;margin:auto;padding:22px}.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
+h1{margin:0;font-size:28px}.badge{padding:8px 12px;border-radius:999px;background:#ffffff18;border:1px solid #ffffff25}
+.grid{display:grid;grid-template-columns:1.25fr .75fr;gap:18px}@media(max-width:800px){.grid{grid-template-columns:1fr}}
+.card{background:#ffffff0e;border:1px solid #ffffff1c;border-radius:24px;padding:18px;backdrop-filter:blur(14px);box-shadow:0 18px 60px #0005}
+.scene{height:500px;border-radius:20px;position:relative;overflow:hidden;background:linear-gradient(#6c91bd 0 55%,#315f42 55% 100%)}
+.moon{position:absolute;right:55px;top:35px;width:75px;height:75px;border-radius:50%;background:#fff5c9;box-shadow:0 0 45px #fff8}
+.floor{position:absolute;bottom:0;left:0;right:0;height:45%;background:linear-gradient(90deg,#254b34,#396c42,#254b34)}
+.character{position:absolute;bottom:68px;width:150px;text-align:center;transition:.45s}
+.charA{left:18%}.charB{right:18%}
+.head{width:82px;height:82px;margin:auto;border-radius:50%;background:#f1bd91;border:4px solid #ffffff50;position:relative}
+.hair{position:absolute;left:-5px;right:-5px;top:-8px;height:43px;border-radius:45px 45px 15px 15px;background:#4a2a1d}
+.body{width:92px;height:125px;margin:-2px auto 0;border-radius:35px 35px 18px 18px;background:#e86f9b;border:4px solid #ffffff30}
+.charB .body{background:#5578df}.name{margin-top:7px;font-weight:700}
+.controls{display:grid;gap:10px}.controls button,.controls select{width:100%;padding:12px 14px;border-radius:14px;border:1px solid #ffffff22;background:#ffffff12;color:#fff;font-size:15px}
+.controls button{cursor:pointer}.controls button:hover{background:#ffffff20}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:9px}.stat{padding:12px;border-radius:15px;background:#0002}.bar{height:9px;background:#ffffff18;border-radius:99px;overflow:hidden;margin-top:7px}.fill{height:100%;width:45%;background:linear-gradient(90deg,#ff6fae,#ffc1d9);transition:.4s}
+.log{height:130px;overflow:auto;margin-top:12px;padding:10px;background:#0002;border-radius:14px;font-size:13px;line-height:1.7}
+.sit .charA{left:35%;transform:translateX(-20px)}.sit .charB{right:35%;transform:translateX(20px)}
+.dance .charA{animation:bounce .7s infinite alternate}.dance .charB{animation:bounce .7s .2s infinite alternate}
+@keyframes bounce{to{transform:translateY(-28px) rotate(4deg)}}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="top"><h1>💗 Love Life</h1><div class="badge" id="status">الحالة: أعزب</div></div>
+  <div class="grid">
+    <section class="card">
+      <div class="scene" id="scene">
+        <div class="moon"></div><div class="floor"></div>
+        <div class="character charA"><div class="head"><div class="hair" id="hairA"></div></div><div class="body" id="bodyA"></div><div class="name" id="nameA">ليان</div></div>
+        <div class="character charB"><div class="head"><div class="hair" id="hairB"></div></div><div class="body" id="bodyB"></div><div class="name" id="nameB">آدم</div></div>
+      </div>
+    </section>
+    <aside class="card">
+      <h2 style="margin-top:0">تخصيص الشخصية</h2>
+      <div class="controls">
+        <input id="nameInput" placeholder="اسم شخصيتك" value="ليان" style="padding:12px;border-radius:14px;border:1px solid #ffffff22;background:#ffffff12;color:white">
+        <select id="hairSelect"><option value="#4a2a1d">شعر بني</option><option value="#111">شعر أسود</option><option value="#d9a441">شعر ذهبي</option><option value="#7d4aa8">شعر بنفسجي</option></select>
+        <select id="outfitSelect"><option value="#e86f9b">فستان وردي</option><option value="#69b8d8">فستان سماوي</option><option value="#a96de8">فستان بنفسجي</option><option value="#f0a34e">فستان برتقالي</option></select>
+        <div class="row"><button onclick="date()">💌 موعد</button><button onclick="marry()">💍 زواج</button></div>
+        <div class="row"><button onclick="sitTogether()">🛋️ نجلس معًا</button><button onclick="dance()">💃 رقص</button></div>
+        <button onclick="resetScene()">↩️ إعادة الوضع</button>
+      </div>
+      <div class="stat" style="margin-top:14px">الحب: <b id="loveText">0%</b><div class="bar"><div class="fill" id="loveBar"></div></div></div>
+      <div class="log" id="log">مرحبًا! اختاري مظهرك ثم ابدئي التفاعل. ✨</div>
+    </aside>
+  </div>
+</div>
+<script>
+let love=0, married=false, timer;
+const scene=document.getElementById('scene'), logBox=document.getElementById('log');
+function log(t){logBox.innerHTML='<div>'+t+'</div>'+logBox.innerHTML}
+function update(){document.getElementById('loveText').textContent=love+'%';document.getElementById('loveBar').style.width=love+'%';document.getElementById('status').textContent='الحالة: '+(married?'متزوجة 💍':'أعزب')}
+document.getElementById('nameInput').addEventListener('input',e=>document.getElementById('nameA').textContent=e.target.value||'ليان');
+document.getElementById('hairSelect').addEventListener('change',e=>document.getElementById('hairA').style.background=e.target.value);
+document.getElementById('outfitSelect').addEventListener('change',e=>document.getElementById('bodyA').style.background=e.target.value);
+function date(){love=Math.min(100,love+20);log('💌 خرجتِ في موعد لطيف مع آدم.');update()}
+function marry(){if(love<50){log('❤️ ارفعي مستوى الحب إلى 50% أولًا.');return}married=true;love=100;log('💍 تم الزواج! مبروك لكما.');update()}
+function sitTogether(){scene.classList.remove('dance');scene.classList.add('sit');log(married?'🛋️ جلستما معًا في لحظة رومانسية.':'🛋️ جلستما معًا وتحدثتما بهدوء.');clearTimeout(timer);timer=setTimeout(()=>scene.classList.remove('sit'),1800)}
+function dance(){scene.classList.remove('sit');scene.classList.add('dance');love=Math.min(100,love+5);log('💃 رقصتما معًا بحركات لطيفة.');update();clearTimeout(timer);timer=setTimeout(()=>scene.classList.remove('dance'),3500)}
+function resetScene(){scene.classList.remove('sit','dance');love=0;married=false;log('↩️ بدأتِ من جديد.');update()}
+update();
+</script>
+</body>
+</html>'''
 
-    public void SetPrice(int price)
-    {
-        datingPrice = Mathf.Max(0, price);
-        Debug.Log("السعر المحدد: " + datingPrice);
-    }
-
-    public void AcceptDate(string characterName, int offer)
-    {
-        if (offer >= datingPrice)
-        {
-            affection += 20;
-            Debug.Log(characterName + " وافق على الموعد مع " + playerName);
-        }
-        else
-        {
-            Debug.Log("العرض أقل من السعر المحدد.");
-        }
-    }
-
-    public void AcceptMarriage(string characterName)
-    {
-        if (affection >= 50)
-        {
-            married = true;
-            Debug.Log("تم الزواج من " + characterName + " ❤️");
-        }
-        else
-        {
-            Debug.Log("تحتاجان إلى بناء علاقة أقوى أولاً.");
-        }
-    }
-
-    public void RomanticInteraction(string characterName)
-    {
-        if (married)
-        {
-            affection += 10;
-            Debug.Log("لحظة رومانسية جميلة مع " + characterName + " 💕");
-        }
-    }
-}
+path = Path("/mnt/data/love_life_game.html")
+path.write_text(html, encoding="utf-8")
+print(path)
