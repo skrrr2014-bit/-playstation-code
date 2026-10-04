@@ -2,443 +2,829 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-
-<title>TikTok Hunter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RwL</title>
 
 <style>
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+*{box-sizing:border-box}
 
 body{
- margin:0;
- min-height:100vh;
- font-family:Arial,sans-serif;
- color:#fff;
- background:
- radial-gradient(circle at 10% 0%,#ec489955,transparent 30%),
- radial-gradient(circle at 100% 20%,#7c3aed55,transparent 30%),
- linear-gradient(145deg,#050507,#11111b,#050507);
+    margin:0;
+    min-height:100vh;
+    background:#080a10;
+    color:white;
+    font-family:Arial,sans-serif;
 }
 
-.app{
- width:min(94%,540px);
- margin:auto;
- padding:18px 0 35px;
+.container{
+    width:min(560px,94%);
+    margin:auto;
+    padding:18px 0 40px;
 }
 
-.hero{
- text-align:center;
- padding:30px 15px;
- border-radius:28px;
- background:#ffffff0d;
- border:1px solid #ffffff18;
- box-shadow:0 20px 60px #0008;
- backdrop-filter:blur(15px);
+.cover{
+    height:270px;
+    border-radius:28px;
+    overflow:hidden;
+    position:relative;
+    background:
+        linear-gradient(#0001,#0009),
+        url("RwL.png") center/cover;
+    border:1px solid #ffffff20;
+    box-shadow:0 20px 60px #0009;
 }
 
-.logo{
- width:78px;height:78px;
- margin:auto;
- display:flex;
- align-items:center;
- justify-content:center;
- border-radius:24px;
- font-size:38px;
- background:linear-gradient(135deg,#ff2d55,#7c3aed);
- box-shadow:0 12px 35px #ec489955;
+.brand{
+    position:absolute;
+    bottom:20px;
+    right:20px;
 }
 
-h1{margin:16px 0 5px;font-size:29px}
-.sub{color:#aaa;font-size:13px}
-
-.card{
- margin-top:14px;
- padding:17px;
- border-radius:22px;
- background:#ffffff09;
- border:1px solid #ffffff12;
- backdrop-filter:blur(14px);
+.brand h1{
+    margin:0;
+    font-size:38px;
+    letter-spacing:3px;
 }
 
-.row{
- display:grid;
- grid-template-columns:1fr 1fr;
- gap:9px;
+.brand p{
+    margin:5px 0 0;
+    font-size:12px;
+    color:#ddd;
 }
 
-label{
- display:block;
- margin-bottom:7px;
- color:#bbb;
- font-size:12px;
-}
-
-select,input{
- width:100%;
- padding:13px;
- border-radius:13px;
- outline:none;
- border:1px solid #ffffff18;
- background:#181722;
- color:#fff;
- font-size:14px;
+.tabs{
+    display:grid;
+    grid-template-columns:repeat(3,1fr);
+    gap:9px;
+    margin-top:12px;
 }
 
 button{
- width:100%;
- margin-top:11px;
- padding:14px;
- border:0;
- border-radius:14px;
- color:#fff;
- font-size:14px;
- font-weight:bold;
- background:linear-gradient(135deg,#ec4899,#7c3aed);
+    color:white;
+    border:0;
+    cursor:pointer;
+    font:inherit;
 }
 
-.stop{background:linear-gradient(135deg,#ef4444,#991b1b)}
-.download{background:#292735}
-
-.stats{
- display:grid;
- grid-template-columns:repeat(3,1fr);
- gap:7px;
+.tab,
+.main{
+    padding:14px;
+    border-radius:15px;
+    background:#ffffff10;
+    border:1px solid #ffffff18;
 }
 
-.stat{
- text-align:center;
- padding:12px 4px;
- border-radius:14px;
- background:#ffffff08;
+.tab.active,
+.main{
+    background:white;
+    color:#111;
 }
 
-.num{font-size:20px;font-weight:bold}
-.txt{font-size:10px;color:#999;margin-top:3px}
-
-.progress{
- height:7px;
- margin-top:13px;
- border-radius:20px;
- overflow:hidden;
- background:#24222e;
+.panel{
+    display:none;
+    margin-top:12px;
+    padding:18px;
+    border-radius:22px;
+    background:#ffffff0d;
+    border:1px solid #ffffff18;
 }
 
-.bar{
- height:100%;
- width:0%;
- background:linear-gradient(90deg,#ec4899,#8b5cf6);
- transition:.1s;
+.panel.active{
+    display:block;
+}
+
+h2{
+    margin:0 0 14px;
+    font-size:19px;
+}
+
+input,
+select{
+    width:100%;
+    padding:13px;
+    margin:5px 0 10px;
+    border-radius:13px;
+    border:1px solid #ffffff18;
+    background:#0e1118;
+    color:white;
+    outline:none;
+}
+
+.row{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:9px;
+}
+
+.main{
+    width:100%;
+    margin-top:4px;
 }
 
 .results{
- max-height:430px;
- overflow:auto;
+    display:grid;
+    gap:8px;
+    margin-top:12px;
+    max-height:430px;
+    overflow:auto;
 }
 
-.result{
- display:flex;
- align-items:center;
- gap:7px;
- margin-bottom:7px;
- padding:11px;
- border-radius:14px;
- background:#ffffff07;
- border:1px solid #ffffff0d;
-}
-
-.user{
- flex:1;
- direction:ltr;
- font-weight:bold;
- overflow:hidden;
- text-overflow:ellipsis;
-}
-
-.badge{
- padding:5px 8px;
- border-radius:15px;
- font-size:10px;
- color:#facc15;
- background:#3b3210;
+.item{
+    display:flex;
+    justify-content:space-between;
+    align-items:center;
+    direction:ltr;
+    padding:11px;
+    border-radius:12px;
+    background:#ffffff09;
 }
 
 .copy{
- width:auto;
- margin:0;
- padding:7px 9px;
- background:#292735;
- font-size:10px;
+    padding:7px 10px;
+    border-radius:9px;
+    background:#252b36;
 }
 
-.notice{
- margin-top:12px;
- text-align:center;
- color:#777;
- font-size:10px;
- line-height:1.7;
+.note{
+    margin-top:10px;
+    font-size:11px;
+    line-height:1.7;
+    color:#aeb5c4;
+}
+
+.status{
+    min-height:18px;
+    margin-top:8px;
+    color:#ffaaa8;
+    font-size:12px;
+}
+
+.stats{
+    display:flex;
+    gap:8px;
+    margin-top:10px;
+}
+
+.stat{
+    flex:1;
+    text-align:center;
+    padding:9px;
+    border-radius:12px;
+    background:#ffffff08;
+    font-size:11px;
+}
+
+.stat b{
+    display:block;
+    font-size:18px;
 }
 </style>
 </head>
 
 <body>
 
-<div class="app">
+<div class="container">
 
-<div class="hero">
- <div class="logo">♬</div>
- <h1>TikTok Hunter</h1>
- <div class="sub">Fast Username Generator</div>
+    <section class="cover">
+        <div class="brand">
+            <h1>RwL</h1>
+            <p>USERNAME LAB · CREATE · CHECK · GET</p>
+        </div>
+    </section>
+
+    <div class="tabs">
+        <button id="tabTik" class="tab" onclick="openTab('tiktok')">
+            TikTok
+        </button>
+
+        <button id="tabSnap" class="tab" onclick="openTab('snap')">
+            Snapchat
+        </button>
+
+        <button id="tabStore" class="tab" onclick="openTab('store')">
+            Store
+        </button>
+    </div>
+
+
+    <!-- TIKTOK -->
+
+    <section id="tiktok" class="panel">
+
+        <div id="login">
+
+            <h2>🔐 دخول TikTok</h2>
+
+            <p class="note">
+                أدخل رمز الدخول للواجهة.
+            </p>
+
+            <input
+                id="password"
+                type="password"
+                inputmode="numeric"
+                placeholder="رمز الدخول">
+
+            <button class="main" onclick="unlockTikTok()">
+                دخول
+            </button>
+
+            <div id="loginStatus" class="status"></div>
+
+        </div>
+
+
+        <div id="tiktokTool" style="display:none">
+
+            <h2>🎵 مولّد يوزرات TikTok</h2>
+
+            <div class="row">
+
+                <div>
+                    <label>طول اليوزر</label>
+
+                    <input
+                        id="tikLength"
+                        type="number"
+                        min="3"
+                        max="20"
+                        value="6">
+                </div>
+
+                <div>
+                    <label>عدد اليوزرات</label>
+
+                    <input
+                        id="tikCount"
+                        type="number"
+                        min="1"
+                        max="100"
+                        value="20">
+                </div>
+
+            </div>
+
+            <select id="tikType">
+
+                <option value="letters">
+                    حروف فقط
+                </option>
+
+                <option value="mixed">
+                    حروف + أرقام
+                </option>
+
+                <option value="underscore">
+                    حروف + _
+                </option>
+
+            </select>
+
+            <button class="main" onclick="generateTikTok()">
+                توليد وفحص محلي
+            </button>
+
+            <div class="stats">
+
+                <div class="stat">
+                    <b id="tikTotal">0</b>
+                    النتائج
+                </div>
+
+                <div class="stat">
+                    <b id="tikValid">0</b>
+                    سليمة
+                </div>
+
+            </div>
+
+            <div id="tikResults" class="results"></div>
+
+            <div class="note">
+                الفحص هنا محلي للصيغة والتكرار فقط،
+                وليس فحص توفر حقيقي على TikTok.
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- SNAPCHAT -->
+
+    <section id="snap" class="panel">
+
+        <h2>👻 مولّد يوزرات Snapchat</h2>
+
+        <div class="row">
+
+            <div>
+                <label>طول اليوزر</label>
+
+                <input
+                    id="snapLength"
+                    type="number"
+                    min="3"
+                    max="20"
+                    value="6">
+            </div>
+
+            <div>
+                <label>عدد اليوزرات</label>
+
+                <input
+                    id="snapCount"
+                    type="number"
+                    min="1"
+                    max="100"
+                    value="20">
+            </div>
+
+        </div>
+
+        <select id="snapType">
+
+            <option value="letters">
+                حروف فقط
+            </option>
+
+            <option value="mixed">
+                حروف + أرقام
+            </option>
+
+            <option value="underscore">
+                حروف + _
+            </option>
+
+        </select>
+
+        <button class="main" onclick="generateSnapchat()">
+            توليد وفحص محلي
+        </button>
+
+        <div class="stats">
+
+            <div class="stat">
+                <b id="snapTotal">0</b>
+                النتائج
+            </div>
+
+            <div class="stat">
+                <b id="snapValid">0</b>
+                سليمة
+            </div>
+
+        </div>
+
+        <div id="snapResults" class="results"></div>
+
+        <div class="note">
+            الفحص محلي للصيغة والتكرار فقط.
+        </div>
+
+    </section>
+
+
+    <!-- STORE -->
+
+    <section id="store" class="panel">
+
+        <h2>🎟️ أكواد تجريبية</h2>
+
+        <select id="codeCount">
+
+            <option value="1">1 كود</option>
+            <option value="5">5 أكواد</option>
+            <option value="10">10 أكواد</option>
+            <option value="20">20 كود</option>
+
+        </select>
+
+        <button class="main" onclick="generateCodes()">
+            توليد أكواد 12 خانة
+        </button>
+
+        <div id="codeResults" class="results"></div>
+
+        <div class="note">
+            الأكواد عشوائية تجريبية وليست أكواد Store حقيقية
+            ولا يمكن استخدامها للتفعيل أو الاسترداد.
+        </div>
+
+    </section>
+
 </div>
 
-<div class="card">
-
-<div class="row">
-
-<div>
-<label>طول اليوزر</label>
-<select id="length">
-<option value="3">3 — ثلاثي</option>
-<option value="4" selected>4 — رباعي</option>
-<option value="5">5 — خماسي</option>
-</select>
-</div>
-
-<div>
-<label>عدد اليوزرات</label>
-<input id="amount" type="number" value="100" min="1" max="10000">
-</div>
-
-</div>
-
-<div style="margin-top:13px">
-<label>النمط</label>
-
-<select id="mode">
-<option value="mixed">حروف + أرقام</option>
-<option value="letters">حروف فقط</option>
-<option value="numbers">أرقام فقط</option>
-</select>
-</div>
-
-<button id="start">🚀 ابدأ</button>
-<button id="stop" class="stop" style="display:none">⛔ إيقاف</button>
-
-<div class="progress">
- <div id="bar" class="bar"></div>
-</div>
-
-</div>
-
-<div class="card">
-
-<div class="stats">
-
-<div class="stat">
- <div id="generated" class="num">0</div>
- <div class="txt">تم التوليد</div>
-</div>
-
-<div class="stat">
- <div id="unique" class="num">0</div>
- <div class="txt">بدون تكرار</div>
-</div>
-
-<div class="stat">
- <div id="shown" class="num">0</div>
- <div class="txt">النتائج</div>
-</div>
-
-</div>
-
-</div>
-
-<div class="card">
-
-<h3 style="margin-top:0">📋 النتائج</h3>
-
-<div id="results" class="results">
- <div id="empty" style="text-align:center;color:#777;padding:30px">
- لم يبدأ التوليد
- </div>
-</div>
-
-<button class="download" id="download">
-💾 تحميل TXT
-</button>
-
-</div>
-
-<div class="notice">
-هذه النسخة لا تستخدم API ولا تدّعي أن اليوزر متاح.
-«غير مؤكد» تعني أن الاسم تم توليده فقط ولم يتم التحقق منه مع TikTok.
-</div>
-
-</div>
 
 <script>
-const start=document.getElementById("start");
-const stop=document.getElementById("stop");
-const results=document.getElementById("results");
-const bar=document.getElementById("bar");
 
-let running=false;
-let allUsers=[];
+const LETTERS =
+"abcdefghijklmnopqrstuvwxyz";
 
-function randomUser(length,mode){
+const MIXED =
+"abcdefghijklmnopqrstuvwxyz0123456789";
 
- let chars;
 
- if(mode==="letters"){
-   chars="abcdefghijklmnopqrstuvwxyz";
- }else if(mode==="numbers"){
-   chars="0123456789";
- }else{
-   chars="abcdefghijklmnopqrstuvwxyz0123456789";
- }
+/* تغيير الصفحات */
 
- let out="";
+function openTab(id){
 
- for(let i=0;i<length;i++){
-   out+=chars[Math.floor(Math.random()*chars.length)];
- }
+    document
+        .querySelectorAll(".panel")
+        .forEach(panel=>{
+            panel.classList.remove("active");
+        });
 
- return out;
+    document
+        .querySelectorAll(".tab")
+        .forEach(button=>{
+            button.classList.remove("active");
+        });
+
+    document
+        .getElementById(id)
+        .classList.add("active");
+
+    if(id==="tiktok"){
+        document
+            .getElementById("tabTik")
+            .classList.add("active");
+    }
+
+    if(id==="snap"){
+        document
+            .getElementById("tabSnap")
+            .classList.add("active");
+    }
+
+    if(id==="store"){
+        document
+            .getElementById("tabStore")
+            .classList.add("active");
+    }
+
 }
 
-function addUser(user){
 
- const empty=document.getElementById("empty");
+/* رمز TikTok */
 
- if(empty) empty.remove();
+function unlockTikTok(){
 
- const row=document.createElement("div");
- row.className="result";
+    const code =
+        document.getElementById("password").value;
 
- row.innerHTML=`
-   <span class="user">@${user}</span>
-   <span class="badge">غير مؤكد</span>
-   <button class="copy">نسخ</button>
- `;
+    if(code==="2112"){
 
- row.querySelector(".copy").onclick=()=>{
-   navigator.clipboard.writeText("@"+user);
- };
+        document
+            .getElementById("login")
+            .style.display="none";
 
- results.prepend(row);
+        document
+            .getElementById("tiktokTool")
+            .style.display="block";
+
+    }else{
+
+        document
+            .getElementById("loginStatus")
+            .textContent=
+            "❌ الرمز غير صحيح.";
+
+    }
+
 }
 
-async function startHunter(){
 
- running=true;
- allUsers=[];
+/* إنشاء يوزر */
 
- start.style.display="none";
- stop.style.display="block";
+function createUsername(length,type){
 
- results.innerHTML=`
- <div id="empty"
- style="text-align:center;color:#777;padding:30px">
- جاري التوليد...
- </div>`;
+    let pool;
 
- document.getElementById("generated").textContent="0";
- document.getElementById("unique").textContent="0";
- document.getElementById("shown").textContent="0";
+    if(type==="letters"){
+        pool=LETTERS;
+    }
 
- const length=Number(
-   document.getElementById("length").value
- );
+    else if(type==="mixed"){
+        pool=MIXED;
+    }
 
- const amount=Math.min(
-   Math.max(
-     Number(document.getElementById("amount").value)||100,
-     1
-   ),
-   10000
- );
+    else{
+        pool=LETTERS+"_";
+    }
 
- const mode=document.getElementById("mode").value;
+    let username="";
 
- const used=new Set();
+    for(let i=0;i<length;i++){
 
- for(let i=0;i<amount && running;i++){
+        username +=
+            pool[
+                Math.floor(
+                    Math.random()*pool.length
+                )
+            ];
 
-   let user;
+    }
 
-   do{
-     user=randomUser(length,mode);
-   }while(used.has(user));
-
-   used.add(user);
-   allUsers.push(user);
-
-   addUser(user);
-
-   document.getElementById("generated")
-     .textContent=i+1;
-
-   document.getElementById("unique")
-     .textContent=used.size;
-
-   document.getElementById("shown")
-     .textContent=allUsers.length;
-
-   bar.style.width=
-     ((i+1)/amount*100)+"%";
-
-   /*
-    * دفعات صغيرة حتى لا تتجمد صفحة الجوال.
-    */
-   if(i%50===0){
-     await new Promise(r=>setTimeout(r,0));
-   }
- }
-
- finish();
+    return username;
 }
 
-function finish(){
 
- running=false;
+/* فحص محلي */
 
- start.style.display="block";
- stop.style.display="none";
+function validateUsername(username,type){
+
+    if(type==="letters"){
+        return /^[a-z]+$/.test(username);
+    }
+
+    if(type==="mixed"){
+        return /^[a-z0-9]+$/.test(username);
+    }
+
+    return /^[a-z_]+$/.test(username);
+
 }
 
-stop.onclick=()=>{
- running=false;
- finish();
-};
 
-start.onclick=startHunter;
+/* عرض النتائج */
 
-document.getElementById("download").onclick=()=>{
+function showResults(list,target){
 
- if(!allUsers.length){
-   alert("ولد يوزرات أولاً");
-   return;
- }
+    const box =
+        document.getElementById(target);
 
- const text=allUsers.join("\n");
+    box.innerHTML="";
 
- const blob=new Blob(
-   [text],
-   {type:"text/plain;charset=utf-8"}
- );
+    list.forEach(username=>{
 
- const url=URL.createObjectURL(blob);
+        const row =
+            document.createElement("div");
 
- const a=document.createElement("a");
+        row.className="item";
 
- a.href=url;
- a.download="tiktok_usernames.txt";
 
- document.body.appendChild(a);
- a.click();
- a.remove();
+        const text =
+            document.createElement("span");
 
- URL.revokeObjectURL(url);
-};
+        text.textContent=username;
+
+
+        const copy =
+            document.createElement("button");
+
+        copy.className="copy";
+
+        copy.textContent="نسخ";
+
+
+        copy.onclick=async()=>{
+
+            try{
+
+                await navigator.clipboard
+                    .writeText(username);
+
+                copy.textContent="تم ✓";
+
+                setTimeout(()=>{
+                    copy.textContent="نسخ";
+                },900);
+
+            }catch{
+
+                copy.textContent="فشل";
+
+            }
+
+        };
+
+
+        row.appendChild(text);
+
+        row.appendChild(copy);
+
+        box.appendChild(row);
+
+    });
+
+}
+
+
+/* TikTok */
+
+function generateTikTok(){
+
+    const length =
+        Math.max(
+            3,
+            Math.min(
+                20,
+                Number(
+                    document
+                    .getElementById("tikLength")
+                    .value
+                ) || 6
+            )
+        );
+
+    const count =
+        Math.max(
+            1,
+            Math.min(
+                100,
+                Number(
+                    document
+                    .getElementById("tikCount")
+                    .value
+                ) || 20
+            )
+        );
+
+    const type =
+        document
+        .getElementById("tikType")
+        .value;
+
+
+    const unique =
+        new Set();
+
+
+    while(unique.size<count){
+
+        unique.add(
+            createUsername(
+                length,
+                type
+            )
+        );
+
+    }
+
+
+    const list=[...unique];
+
+    const valid =
+        list.filter(
+            username =>
+            validateUsername(
+                username,
+                type
+            )
+        );
+
+
+    showResults(
+        list,
+        "tikResults"
+    );
+
+
+    document
+        .getElementById("tikTotal")
+        .textContent=list.length;
+
+    document
+        .getElementById("tikValid")
+        .textContent=valid.length;
+
+}
+
+
+/* Snapchat */
+
+function generateSnapchat(){
+
+    const length =
+        Math.max(
+            3,
+            Math.min(
+                20,
+                Number(
+                    document
+                    .getElementById("snapLength")
+                    .value
+                ) || 6
+            )
+        );
+
+    const count =
+        Math.max(
+            1,
+            Math.min(
+                100,
+                Number(
+                    document
+                    .getElementById("snapCount")
+                    .value
+                ) || 20
+            )
+        );
+
+    const type =
+        document
+        .getElementById("snapType")
+        .value;
+
+
+    const unique =
+        new Set();
+
+
+    while(unique.size<count){
+
+        unique.add(
+            createUsername(
+                length,
+                type
+            )
+        );
+
+    }
+
+
+    const list=[...unique];
+
+
+    const valid =
+        list.filter(
+            username =>
+            validateUsername(
+                username,
+                type
+            )
+        );
+
+
+    showResults(
+        list,
+        "snapResults"
+    );
+
+
+    document
+        .getElementById("snapTotal")
+        .textContent=list.length;
+
+    document
+        .getElementById("snapValid")
+        .textContent=valid.length;
+
+}
+
+
+/* أكواد تجريبية */
+
+function generateCodes(){
+
+    const count =
+        Number(
+            document
+            .getElementById("codeCount")
+            .value
+        );
+
+
+    const pool =
+        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+
+    const list=[];
+
+
+    for(let i=0;i<count;i++){
+
+        let code="";
+
+        for(let j=0;j<12;j++){
+
+            code +=
+                pool[
+                    Math.floor(
+                        Math.random()*pool.length
+                    )
+                ];
+
+        }
+
+        list.push(code);
+
+    }
+
+
+    showResults(
+        list,
+        "codeResults"
+    );
+
+}
+
+
+/* فتح TikTok أولاً */
+
+openTab("tiktok");
+
 </script>
 
 </body>
