@@ -2,85 +2,116 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RwL Username Checker</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>RwL</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,body{
+    margin:0;
+    min-height:100%;
+    background:#000;
+    color:#fff;
+    font-family:Arial,sans-serif;
+}
 
 body{
-    margin:0;
-    min-height:100vh;
-    color:#fff;
-    font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Arial,sans-serif;
-    background:
-      radial-gradient(circle at 50% 0%,#29445f 0,#0a1422 38%,#03060b 100%);
+    overflow-x:hidden;
 }
 
-.snow{
+/* فيديو العين الحقيقي */
+#eyeVideo{
     position:fixed;
     inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    z-index:0;
+    filter:grayscale(100%) contrast(1.18) brightness(.55);
+    opacity:.86;
+}
+
+/* التعتيم السينمائي */
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:1;
     pointer-events:none;
-    overflow:hidden;
-    z-index:10;
-}
-
-.flake{
-    position:absolute;
-    top:-20px;
-    color:#fff;
-    opacity:.55;
-    animation:fall linear infinite;
-}
-
-@keyframes fall{
-    to{
-        transform:translate3d(var(--x),110vh,0) rotate(360deg);
-    }
-}
-
-.app{
-    width:min(760px,94%);
-    margin:auto;
-    padding:18px 0 35px;
-}
-
-.hero{
-    height:300px;
-    position:relative;
-    overflow:hidden;
-    border-radius:30px;
-    border:1px solid #ffffff20;
     background:
-      linear-gradient(180deg,#0001,#000b),
-      url("RwL.png") center/cover no-repeat;
-    box-shadow:0 25px 80px #0009;
+        radial-gradient(circle at center,
+            transparent 5%,
+            rgba(0,0,0,.18) 45%,
+            rgba(0,0,0,.9) 100%),
+        linear-gradient(
+            rgba(0,0,0,.12),
+            rgba(0,0,0,.52)
+        );
 }
 
-.heroText{
-    position:absolute;
-    left:25px;
-    bottom:25px;
-    direction:ltr;
+/* الثلج */
+#snow{
+    position:fixed;
+    inset:0;
+    z-index:3;
+    pointer-events:none;
+}
+
+/* المحتوى */
+.app{
+    position:relative;
+    z-index:5;
+    width:min(900px,94%);
+    margin:auto;
+    padding:25px 0 60px;
+}
+
+.screen{
+    min-height:100vh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+}
+
+.card{
+    width:100%;
+    padding:32px;
+    border:1px solid rgba(255,255,255,.13);
+    border-radius:28px;
+    background:rgba(0,0,0,.55);
+    backdrop-filter:blur(13px);
+    box-shadow:
+        0 25px 100px #000,
+        inset 0 0 45px rgba(255,255,255,.018);
 }
 
 .logo{
-    font-size:64px;
+    text-align:center;
+    font-size:86px;
     font-weight:900;
-    letter-spacing:-4px;
+    letter-spacing:-9px;
+    text-shadow:
+        0 0 12px rgba(255,255,255,.3),
+        0 0 45px rgba(255,255,255,.1);
 }
 
-.sub{
-    font-size:11px;
-    letter-spacing:4px;
-    color:#d5dfec;
+.subtitle{
+    text-align:center;
+    color:#8b8b8b;
+    letter-spacing:7px;
+    font-size:10px;
+    margin-top:-8px;
+    margin-bottom:30px;
 }
 
-.tabs{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:8px;
-    margin:12px 0;
+.welcomeText{
+    text-align:center;
+    color:#aaa;
+    font-size:13px;
+    margin-bottom:20px;
 }
 
 button{
@@ -88,698 +119,754 @@ button{
     cursor:pointer;
 }
 
-.tab{
-    padding:14px 8px;
+.mainBtn{
+    width:100%;
+    padding:16px;
+    border-radius:16px;
+    border:1px solid rgba(255,255,255,.14);
+    color:#fff;
+    background:linear-gradient(
+        135deg,
+        rgba(255,255,255,.12),
+        rgba(255,255,255,.025)
+    );
+    transition:.2s;
+}
+
+.mainBtn:hover{
+    transform:translateY(-2px);
+    border-color:rgba(255,255,255,.35);
+    box-shadow:0 12px 35px #000;
+}
+
+input{
+    width:100%;
+    padding:16px;
+    margin:10px 0;
     border-radius:15px;
-    border:1px solid #ffffff18;
-    color:white;
-    background:#ffffff0b;
+    border:1px solid rgba(255,255,255,.12);
+    outline:none;
+    background:rgba(0,0,0,.65);
+    color:#fff;
+    text-align:center;
+    font-size:16px;
+}
+
+.error{
+    min-height:20px;
+    color:#ff5368;
+    text-align:center;
+    font-size:12px;
+    margin-top:8px;
+}
+
+#login,
+#home{
+    display:none;
+}
+
+.tabs{
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:10px;
+    margin:20px 0;
+}
+
+.tab{
+    padding:14px;
+    border-radius:14px;
+    border:1px solid rgba(255,255,255,.1);
+    background:rgba(255,255,255,.05);
+    color:#fff;
 }
 
 .tab.active{
     background:#fff;
-    color:#111;
+    color:#000;
 }
 
-.panel{
+.section{
     display:none;
 }
 
-.panel.active{
+.section.active{
     display:block;
 }
 
-.card{
-    padding:20px;
-    border-radius:23px;
-    border:1px solid #ffffff15;
-    background:#09111ed9;
-    backdrop-filter:blur(18px);
-    box-shadow:0 20px 50px #0005;
-}
-
-.lock{
-    max-width:420px;
-    margin:45px auto;
-    text-align:center;
-}
-
-.icon{
-    font-size:35px;
-    margin-bottom:10px;
-}
-
-h2{
-    margin:5px 0;
-}
-
-.muted{
-    color:#9aa9bc;
-    font-size:12px;
-    margin:7px 0 18px;
-}
-
-input,select{
-    width:100%;
-    padding:13px;
-    margin:5px 0 10px;
-    color:white;
-    background:#050b13;
-    border:1px solid #ffffff18;
-    border-radius:13px;
-    outline:none;
-}
-
-.main{
-    width:100%;
-    padding:14px;
-    margin-top:6px;
-    border:0;
-    border-radius:14px;
-    color:white;
-    font-weight:800;
-    background:linear-gradient(135deg,#ff3d9a,#775cff);
-}
-
-.row{
+.controls{
     display:grid;
     grid-template-columns:1fr 1fr;
     gap:10px;
 }
 
-.result{
-    margin-top:15px;
-    padding:17px;
-    border-radius:17px;
-    text-align:center;
-    background:#ffffff08;
-    border:1px solid #ffffff10;
-}
-
-.result .name{
-    font-size:20px;
-    font-weight:800;
-    direction:ltr;
-}
-
-.status{
-    margin-top:10px;
-    font-size:14px;
-    font-weight:700;
-}
-
-.green{color:#35e5a4}
-.red{color:#ff5873}
-.yellow{color:#ffd166}
-
-.results{
-    margin-top:14px;
+.list{
     display:grid;
     gap:8px;
-    max-height:430px;
+    margin-top:16px;
+    max-height:420px;
     overflow:auto;
 }
 
-.item{
+.user{
     display:flex;
     align-items:center;
     justify-content:space-between;
-    gap:8px;
     direction:ltr;
-    padding:11px;
+    gap:8px;
+    padding:12px;
     border-radius:13px;
-    background:#ffffff08;
+    border:1px solid rgba(255,255,255,.08);
+    background:rgba(255,255,255,.04);
 }
 
-.copy{
-    padding:7px 10px;
+.actions{
+    display:flex;
+    gap:6px;
+}
+
+.small{
+    border:1px solid rgba(255,255,255,.12);
+    background:#111;
     color:#fff;
-    border:1px solid #ffffff14;
+    padding:8px 11px;
     border-radius:9px;
-    background:#182231;
 }
 
-.note{
+.status{
+    text-align:center;
+    color:#777;
+    font-size:11px;
     margin-top:12px;
-    color:#8493a8;
-    font-size:10px;
-    line-height:1.8;
 }
 
-.error{
-    min-height:18px;
-    color:#ff607a;
-    font-size:12px;
+/* زر الصوت */
+.musicBtn{
+    position:fixed;
+    left:18px;
+    bottom:18px;
+    z-index:20;
+    width:48px;
+    height:48px;
+    border-radius:50%;
+    border:1px solid rgba(255,255,255,.18);
+    background:rgba(0,0,0,.78);
+    color:#fff;
+    font-size:18px;
 }
 
-@media(max-width:520px){
-    .hero{height:250px}
-    .logo{font-size:52px}
-    .row{grid-template-columns:1fr}
+@media(max-width:600px){
+    .logo{
+        font-size:64px;
+    }
+
+    .controls{
+        grid-template-columns:1fr;
+    }
+
+    .card{
+        padding:23px;
+    }
 }
 </style>
 </head>
 
 <body>
 
-<div class="snow" id="snow"></div>
+<!-- ضع فيديو العين الحقيقي هنا باسم eye.mp4 -->
+<video id="eyeVideo"
+       autoplay
+       muted
+       loop
+       playsinline>
+    <source src="eye.mp4" type="video/mp4">
+</video>
+
+<div class="overlay"></div>
+<canvas id="snow"></canvas>
 
 <div class="app">
 
-<section class="hero">
-    <div class="heroText">
-        <div class="logo">RwL</div>
-        <div class="sub">USERNAME LAB</div>
-    </div>
-</section>
+<!-- البداية -->
+<div class="screen" id="welcome">
+
+<div class="card">
+
+<div class="logo">RwL</div>
+
+<div class="subtitle">
+UNKNOWN • USERNAME • LAB
+</div>
+
+<div class="welcomeText">
+العين تراقب... والباقي عليك.
+</div>
+
+<button class="mainBtn" onclick="openLogin()">
+مرحبًا بك — اضغط للدخول
+</button>
+
+</div>
+
+</div>
+
+
+<!-- الرمز -->
+<div class="screen" id="login">
+
+<div class="card">
+
+<h2 style="text-align:center">
+🔐 فضلاً اكتب الرمز
+</h2>
+
+<div class="welcomeText">
+أدخل رمز RwL للمتابعة
+</div>
+
+<input
+    id="code"
+    type="password"
+    inputmode="numeric"
+    placeholder="••••">
+
+<button class="mainBtn" onclick="unlock()">
+دخول
+</button>
+
+<div class="error" id="error"></div>
+
+</div>
+
+</div>
+
+
+<!-- الرئيسية -->
+<div id="home">
+
+<div class="card">
+
+<div class="logo" style="font-size:55px">
+RwL
+</div>
+
+<div class="subtitle">
+CONTROL PANEL
+</div>
 
 <div class="tabs">
-    <button class="tab active" onclick="openTab('tik')">🎵 TikTok</button>
-    <button class="tab" onclick="openTab('snap')">👻 Snapchat</button>
-    <button class="tab" onclick="openTab('store')">🎟️ Store</button>
+
+<button class="tab active"
+        onclick="changeTab('tiktok',this)">
+🎵 TikTok
+</button>
+
+<button class="tab"
+        onclick="changeTab('snapchat',this)">
+👻 Snapchat
+</button>
+
+</div>
+
+
+<!-- TikTok -->
+<div id="tiktok" class="section active">
+
+<div class="controls">
+
+<input id="ttLength"
+       type="number"
+       min="3"
+       max="24"
+       value="6"
+       placeholder="طول اليوزر">
+
+<input id="ttCount"
+       type="number"
+       min="1"
+       max="100"
+       value="20"
+       placeholder="العدد">
+
+</div>
+
+<button class="mainBtn"
+        onclick="generate('tt')">
+⚡ توليد يوزرات TikTok
+</button>
+
+<div class="list" id="ttList"></div>
+
 </div>
 
 
-<section id="tik" class="panel active">
+<!-- Snapchat -->
+<div id="snapchat" class="section">
 
-    <div id="login" class="card lock">
+<div class="controls">
 
-        <div class="icon">🔐</div>
+<input id="scLength"
+       type="number"
+       min="3"
+       max="24"
+       value="6"
+       placeholder="طول اليوزر">
 
-        <h2>دخول TikTok</h2>
-
-        <div class="muted">
-            أدخل رمز RwL للمتابعة
-        </div>
-
-        <input
-            id="access"
-            type="password"
-            inputmode="numeric"
-            placeholder="رمز الدخول">
-
-        <button class="main" onclick="unlock()">
-            دخول
-        </button>
-
-        <div id="loginError" class="error"></div>
-
-    </div>
-
-
-    <div id="checker" style="display:none">
-
-        <div class="card">
-
-            <h2>🎵 فحص يوزر TikTok</h2>
-
-            <div class="muted">
-                أدخل يوزرًا واحدًا للفحص.
-            </div>
-
-            <input
-                id="username"
-                placeholder="مثال: username"
-                autocomplete="off">
-
-            <button class="main" onclick="checkUser()">
-                ⚡ فحص اليوزر
-            </button>
-
-            <div id="result" class="result" style="display:none">
-
-                <div id="resultName" class="name"></div>
-
-                <div id="resultStatus" class="status"></div>
-
-            </div>
-
-            <div class="note">
-                ⚠️ مصدر الفحص المستخدم غير رسمي من TikTok.
-                لذلك عند عدم وجود استجابة مؤكدة سيظهر
-                «تعذر الفحص» بدل إعطاء نتيجة وهمية.
-            </div>
-
-        </div>
-
-
-        <div class="card" style="margin-top:12px">
-
-            <h2>⚡ توليد يوزرات</h2>
-
-            <div class="row">
-
-                <div>
-                    <label>الطول</label>
-                    <input id="length" type="number" min="3" max="20" value="6">
-                </div>
-
-                <div>
-                    <label>العدد</label>
-                    <input id="count" type="number" min="1" max="100" value="20">
-                </div>
-
-            </div>
-
-            <select id="type">
-                <option value="mixed">حروف + أرقام</option>
-                <option value="letters">حروف فقط</option>
-                <option value="underscore">حروف + _</option>
-            </select>
-
-            <button class="main" onclick="generate()">
-                توليد
-            </button>
-
-            <div id="results" class="results"></div>
-
-        </div>
-
-    </div>
-
-</section>
-
-
-<section id="snap" class="panel">
-
-    <div class="card">
-
-        <h2>👻 Snapchat</h2>
-
-        <div class="muted">
-            مولد يوزرات محلي.
-        </div>
-
-        <button class="main" onclick="snapGenerate()">
-            توليد يوزرات
-        </button>
-
-        <div id="snapResults" class="results"></div>
-
-    </div>
-
-</section>
-
-
-<section id="store" class="panel">
-
-    <div class="card">
-
-        <h2>🎟️ Store</h2>
-
-        <div class="muted">
-            مولد أكواد تجريبية فقط.
-        </div>
-
-        <button class="main" onclick="codes()">
-            توليد 12 خانة
-        </button>
-
-        <div id="codeResults" class="results"></div>
-
-    </div>
-
-</section>
-
+<input id="scCount"
+       type="number"
+       min="1"
+       max="100"
+       value="20"
+       placeholder="العدد">
 
 </div>
+
+<button class="mainBtn"
+        onclick="generate('sc')">
+⚡ توليد يوزرات Snapchat
+</button>
+
+<div class="list" id="scList"></div>
+
+</div>
+
+<div class="status">
+«نسخ» ينسخ اليوزر بدون @
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+
+<!-- زر الموسيقى -->
+<button class="musicBtn"
+        id="musicBtn"
+        onclick="toggleMusic()">
+🔇
+</button>
 
 
 <script>
 
-/* الثلج */
+/* =========================
+   الدخول
+========================= */
 
-const snow=document.getElementById("snow");
+function openLogin(){
 
-for(let i=0;i<65;i++){
+    document.getElementById("welcome")
+        .style.display="none";
 
-    const f=document.createElement("span");
+    document.getElementById("login")
+        .style.display="flex";
 
-    f.className="flake";
-    f.textContent=Math.random()>.5?"❄":"•";
-
-    f.style.left=Math.random()*100+"%";
-    f.style.fontSize=(4+Math.random()*7)+"px";
-    f.style.animationDuration=(7+Math.random()*10)+"s";
-    f.style.animationDelay=(-Math.random()*15)+"s";
-
-    f.style.setProperty(
-        "--x",
-        (Math.random()*160-80)+"px"
-    );
-
-    snow.appendChild(f);
+    startMusic();
 }
-
-
-/* التبويبات */
-
-function openTab(id){
-
-    document
-    .querySelectorAll(".panel")
-    .forEach(x=>x.classList.remove("active"));
-
-    document
-    .querySelectorAll(".tab")
-    .forEach(x=>x.classList.remove("active"));
-
-    document.getElementById(id)
-        .classList.add("active");
-
-    const index={
-        tik:0,
-        snap:1,
-        store:2
-    }[id];
-
-    document
-    .querySelectorAll(".tab")[index]
-    .classList.add("active");
-}
-
-
-/* الدخول */
 
 function unlock(){
 
-    const value=
-        document.getElementById("access").value;
+    const code =
+        document.getElementById("code").value;
 
-    if(value==="2112"){
+    if(code === "2112"){
 
         document.getElementById("login")
             .style.display="none";
 
-        document.getElementById("checker")
+        document.getElementById("home")
             .style.display="block";
 
     }else{
 
-        document.getElementById("loginError")
-            .textContent="❌ رمز الدخول غير صحيح.";
+        document.getElementById("error")
+            .textContent="الرمز غير صحيح 🔴";
 
     }
 }
 
 
-/* فحص اليوزر */
+/* =========================
+   التبويبات
+========================= */
 
-async function checkUser(){
+function changeTab(id,button){
 
-    let username=
-        document.getElementById("username")
-        .value.trim()
-        .toLowerCase();
+    document
+        .querySelectorAll(".section")
+        .forEach(x =>
+            x.classList.remove("active")
+        );
 
-    if(username.startsWith("@"))
-        username=username.slice(1);
+    document
+        .querySelectorAll(".tab")
+        .forEach(x =>
+            x.classList.remove("active")
+        );
 
-    const result=
-        document.getElementById("result");
+    document
+        .getElementById(id)
+        .classList.add("active");
 
-    const name=
-        document.getElementById("resultName");
-
-    const status=
-        document.getElementById("resultStatus");
-
-    if(!username){
-
-        result.style.display="block";
-        name.textContent="";
-        status.className="status red";
-        status.textContent="🔴 أدخل يوزر أولاً";
-        return;
-    }
-
-    name.textContent="@"+username;
-
-    result.style.display="block";
-
-    status.className="status yellow";
-    status.textContent="⏳ جاري الفحص...";
-
-    try{
-
-        /*
-         * ملاحظة:
-         * المتصفح قد يمنع هذا الطلب بسبب CORS.
-         * إذا حدث ذلك تظهر حالة تعذر الفحص.
-         */
-
-        const url=
-        "https://www.tiktok.com/api/unique/check/?aid=1988&unique_id="
-        +encodeURIComponent(username);
-
-        const response=
-            await fetch(url,{
-                method:"GET",
-                headers:{
-                    "Accept":"application/json"
-                }
-            });
-
-        if(!response.ok){
-            throw new Error("HTTP");
-        }
-
-        const data=
-            await response.json();
-
-
-        if(
-            data &&
-            data.statusCode===0 &&
-            data.isAvailable===true
-        ){
-
-            status.className="status green";
-            status.textContent="متاح ✅";
-
-            return;
-        }
-
-
-        if(
-            data &&
-            data.statusCode===0 &&
-            data.isAvailable===false
-        ){
-
-            status.className="status red";
-            status.textContent="غير متاح 🔴";
-
-            return;
-        }
-
-
-        status.className="status yellow";
-        status.textContent="تعذر الفحص ⚠️";
-
-    }catch(error){
-
-        status.className="status yellow";
-        status.textContent="تعذر الفحص ⚠️";
-
-    }
+    button.classList.add("active");
 }
 
 
-/* المولد */
+/* =========================
+   توليد اليوزرات
+========================= */
 
-function makeUser(length,type){
+function randomUsername(length){
 
-    let chars;
+    const chars =
+        "abcdefghijklmnopqrstuvwxyz0123456789";
 
-    if(type==="letters")
-        chars="abcdefghijklmnopqrstuvwxyz";
-
-    else if(type==="underscore")
-        chars="abcdefghijklmnopqrstuvwxyz_";
-
-    else
-        chars="abcdefghijklmnopqrstuvwxyz0123456789";
-
-    let value="";
+    let name = "";
 
     for(let i=0;i<length;i++){
 
-        value+=chars[
+        name += chars[
             Math.floor(Math.random()*chars.length)
         ];
 
     }
 
-    return value;
+    return name;
 }
 
+function generate(type){
 
-function generate(){
+    let length;
+    let count;
+    let list;
 
-    const length=
-        Math.max(
-            3,
-            Math.min(
-                20,
-                Number(
-                    document.getElementById("length").value
-                )||6
-            )
-        );
+    if(type === "tt"){
 
-    const count=
-        Math.max(
-            1,
-            Math.min(
-                100,
-                Number(
-                    document.getElementById("count").value
-                )||20
-            )
-        );
+        length =
+            Number(
+                document.getElementById("ttLength").value
+            ) || 6;
 
-    const type=
-        document.getElementById("type").value;
+        count =
+            Number(
+                document.getElementById("ttCount").value
+            ) || 20;
 
-    const set=new Set();
+        list =
+            document.getElementById("ttList");
 
-    while(set.size<count){
+    }else{
 
-        set.add(
-            makeUser(length,type)
-        );
+        length =
+            Number(
+                document.getElementById("scLength").value
+            ) || 6;
 
+        count =
+            Number(
+                document.getElementById("scCount").value
+            ) || 20;
+
+        list =
+            document.getElementById("scList");
     }
 
-    const box=
-        document.getElementById("results");
+    length = Math.max(3,Math.min(24,length));
+    count = Math.max(1,Math.min(100,count));
 
-    box.innerHTML="";
+    list.innerHTML="";
 
-    [...set].forEach(username=>{
+    const names = new Set();
 
-        const row=
+    while(names.size < count){
+        names.add(randomUsername(length));
+    }
+
+    names.forEach(name => {
+
+        const row =
             document.createElement("div");
 
-        row.className="item";
+        row.className="user";
 
-        const text=
+        const text =
             document.createElement("span");
 
-        text.textContent="@"+username;
+        text.textContent=name;
 
-        const copy=
+        const actions =
+            document.createElement("div");
+
+        actions.className="actions";
+
+
+        /* نسخ */
+        const copy =
             document.createElement("button");
 
-        copy.className="copy";
+        copy.className="small";
         copy.textContent="نسخ";
 
-        copy.onclick=async()=>{
+        copy.onclick = async() => {
 
             try{
 
                 await navigator.clipboard
-                    .writeText("@"+username);
-
-                copy.textContent="تم ✓";
-
-                setTimeout(()=>{
-                    copy.textContent="نسخ";
-                },800);
+                    .writeText(name);
 
             }catch{
 
-                copy.textContent="فشل";
+                const area =
+                    document.createElement("textarea");
+
+                area.value=name;
+                document.body.appendChild(area);
+                area.select();
+                document.execCommand("copy");
+                area.remove();
+
+            }
+
+            copy.textContent="تم ✓";
+
+            setTimeout(()=>{
+                copy.textContent="نسخ";
+            },900);
+
+        };
+
+
+        /* فتح الحساب */
+        const open =
+            document.createElement("button");
+
+        open.className="small";
+        open.textContent="فتح";
+
+        open.onclick = () => {
+
+            if(type === "tt"){
+
+                window.open(
+                    "https://www.tiktok.com/@" +
+                    encodeURIComponent(name),
+                    "_blank"
+                );
+
+            }else{
+
+                window.open(
+                    "https://www.snapchat.com/add/" +
+                    encodeURIComponent(name),
+                    "_blank"
+                );
 
             }
 
         };
 
-        row.append(text,copy);
-        box.appendChild(row);
+        actions.append(copy,open);
+        row.append(text,actions);
+        list.appendChild(row);
 
+    });
+}
+
+
+/* =========================
+   ثلج خفيف
+========================= */
+
+const canvas =
+    document.getElementById("snow");
+
+const ctx =
+    canvas.getContext("2d");
+
+let flakes=[];
+
+function resizeSnow(){
+
+    canvas.width=innerWidth;
+    canvas.height=innerHeight;
+
+}
+
+resizeSnow();
+
+window.addEventListener(
+    "resize",
+    resizeSnow
+);
+
+for(let i=0;i<100;i++){
+
+    flakes.push({
+        x:Math.random()*innerWidth,
+        y:Math.random()*innerHeight,
+        r:Math.random()*2+.4,
+        speed:Math.random()*.65+.2,
+        drift:Math.random()*.35-.175
     });
 
 }
 
+function drawSnow(){
 
-/* Snapchat */
+    ctx.clearRect(
+        0,0,
+        canvas.width,
+        canvas.height
+    );
 
-function snapGenerate(){
+    flakes.forEach(f => {
 
-    const box=
-        document.getElementById("snapResults");
+        ctx.beginPath();
 
-    box.innerHTML="";
+        ctx.arc(
+            f.x,
+            f.y,
+            f.r,
+            0,
+            Math.PI*2
+        );
 
-    for(let i=0;i<20;i++){
+        ctx.fillStyle="rgba(255,255,255,.55)";
+        ctx.fill();
 
-        const username=
-            makeUser(
-                6,
-                "mixed"
-            );
+        f.y += f.speed;
+        f.x += f.drift;
 
-        const row=
-            document.createElement("div");
+        if(f.y > innerHeight + 5){
 
-        row.className="item";
-
-        row.innerHTML=
-        `<span>@${username}</span>
-         <button class="copy"
-         onclick="navigator.clipboard.writeText('@${username}')">
-         نسخ
-         </button>`;
-
-        box.appendChild(row);
-
-    }
-}
-
-
-/* أكواد تجريبية */
-
-function codes(){
-
-    const box=
-        document.getElementById("codeResults");
-
-    box.innerHTML="";
-
-    const chars=
-        "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-
-    for(let i=0;i<10;i++){
-
-        let code="";
-
-        for(let j=0;j<12;j++){
-
-            code+=chars[
-                Math.floor(
-                    Math.random()*chars.length
-                )
-            ];
+            f.y=-5;
+            f.x=Math.random()*innerWidth;
 
         }
 
-        const row=
-            document.createElement("div");
+    });
 
-        row.className="item";
+    requestAnimationFrame(drawSnow);
+}
 
-        row.innerHTML=
-        `<span>${code}</span>
-         <button class="copy"
-         onclick="navigator.clipboard.writeText('${code}')">
-         نسخ
-         </button>`;
+drawSnow();
 
-        box.appendChild(row);
+
+/* =========================
+   نغمة غامضة خفيفة
+========================= */
+
+let audioContext=null;
+let masterGain=null;
+let oscillators=[];
+let musicOn=false;
+
+function startMusic(){
+
+    if(audioContext){
+
+        if(audioContext.state === "suspended"){
+            audioContext.resume();
+        }
+
+        return;
+    }
+
+    audioContext =
+        new (
+            window.AudioContext ||
+            window.webkitAudioContext
+        )();
+
+    masterGain =
+        audioContext.createGain();
+
+    masterGain.gain.value=.018;
+
+    masterGain.connect(
+        audioContext.destination
+    );
+
+    /*
+       عدة نغمات منخفضة جدًا
+       تعطي جوًا غامضًا هادئًا
+    */
+
+    const notes=[
+        55,
+        65.41,
+        73.42
+    ];
+
+    notes.forEach((frequency,index)=>{
+
+        const osc =
+            audioContext.createOscillator();
+
+        const gain =
+            audioContext.createGain();
+
+        osc.type="sine";
+        osc.frequency.value=frequency;
+
+        gain.gain.value=.12;
+
+        osc.connect(gain);
+        gain.connect(masterGain);
+
+        osc.start();
+
+        oscillators.push({
+            osc,
+            gain,
+            base:frequency
+        });
+
+    });
+
+    musicOn=true;
+
+    document.getElementById("musicBtn")
+        .textContent="🔊";
+}
+
+function toggleMusic(){
+
+    if(!audioContext){
+
+        startMusic();
+        return;
+    }
+
+    if(musicOn){
+
+        masterGain.gain.setTargetAtTime(
+            0,
+            audioContext.currentTime,
+            .15
+        );
+
+        musicOn=false;
+
+        document.getElementById("musicBtn")
+            .textContent="🔇";
+
+    }else{
+
+        masterGain.gain.setTargetAtTime(
+            .018,
+            audioContext.currentTime,
+            .15
+        );
+
+        musicOn=true;
+
+        document.getElementById("musicBtn")
+            .textContent="🔊";
 
     }
+
 }
 
 </script>
