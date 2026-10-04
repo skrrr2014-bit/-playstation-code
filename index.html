@@ -1,548 +1,274 @@
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>غرفتي الرومانسية</title>
-
-<style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:Arial,sans-serif;
-  background:#17131b;
-  color:white;
-  overflow:hidden;
-}
-
-#game{
-  width:100vw;
-  height:100vh;
-  position:relative;
-  overflow:hidden;
-  background:linear-gradient(#ded0c5 0 62%,#725646 62%);
-}
-
-/* الغرفة */
-.wall{
-  position:absolute;
-  inset:0 0 38%;
-  background:linear-gradient(135deg,#eee3d9,#cdbbab);
-}
-
-.floor{
-  position:absolute;
-  left:0;
-  right:0;
-  bottom:0;
-  height:38%;
-  background:linear-gradient(90deg,#684d3d,#92705b,#684d3d);
-}
-
-.window{
-  position:absolute;
-  top:10%;
-  left:8%;
-  width:25%;
-  height:28%;
-  border:12px solid #60493c;
-  background:linear-gradient(#8dc0df,#dff2fa);
-}
-
-.bed{
-  position:absolute;
-  right:7%;
-  bottom:17%;
-  width:32%;
-  height:24%;
-  border-radius:18px 18px 5px 5px;
-  background:#ddd7d1;
-  box-shadow:0 15px 30px #0004;
-}
-
-.pillow{
-  position:absolute;
-  right:8%;
-  top:10%;
-  width:34%;
-  height:32%;
-  border-radius:12px;
-  background:#f5f0ec;
-}
-
-.rug{
-  position:absolute;
-  left:27%;
-  bottom:5%;
-  width:45%;
-  height:18%;
-  border-radius:50%;
-  background:#bda596;
-}
-
-/* الشخصيات */
-.character{
-  position:absolute;
-  bottom:19%;
-  width:115px;
-  height:210px;
-  z-index:5;
-  transition:left .12s,bottom .12s;
-}
-
-.player{
-  left:42%;
-}
-
-.husband{
-  left:58%;
-}
-
-.head{
-  width:64px;
-  height:64px;
-  margin:auto;
-  border-radius:50%;
-  background:#d89a70;
-  border:3px solid #ffffff55;
-  position:relative;
-}
-
-.hair{
-  position:absolute;
-  top:-6px;
-  left:-2px;
-  right:-2px;
-  height:40px;
-  border-radius:40px 40px 12px 12px;
-  background:#40291e;
-}
-
-.body{
-  width:74px;
-  height:108px;
-  margin:auto;
-  border-radius:25px 25px 12px 12px;
-  background:#bd6088;
-  border:3px solid #ffffff44;
-}
-
-.husband .body{
-  background:#4e6fa6;
-}
-
-.name{
-  text-align:center;
-  font-weight:bold;
-  margin-top:5px;
-  text-shadow:0 2px 5px black;
-}
-
-/* القائمة */
-.menu{
-  position:absolute;
-  top:15px;
-  right:15px;
-  width:300px;
-  padding:16px;
-  border-radius:18px;
-  background:#17141ddd;
-  border:1px solid #ffffff22;
-  z-index:20;
-  backdrop-filter:blur(10px);
-}
-
-button,select,input{
-  width:100%;
-  min-height:44px;
-  margin:5px 0;
-  padding:9px;
-  border-radius:11px;
-  border:1px solid #ffffff22;
-  background:#ffffff12;
-  color:white;
-  font-size:15px;
-}
-
-button{
-  cursor:pointer;
-}
-
-button:hover{
-  background:#ffffff25;
-}
-
-.row{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:6px;
-}
-
-.hidden{
-  display:none;
-}
-
-.bar{
-  height:8px;
-  background:#ffffff20;
-  border-radius:20px;
-  overflow:hidden;
-}
-
-.fill{
-  height:100%;
-  width:50%;
-  background:#e58bad;
-  transition:.3s;
-}
-
-#message{
-  position:absolute;
-  bottom:20px;
-  left:50%;
-  transform:translateX(-50%);
-  padding:10px 18px;
-  border-radius:30px;
-  background:#17141ddd;
-  opacity:0;
-  transition:.3s;
-  z-index:30;
-}
-</style>
-</head>
-
-<body>
-
-<div id="game">
-
-<div class="wall"></div>
-<div class="floor"></div>
-<div class="window"></div>
-
-<div class="bed">
-  <div class="pillow"></div>
-</div>
-
-<div class="rug"></div>
-
-<!-- الشخصية -->
-<div id="player" class="character player">
-  <div class="head">
-    <div id="hair" class="hair"></div>
-  </div>
-  <div id="body" class="body"></div>
-  <div id="playerName" class="name">ليان</div>
-</div>
-
-<!-- الزوج -->
-<div id="husband" class="character husband">
-  <div class="head">
-    <div class="hair"></div>
-  </div>
-  <div class="body"></div>
-  <div class="name">آدم</div>
-</div>
-
-<!-- القائمة -->
-<div class="menu">
-
-<b>💗 غرفتي</b>
-
-<p style="font-size:12px;color:#ddd">
-التحرك بالأسهم أو WASD
-</p>
-
-<div class="row">
-<button onclick="toggleMenu()">☰ القائمة</button>
-<button onclick="toggleWardrobe()">👗 الملابس</button>
-</div>
-
-<div id="actions">
-
-<div class="row">
-<button onclick="talk()">💬 تحدث</button>
-<button onclick="dance()">💃 رقص</button>
-</div>
-
-<div class="row">
-<button onclick="sit()">🛋️ جلوس</button>
-<button onclick="hug()">🤗 عناق</button>
-</div>
-
-<button onclick="follow()">🚶 امشِ مع الزوج</button>
-
-</div>
-
-<div id="wardrobe" class="hidden">
-
-<input
-id="nameInput"
-value="ليان"
-placeholder="اسم الشخصية">
-
-<select id="hairSelect">
-<option value="#40291e">شعر بني</option>
-<option value="#111111">شعر أسود</option>
-<option value="#c89b3c">شعر ذهبي</option>
-<option value="#75479d">شعر بنفسجي</option>
-</select>
-
-<select id="outfitSelect">
-<option value="#bd6088">فستان وردي</option>
-<option value="#4e9fba">ملابس سماوية</option>
-<option value="#8053b0">ملابس بنفسجية</option>
-<option value="#c17d43">ملابس برتقالية</option>
-</select>
-
-</div>
-
-<p>
-❤️ العلاقة:
-<span id="loveText">50%</span>
-</p>
-
-<div class="bar">
-<div id="loveBar" class="fill"></div>
-</div>
-
-</div>
-
-<div id="message"></div>
-
-</div>
-
-<script>
-
-let x = 42;
-let y = 0;
-
-let love = 50;
-let following = false;
-
-const player =
-document.getElementById("player");
-
-const husband =
-document.getElementById("husband");
-
-const message =
-document.getElementById("message");
-
-function showMessage(text){
-
-message.textContent = text;
-
-message.style.opacity = "1";
-
-setTimeout(()=>{
-message.style.opacity = "0";
-},1700);
-
-}
-
-function updateLove(amount){
-
-love += amount;
-
-if(love > 100) love = 100;
-
-if(love < 0) love = 0;
-
-document.getElementById("loveText")
-.textContent = love + "%";
-
-document.getElementById("loveBar")
-.style.width = love + "%";
-
-}
-
-function move(){
-
-if(x < 8) x = 8;
-if(x > 88) x = 88;
-
-if(y < -3) y = -3;
-if(y > 12) y = 12;
-
-player.style.left = x + "%";
-player.style.bottom = (19-y) + "%";
-
-if(following){
-
-husband.style.left =
-Math.min(88,x+12) + "%";
-
-husband.style.bottom =
-(19-y) + "%";
-
-}
-
-}
-
-document.addEventListener("keydown",function(e){
-
-let key = e.key.toLowerCase();
-
-if(key === "arrowleft" || key === "a"){
-x -= 2;
-}
-
-if(key === "arrowright" || key === "d"){
-x += 2;
-}
-
-if(key === "arrowup" || key === "w"){
-y += 1;
-}
-
-if(key === "arrowdown" || key === "s"){
-y -= 1;
-}
-
-move();
-
-});
-
-function toggleMenu(){
-
-document
-.getElementById("actions")
-.classList.toggle("hidden");
-
-}
-
-function toggleWardrobe(){
-
-document
-.getElementById("wardrobe")
-.classList.toggle("hidden");
-
-}
-
-function talk(){
-
-updateLove(5);
-
-showMessage(
-"💬 تحدثتما وضحكتما معًا."
-);
-
-}
-
-function dance(){
-
-updateLove(3);
-
-player.animate(
-[
-{transform:"translateY(0) rotate(0deg)"},
-{transform:"translateY(-25px) rotate(6deg)"},
-{transform:"translateY(0) rotate(-6deg)"}
-],
+using UnityEngine;
+using UnityEngine.EventSystems;
+using UnityEngine.UI;
+
+public class MobileGameController : MonoBehaviour
 {
-duration:900,
-iterations:2
+    [Header("الشخصية")]
+    public CharacterController player;
+    public Transform husband;
+
+    [Header("الكاميرا")]
+    public Camera gameCamera;
+    public Transform cameraTarget;
+
+    [Header("الحركة")]
+    public float moveSpeed = 2.5f;
+    public float rotationSpeed = 8f;
+
+    [Header("الزوج")]
+    public float husbandSpeed = 1.8f;
+    public float followDistance = 2.5f;
+
+    [Header("واجهة الجوال")]
+    public Joystick movementJoystick;
+    public Text messageText;
+
+    [Header("الكاميرا اللمسية")]
+    public float cameraSensitivity = 0.15f;
+
+    private float yaw = 0f;
+    private float pitch = 10f;
+    private Vector2 lastTouch;
+    private bool rotatingCamera;
+
+    void Start()
+    {
+        if (messageText != null)
+            messageText.text = "";
+
+        yaw = cameraTarget.eulerAngles.y;
+    }
+
+    void Update()
+    {
+        MovePlayer();
+        MoveHusband();
+        TouchCamera();
+        UpdateCamera();
+    }
+
+    // =========================
+    // حركة الشخصية بالجويستك
+    // =========================
+
+    void MovePlayer()
+    {
+        if (movementJoystick == null)
+            return;
+
+        float horizontal = movementJoystick.Horizontal;
+        float vertical = movementJoystick.Vertical;
+
+        Vector3 forward = gameCamera.transform.forward;
+        Vector3 right = gameCamera.transform.right;
+
+        forward.y = 0;
+        right.y = 0;
+
+        forward.Normalize();
+        right.Normalize();
+
+        Vector3 movement =
+            forward * vertical +
+            right * horizontal;
+
+        if (movement.magnitude > 1f)
+            movement.Normalize();
+
+        player.SimpleMove(
+            movement * moveSpeed
+        );
+
+        if (movement.magnitude > 0.1f)
+        {
+            Quaternion targetRotation =
+                Quaternion.LookRotation(movement);
+
+            player.transform.rotation =
+                Quaternion.Slerp(
+                    player.transform.rotation,
+                    targetRotation,
+                    rotationSpeed * Time.deltaTime
+                );
+        }
+    }
+
+    // =========================
+    // الزوج
+    // =========================
+
+    void MoveHusband()
+    {
+        if (husband == null)
+            return;
+
+        Vector3 direction =
+            player.transform.position -
+            husband.position;
+
+        direction.y = 0;
+
+        float distance =
+            direction.magnitude;
+
+        if (distance > followDistance)
+        {
+            Vector3 movement =
+                direction.normalized *
+                husbandSpeed *
+                Time.deltaTime;
+
+            husband.position += movement;
+
+            if (movement.sqrMagnitude > 0.001f)
+            {
+                Quaternion targetRotation =
+                    Quaternion.LookRotation(movement);
+
+                husband.rotation =
+                    Quaternion.Slerp(
+                        husband.rotation,
+                        targetRotation,
+                        8f * Time.deltaTime
+                    );
+            }
+        }
+    }
+
+    // =========================
+    // تحريك الكاميرا بالإصبع
+    // =========================
+
+    void TouchCamera()
+    {
+        if (Input.touchCount == 0)
+            return;
+
+        Touch touch = Input.GetTouch(0);
+
+        // لا تحرك الكاميرا إذا كان الإصبع على زر/جويستك
+        if (EventSystem.current != null &&
+            EventSystem.current.IsPointerOverGameObject(touch.fingerId))
+        {
+            return;
+        }
+
+        if (touch.phase == TouchPhase.Began)
+        {
+            lastTouch = touch.position;
+            rotatingCamera = true;
+        }
+
+        if (touch.phase == TouchPhase.Moved &&
+            rotatingCamera)
+        {
+            Vector2 delta =
+                touch.position - lastTouch;
+
+            yaw += delta.x * cameraSensitivity;
+            pitch -= delta.y * cameraSensitivity;
+
+            pitch = Mathf.Clamp(
+                pitch,
+                -10f,
+                45f
+            );
+
+            lastTouch = touch.position;
+        }
+
+        if (touch.phase == TouchPhase.Ended ||
+            touch.phase == TouchPhase.Canceled)
+        {
+            rotatingCamera = false;
+        }
+    }
+
+    // =========================
+    // الكاميرا
+    // =========================
+
+    void UpdateCamera()
+    {
+        if (gameCamera == null ||
+            cameraTarget == null)
+            return;
+
+        Quaternion rotation =
+            Quaternion.Euler(
+                pitch,
+                yaw,
+                0
+            );
+
+        Vector3 offset =
+            rotation *
+            new Vector3(
+                0f,
+                1.6f,
+                -4f
+            );
+
+        Vector3 wantedPosition =
+            cameraTarget.position +
+            offset;
+
+        gameCamera.transform.position =
+            Vector3.Lerp(
+                gameCamera.transform.position,
+                wantedPosition,
+                12f * Time.deltaTime
+            );
+
+        gameCamera.transform.LookAt(
+            cameraTarget.position +
+            Vector3.up * 1.1f
+        );
+    }
+
+    // =========================
+    // الأزرار
+    // =========================
+
+    public void Talk()
+    {
+        ShowMessage("💬 تحدثتما معًا.");
+    }
+
+    public void Hug()
+    {
+        ShowMessage("🤗 عناق لطيف.");
+    }
+
+    public void Dance()
+    {
+        ShowMessage("💃 رقصتما معًا.");
+    }
+
+    public void Sit()
+    {
+        ShowMessage("🛋️ جلستما معًا.");
+    }
+
+    void ShowMessage(string text)
+    {
+        if (messageText == null)
+            return;
+
+        messageText.text = text;
+
+        CancelInvoke(nameof(ClearMessage));
+
+        Invoke(
+            nameof(ClearMessage),
+            2f
+        );
+    }
+
+    void ClearMessage()
+    {
+        if (messageText != null)
+            messageText.text = "";
+    }
 }
-);
-
-husband.animate(
-[
-{transform:"translateY(0) rotate(0deg)"},
-{transform:"translateY(-25px) rotate(-6deg)"},
-{transform:"translateY(0) rotate(6deg)"}
-],
-{
-duration:900,
-iterations:2
-}
-);
-
-showMessage(
-"💃 رقصتما معًا."
-);
-
-}
-
-function sit(){
-
-husband.style.left =
-(x+8) + "%";
-
-husband.style.bottom =
-(19-y) + "%";
-
-updateLove(2);
-
-showMessage(
-"🛋️ جلستما معًا."
-);
-
-}
-
-function hug(){
-
-husband.style.left =
-(x+6) + "%";
-
-updateLove(4);
-
-showMessage(
-"🤗 عناق لطيف."
-);
-
-}
-
-function follow(){
-
-following = !following;
-
-showMessage(
-following
-? "🚶 الزوج يمشي معك."
-: "⏸️ توقف عن متابعتك."
-);
-
-move();
-
-}
-
-document
-.getElementById("nameInput")
-.addEventListener("input",function(){
-
-document
-.getElementById("playerName")
-.textContent =
-this.value || "ليان";
-
-});
-
-document
-.getElementById("hairSelect")
-.addEventListener("change",function(){
-
-document
-.getElementById("hair")
-.style.background =
-this.value;
-
-});
-
-document
-.getElementById("outfitSelect")
-.addEventListener("change",function(){
-
-document
-.getElementById("body")
-.style.background =
-this.value;
-
-});
-
-move();
-
-</script>
-
-</body>
-</html>
