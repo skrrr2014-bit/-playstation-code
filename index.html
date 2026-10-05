@@ -3,548 +3,771 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RwL — فك الشفرة</title>
+<title>RwL — Dark Watcher</title>
 
 <style>
-*{box-sizing:border-box}
+*{
+  box-sizing:border-box;
+  -webkit-tap-highlight-color:transparent;
+}
+
 html,body{
-    margin:0;
-    width:100%;
-    min-height:100%;
-    background:#000;
-    color:#fff;
-    font-family:Arial,Tahoma,sans-serif;
-    overflow:hidden;
+  margin:0;
+  min-height:100%;
+  background:#000;
+  color:#fff;
+  font-family:Arial,Tahoma,sans-serif;
 }
 
 body{
-    min-height:100vh;
+  overflow:hidden;
 }
 
-/* ===== الخلفية المرعبة ===== */
-
-.bg{
-    position:fixed;
-    inset:0;
-    overflow:hidden;
-    background:
-        radial-gradient(circle at 50% 50%,
-        #350008 0%,
-        #100005 18%,
-        #030003 48%,
-        #000 100%);
+/* الخلفية */
+body{
+  background:
+    radial-gradient(
+      ellipse at center,
+      #280006 0%,
+      #090103 28%,
+      #010001 65%,
+      #000 100%
+    );
 }
 
-.bg:before{
-    content:"";
-    position:absolute;
-    inset:0;
-    background:
-        repeating-linear-gradient(
-            0deg,
-            transparent 0px,
-            rgba(255,0,35,.035) 1px,
-            transparent 3px
-        );
-    animation:scan 4s linear infinite;
+body:before{
+  content:"";
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:1;
+
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent 0 4px,
+      rgba(255,0,40,.025) 5px
+    );
+
+  animation:scan 5s linear infinite;
 }
 
 @keyframes scan{
-    from{transform:translateY(-30px)}
-    to{transform:translateY(30px)}
+  from{transform:translateY(-30px)}
+  to{transform:translateY(30px)}
 }
 
-/* ضباب */
-
+/* الضباب */
 .fog{
-    position:absolute;
-    width:65vw;
-    height:65vw;
-    border-radius:50%;
-    filter:blur(100px);
-    opacity:.25;
-    background:#800018;
-    animation:fog 8s infinite alternate ease-in-out;
+  position:fixed;
+  width:70vw;
+  height:70vw;
+  border-radius:50%;
+  filter:blur(100px);
+  background:#8b001c;
+  opacity:.14;
+  pointer-events:none;
+  z-index:0;
+  animation:fog 9s ease-in-out infinite alternate;
 }
 
 .fog1{
-    top:-25%;
-    right:-20%;
+  top:-30%;
+  left:-25%;
 }
 
 .fog2{
-    bottom:-30%;
-    left:-20%;
-    animation-delay:-4s;
+  bottom:-35%;
+  right:-25%;
+  animation-delay:-4s;
 }
 
 @keyframes fog{
-    from{
-        transform:translate(0,0) scale(1);
-    }
-    to{
-        transform:translate(120px,-80px) scale(1.4);
-    }
+  from{
+    transform:translate(0,0) scale(1);
+  }
+
+  to{
+    transform:translate(100px,-70px) scale(1.4);
+  }
 }
 
-/* جسيمات */
-
-.particles span{
-    position:absolute;
-    width:2px;
-    height:2px;
-    border-radius:50%;
-    background:#ff1744;
-    box-shadow:0 0 10px #ff1744;
-    animation:rise linear infinite;
-}
-
-@keyframes rise{
-    from{
-        transform:translateY(110vh);
-        opacity:0;
-    }
-    15%{opacity:1}
-    80%{opacity:.8}
-    to{
-        transform:translateY(-10vh);
-        opacity:0;
-    }
-}
-
-/* ===== العين ===== */
+/* =========================
+   العين
+========================= */
 
 .eye{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:210px;
-    height:110px;
-    transform:translate(-50%,-50%);
-    opacity:.12;
-    animation:eyeFloat 5s ease-in-out infinite;
+  position:fixed;
+  z-index:3;
+  left:50%;
+  top:22%;
+  width:330px;
+  max-width:80vw;
+  height:170px;
+  transform:translate(-50%,-50%);
+  pointer-events:none;
 }
 
-.eyeShape{
-    position:absolute;
-    inset:0;
-    border:3px solid #ff1744;
-    border-radius:80% 5% 80% 5%;
-    transform:rotate(45deg);
-    box-shadow:
-        0 0 20px #ff1744,
-        inset 0 0 30px rgba(255,0,40,.4);
+/*
+  طبقة العين الواقعية بصرياً:
+  يمكن استبدال الخلفية بصورة عين حقيقية
+  إذا أردت استخدام صورة تملك حقوقها.
+*/
+
+.eyeSocket{
+  position:absolute;
+  inset:0;
+
+  border-radius:
+    52% 48% 50% 50% /
+    55% 55% 45% 45%;
+
+  background:
+    radial-gradient(
+      ellipse at center,
+      rgba(130,0,15,.35),
+      rgba(0,0,0,.9) 65%,
+      #000 100%
+    );
+
+  box-shadow:
+    0 0 35px rgba(255,0,40,.15),
+    inset 0 0 50px #000;
+}
+
+.eyeball{
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:250px;
+  height:115px;
+
+  transform:
+    translate(-50%,-50%);
+
+  border-radius:
+    50%;
+
+  background:
+    radial-gradient(
+      circle at 50% 50%,
+      #050505 0 9%,
+      #3b0208 10% 17%,
+      #870015 18% 29%,
+      #250007 30% 45%,
+      #090909 46% 100%
+    );
+
+  box-shadow:
+    0 0 25px rgba(255,0,40,.18),
+    inset 0 0 30px #000;
+}
+
+.iris{
+  position:absolute;
+  left:50%;
+  top:50%;
+
+  width:76px;
+  height:76px;
+
+  transform:
+    translate(-50%,-50%);
+
+  border-radius:50%;
+
+  background:
+    radial-gradient(
+      circle,
+      #000 0 20%,
+      #ff173f 21% 31%,
+      #58000c 32% 55%,
+      #160004 56% 100%
+    );
+
+  box-shadow:
+    0 0 18px #ff1744,
+    0 0 55px rgba(255,0,40,.55);
+
+  transition:
+    transform .12s ease-out;
 }
 
 .pupil{
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    background:#050000;
-    border:5px solid #ff1744;
-    box-shadow:
-        0 0 15px #ff1744,
-        0 0 60px #ff003c;
+  position:absolute;
+  left:50%;
+  top:50%;
+
+  width:25px;
+  height:50px;
+
+  transform:
+    translate(-50%,-50%);
+
+  border-radius:50%;
+
+  background:#000;
+
+  box-shadow:
+    0 0 12px #000,
+    0 0 30px rgba(255,0,0,.5);
 }
 
-.pupil:after{
-    content:"";
-    position:absolute;
-    left:50%;
-    top:50%;
-    width:12px;
-    height:12px;
-    border-radius:50%;
-    transform:translate(-50%,-50%);
-    background:#fff;
-    box-shadow:0 0 15px #fff;
+.eyeLight{
+  position:absolute;
+  width:10px;
+  height:14px;
+
+  left:30%;
+  top:25%;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  box-shadow:
+    0 0 12px #fff;
+
+  opacity:.8;
 }
 
-@keyframes eyeFloat{
-    0%,100%{
-        transform:translate(-50%,-50%) scale(1);
-    }
-    50%{
-        transform:translate(-50%,-51%) scale(1.08);
-    }
-}
-
-/* ===== الشاشة ===== */
+/* =========================
+   LOGIN
+========================= */
 
 .screen{
-    position:relative;
-    z-index:5;
-    min-height:100vh;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    padding:20px;
+  position:relative;
+  z-index:5;
+
+  min-height:100vh;
+
+  display:flex;
+  justify-content:center;
+  align-items:center;
+
+  padding:20px;
 }
 
-.box{
-    width:min(420px,100%);
-    padding:35px 25px;
-    border-radius:25px;
-    background:rgba(4,2,4,.86);
-    border:1px solid rgba(255,20,65,.3);
-    box-shadow:
-        0 0 35px rgba(255,0,40,.15),
-        0 0 100px rgba(255,0,40,.05);
-    backdrop-filter:blur(18px);
-    text-align:center;
-}
+.login{
+  width:min(420px,100%);
 
-/* ===== الشعار ===== */
+  padding:32px 24px;
+
+  text-align:center;
+
+  border-radius:24px;
+
+  background:
+    rgba(2,1,3,.84);
+
+  border:
+    1px solid rgba(255,20,60,.3);
+
+  backdrop-filter:blur(18px);
+
+  box-shadow:
+    0 0 50px rgba(255,0,40,.12),
+    inset 0 0 40px rgba(255,0,40,.025);
+}
 
 .logo{
-    font-size:65px;
-    font-weight:900;
-    letter-spacing:12px;
-    margin-right:-12px;
-    text-shadow:
-        0 0 8px #fff,
-        0 0 20px #ff1744,
-        0 0 50px #ff003c;
-    animation:glitch 3s infinite;
+  font-size:64px;
+  font-weight:900;
+
+  letter-spacing:10px;
+
+  text-shadow:
+    0 0 8px #fff,
+    0 0 25px #ff1744,
+    0 0 65px #ff003c;
+
+  animation:glitch 4s infinite;
 }
 
 @keyframes glitch{
-    0%,88%,100%{
-        transform:none;
-        text-shadow:
-        0 0 8px #fff,
-        0 0 20px #ff1744,
-        0 0 50px #ff003c;
-    }
 
-    89%{
-        transform:skewX(12deg);
-    }
+  0%,91%,100%{
+    transform:none;
+  }
 
-    90%{
-        transform:translateX(-8px);
-        text-shadow:
-        5px 0 #00ffff,
-        -5px 0 #ff003c;
-    }
+  92%{
+    transform:
+      translateX(-7px)
+      skewX(8deg);
+  }
 
-    91%{
-        transform:translateX(8px);
-    }
+  93%{
+    transform:
+      translateX(7px);
+  }
 
-    92%{
-        transform:none;
-    }
+  94%{
+    transform:none;
+  }
 }
 
-.sub{
-    color:#777;
-    font-size:11px;
-    letter-spacing:5px;
-    margin-top:3px;
-}
-
-.skull{
-    font-size:38px;
-    margin:25px 0 10px;
-    filter:drop-shadow(0 0 12px #ff1744);
+.subtitle{
+  color:#666;
+  font-size:10px;
+  letter-spacing:5px;
 }
 
 .title{
-    font-size:24px;
-    font-weight:bold;
+  margin-top:25px;
+  font-size:24px;
+  font-weight:bold;
 }
 
-.desc{
-    color:#777;
-    font-size:12px;
-    margin:8px 0 25px;
+.description{
+  margin:8px 0 22px;
+  color:#777;
+  font-size:12px;
 }
-
-/* ===== الإدخال ===== */
 
 .pin{
-    width:100%;
-    height:58px;
-    background:#030203;
-    color:#fff;
-    border:1px solid #40101c;
-    border-radius:14px;
-    outline:none;
-    text-align:center;
-    font-size:28px;
-    letter-spacing:16px;
-    direction:ltr;
-    transition:.3s;
+  width:100%;
+  height:58px;
+
+  border:
+    1px solid #3b101c;
+
+  border-radius:14px;
+
+  background:#020102;
+  color:#fff;
+
+  outline:none;
+
+  text-align:center;
+
+  font-size:27px;
+
+  letter-spacing:15px;
+
+  direction:ltr;
 }
 
 .pin:focus{
-    border-color:#ff1744;
-    box-shadow:
-        0 0 15px rgba(255,0,50,.2),
-        inset 0 0 15px rgba(255,0,50,.05);
+  border-color:#ff1744;
+
+  box-shadow:
+    0 0 20px rgba(255,0,50,.2);
 }
 
 button{
-    width:100%;
-    height:55px;
-    border:0;
-    border-radius:14px;
-    margin-top:15px;
-    color:#fff;
-    font-weight:bold;
-    font-size:16px;
-    background:
-        linear-gradient(135deg,#ff1744,#65000f);
-    box-shadow:0 0 25px rgba(255,0,45,.2);
-    cursor:pointer;
+  width:100%;
+  height:55px;
+
+  margin-top:14px;
+
+  border:0;
+  border-radius:14px;
+
+  background:
+    linear-gradient(
+      135deg,
+      #ff1744,
+      #62000f
+    );
+
+  color:white;
+
+  font-size:16px;
+  font-weight:bold;
+
+  box-shadow:
+    0 0 25px rgba(255,0,50,.2);
+
+  cursor:pointer;
 }
 
 button:active{
-    transform:scale(.97);
+  transform:scale(.97);
 }
 
 .error{
-    height:20px;
-    margin-top:12px;
-    color:#ff4568;
-    font-size:12px;
+  height:20px;
+
+  margin-top:10px;
+
+  color:#ff5270;
+
+  font-size:12px;
 }
 
-/* ===== تأثير وميض ===== */
-
-.flash{
-    position:fixed;
-    inset:0;
-    background:#ff003c;
-    opacity:0;
-    pointer-events:none;
-    z-index:20;
-}
-
-.flash.active{
-    animation:flash .25s;
-}
-
-@keyframes flash{
-    0%{opacity:.2}
-    100%{opacity:0}
-}
-
-/* ===== التطبيق ===== */
+/* =========================
+   APP
+========================= */
 
 #app{
-    display:none;
-    position:relative;
-    z-index:10;
-    min-height:100vh;
-    padding:20px;
-    overflow:auto;
+  display:none;
+
+  position:relative;
+  z-index:5;
+
+  min-height:100vh;
+
+  padding:20px;
+
+  overflow:auto;
 }
 
 .container{
-    max-width:850px;
-    margin:auto;
+  width:min(850px,100%);
+  margin:auto;
 }
 
 .header{
-    display:flex;
-    justify-content:space-between;
-    align-items:center;
-    margin-bottom:20px;
+  display:flex;
+
+  justify-content:space-between;
+  align-items:center;
+
+  margin-bottom:18px;
 }
 
 .brand{
-    font-size:32px;
-    font-weight:900;
-    letter-spacing:5px;
-    text-shadow:0 0 25px #ff1744;
+  font-size:32px;
+  font-weight:900;
+
+  letter-spacing:5px;
+
+  text-shadow:
+    0 0 25px #ff1744;
 }
 
 .status{
-    padding:8px 12px;
-    border-radius:30px;
-    font-size:11px;
-    color:#ff5270;
-    border:1px solid #3b0d19;
-    background:#080307;
+  color:#ff5270;
+
+  font-size:10px;
+
+  padding:8px 12px;
+
+  border:
+    1px solid #35101a;
+
+  border-radius:30px;
+
+  background:#070307;
 }
 
 .panel{
-    background:rgba(5,3,5,.88);
-    border:1px solid rgba(255,20,65,.2);
-    border-radius:22px;
-    padding:20px;
-    backdrop-filter:blur(18px);
+  padding:22px;
+
+  border-radius:22px;
+
+  background:
+    rgba(3,2,4,.88);
+
+  border:
+    1px solid rgba(255,20,60,.2);
+
+  backdrop-filter:blur(18px);
 }
 
-label{
-    color:#888;
-    font-size:12px;
+.label{
+  color:#888;
+  font-size:12px;
 }
 
 .search{
-    display:flex;
-    gap:10px;
-    margin-top:9px;
+  display:flex;
+  gap:10px;
+
+  margin-top:9px;
 }
 
 .search input{
-    flex:1;
-    min-width:0;
-    height:54px;
-    border-radius:13px;
-    border:1px solid #35101b;
-    background:#020102;
-    color:#fff;
-    outline:none;
-    padding:0 15px;
-    font-size:16px;
-    direction:ltr;
+  flex:1;
+
+  height:54px;
+
+  border:
+    1px solid #35101a;
+
+  border-radius:13px;
+
+  background:#020102;
+
+  color:#fff;
+
+  outline:none;
+
+  padding:0 15px;
+
+  font-size:16px;
+
+  direction:ltr;
+
+  letter-spacing:0;
 }
 
 .search button{
-    width:110px;
-    margin:0;
+  width:110px;
+  margin:0;
 }
 
-.info{
-    margin-top:20px;
-    padding:20px;
-    border-radius:17px;
-    background:#070507;
-    border:1px solid #251018;
+.loading{
+  display:none;
+
+  text-align:center;
+
+  color:#ff5270;
+
+  padding:28px;
+}
+
+.loader{
+  width:34px;
+  height:34px;
+
+  margin:
+    auto
+    auto
+    10px;
+
+  border:
+    3px solid #320914;
+
+  border-top-color:#ff1744;
+
+  border-radius:50%;
+
+  animation:
+    spin .7s linear infinite;
+}
+
+@keyframes spin{
+  to{
+    transform:rotate(360deg);
+  }
+}
+
+.result{
+  display:none;
+  margin-top:20px;
 }
 
 .profile{
-    display:flex;
-    gap:15px;
-    align-items:center;
+  display:flex;
+
+  align-items:center;
+
+  gap:15px;
+
+  padding:18px;
+
+  border-radius:18px;
+
+  background:#080609;
+
+  border:
+    1px solid #211018;
 }
 
 .avatar{
-    width:72px;
-    height:72px;
-    border-radius:50%;
-    border:2px solid #ff1744;
-    box-shadow:0 0 20px rgba(255,0,50,.3);
-    object-fit:cover;
-    background:#100308;
+  width:75px;
+  height:75px;
+
+  border-radius:50%;
+
+  object-fit:cover;
+
+  background:#100307;
+
+  border:
+    2px solid #ff1744;
+
+  box-shadow:
+    0 0 20px rgba(255,0,50,.3);
 }
 
 .name{
-    font-size:20px;
-    font-weight:bold;
+  font-size:20px;
+  font-weight:bold;
 }
 
 .handle{
-    color:#ff5270;
-    direction:ltr;
-    text-align:right;
-    margin-top:5px;
+  direction:ltr;
+
+  color:#ff5270;
+
+  margin-top:5px;
 }
 
 .bio{
-    color:#888;
-    margin-top:6px;
-    font-size:12px;
+  color:#888;
+
+  font-size:12px;
+
+  margin-top:7px;
 }
 
 .stats{
-    display:grid;
-    grid-template-columns:repeat(3,1fr);
-    gap:10px;
-    margin-top:15px;
+  display:grid;
+
+  grid-template-columns:
+    repeat(3,1fr);
+
+  gap:10px;
+
+  margin-top:12px;
 }
 
 .stat{
-    text-align:center;
-    padding:14px 5px;
-    border-radius:12px;
-    background:#0b070a;
-    border:1px solid #211018;
+  padding:15px 5px;
+
+  text-align:center;
+
+  border-radius:13px;
+
+  background:#080609;
+
+  border:
+    1px solid #211018;
 }
 
 .stat b{
-    display:block;
-    font-size:18px;
+  display:block;
+
+  font-size:19px;
 }
 
 .stat span{
-    color:#666;
-    font-size:10px;
+  color:#666;
+  font-size:10px;
 }
 
-.notice{
-    margin-top:15px;
-    text-align:center;
-    color:#666;
-    font-size:10px;
-    line-height:1.7;
+.actions{
+  display:grid;
+
+  grid-template-columns:
+    1fr 1fr;
+
+  gap:10px;
+
+  margin-top:12px;
 }
 
-@media(max-width:500px){
-    .logo{font-size:53px}
-    .search{flex-direction:column}
-    .search button{width:100%}
+.actions button{
+  margin:0;
+}
+
+.secondary{
+  background:#080609;
+
+  border:
+    1px solid #35101a;
+}
+
+.note{
+  margin-top:15px;
+
+  color:#666;
+
+  font-size:10px;
+
+  line-height:1.7;
+
+  text-align:center;
+}
+
+/* جوال */
+
+@media(max-width:520px){
+
+  .logo{
+    font-size:53px;
+  }
+
+  .search{
+    flex-direction:column;
+  }
+
+  .search button{
+    width:100%;
+  }
+
+  .eye{
+    top:18%;
+    transform:
+      translate(-50%,-50%)
+      scale(.78);
+  }
 }
 </style>
 </head>
 
 <body>
 
-<div class="bg">
-    <div class="fog fog1"></div>
-    <div class="fog fog2"></div>
+<!-- الخلفية -->
+<div class="fog fog1"></div>
+<div class="fog fog2"></div>
 
-    <div class="eye">
-        <div class="eyeShape"></div>
-        <div class="pupil"></div>
+<!-- العين -->
+<div class="eye" id="eye">
+
+  <div class="eyeSocket"></div>
+
+  <div class="eyeball">
+
+    <div class="iris" id="iris">
+
+      <div class="pupil"></div>
+
+      <div class="eyeLight"></div>
+
     </div>
 
-    <div class="particles" id="particles"></div>
+  </div>
+
 </div>
 
-<div class="flash" id="flash"></div>
 
 <!-- LOGIN -->
 
-<section class="screen" id="login">
+<section
+  class="screen"
+  id="login"
+>
 
-    <div class="box">
+  <div class="login">
 
-        <div class="logo">RwL</div>
-        <div class="sub">DARK ACCESS SYSTEM</div>
-
-        <div class="skull">☠</div>
-
-        <div class="title">فك الشفرة</div>
-
-        <div class="desc">
-            أدخل رمز الوصول المكوّن من أربعة أرقام
-        </div>
-
-        <input
-            id="pin"
-            class="pin"
-            type="password"
-            maxlength="4"
-            inputmode="numeric"
-            autocomplete="off"
-            placeholder="••••"
-        >
-
-        <button onclick="unlock()">
-            فتح النظام
-        </button>
-
-        <div class="error" id="error"></div>
-
+    <div class="logo">
+      RwL
     </div>
+
+    <div class="subtitle">
+      DARK WATCHER
+    </div>
+
+    <div class="title">
+      فك الشفرة
+    </div>
+
+    <div class="description">
+      النظام يراقب... أدخل رمز الوصول
+    </div>
+
+    <input
+      id="pin"
+      class="pin"
+      type="password"
+      maxlength="4"
+      inputmode="numeric"
+      placeholder="••••"
+    >
+
+    <button onclick="unlock()">
+      الدخول إلى RwL
+    </button>
+
+    <div
+      class="error"
+      id="error"
+    ></div>
+
+  </div>
 
 </section>
 
@@ -553,227 +776,379 @@ label{
 
 <section id="app">
 
-    <div class="container">
+  <div class="container">
 
-        <div class="header">
-            <div class="brand">RwL</div>
-            <div class="status">● SYSTEM ACTIVE</div>
-        </div>
+    <div class="header">
 
-        <div class="panel">
+      <div class="brand">
+        RwL
+      </div>
 
-            <label>أدخل اسم مستخدم TikTok</label>
-
-            <div class="search">
-
-                <input
-                    id="username"
-                    placeholder="@username"
-                    autocomplete="off"
-                >
-
-                <button onclick="searchUser()">
-                    فحص
-                </button>
-
-            </div>
-
-            <div class="info" id="info" style="display:none">
-
-                <div class="profile">
-
-                    <img
-                        id="avatar"
-                        class="avatar"
-                        alt=""
-                    >
-
-                    <div>
-
-                        <div
-                            class="name"
-                            id="name">
-                            —
-                        </div>
-
-                        <div
-                            class="handle"
-                            id="handle">
-                            —
-                        </div>
-
-                        <div
-                            class="bio"
-                            id="bio">
-                            —
-                        </div>
-
-                    </div>
-
-                </div>
-
-                <div class="stats">
-
-                    <div class="stat">
-                        <b id="followers">—</b>
-                        <span>المتابعون</span>
-                    </div>
-
-                    <div class="stat">
-                        <b id="following">—</b>
-                        <span>يتابع</span>
-                    </div>
-
-                    <div class="stat">
-                        <b id="likes">—</b>
-                        <span>الإعجابات</span>
-                    </div>
-
-                </div>
-
-                <div class="notice">
-                    هذه الواجهة مخصصة لعرض المعلومات العامة المتاحة
-                    عن الحساب فقط، ولا تتجاوز إعدادات الخصوصية أو حماية TikTok.
-                </div>
-
-            </div>
-
-        </div>
+      <div class="status">
+        ● WATCHER ONLINE
+      </div>
 
     </div>
+
+    <div class="panel">
+
+      <div class="label">
+        ابحث عن حساب TikTok
+      </div>
+
+      <div class="search">
+
+        <input
+          id="username"
+          placeholder="@username"
+          autocomplete="off"
+        >
+
+        <button onclick="searchUser()">
+          فحص
+        </button>
+
+      </div>
+
+      <div
+        class="loading"
+        id="loading"
+      >
+
+        <div class="loader"></div>
+
+        جاري فحص البيانات العامة...
+
+      </div>
+
+      <div
+        class="result"
+        id="result"
+      >
+
+        <div class="profile">
+
+          <div class="avatar">
+          </div>
+
+          <div>
+
+            <div
+              class="name"
+              id="name"
+            >
+              —
+            </div>
+
+            <div
+              class="handle"
+              id="handle"
+            >
+              —
+            </div>
+
+            <div
+              class="bio"
+              id="bio"
+            >
+              —
+            </div>
+
+          </div>
+
+        </div>
+
+        <div class="stats">
+
+          <div class="stat">
+            <b id="followers">—</b>
+            <span>المتابعون</span>
+          </div>
+
+          <div class="stat">
+            <b id="following">—</b>
+            <span>يتابع</span>
+          </div>
+
+          <div class="stat">
+            <b id="likes">—</b>
+            <span>الإعجابات</span>
+          </div>
+
+        </div>
+
+        <div class="actions">
+
+          <button onclick="openProfile()">
+            فتح الحساب
+          </button>
+
+          <button
+            class="secondary"
+            onclick="copyInfo()"
+          >
+            نسخ النتائج
+          </button>
+
+        </div>
+
+        <div class="note">
+          يعرض المعلومات العامة المتاحة فقط.
+          لا يحاول استخراج كلمات مرور أو رسائل
+          أو أرقام هاتف أو بريد أو موقع أو بيانات خاصة.
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
 
 </section>
 
 
 <script>
 
-/* جسيمات الرعب */
+/* =========================
+   الرمز
+========================= */
 
-const particles =
-document.getElementById("particles");
+const ACCESS =
+  ["7","4","9","2"].join("");
 
-for(let i=0;i<70;i++){
-
-    const p=document.createElement("span");
-
-    p.style.left=Math.random()*100+"%";
-    p.style.animationDuration=
-        (5+Math.random()*12)+"s";
-
-    p.style.animationDelay=
-        (-Math.random()*15)+"s";
-
-    p.style.opacity=
-        (.2+Math.random()*.8);
-
-    particles.appendChild(p);
-}
+let currentUser = "";
 
 
-/* فتح الواجهة */
+/* =========================
+   فك الشفرة
+========================= */
 
 function unlock(){
 
-    const pin =
-        document.getElementById("pin").value;
+  const pin =
+    document.getElementById("pin").value;
 
-    const error =
-        document.getElementById("error");
+  const error =
+    document.getElementById("error");
 
-    if(pin.length !== 4){
-        error.textContent="يجب إدخال 4 أرقام";
-        return;
+  if(pin === ACCESS){
+
+    document.getElementById("login")
+      .style.display = "none";
+
+    document.getElementById("app")
+      .style.display = "block";
+
+    if(navigator.vibrate){
+      navigator.vibrate(80);
     }
 
-    /*
-      ضع نظام التحقق الذي تريده هنا.
-      لا يوجد تجاوز للحماية.
-    */
+  }else{
 
-    if(pin === "5831"){
+    error.textContent =
+      "الشفرة خاطئة... العين تراقبك.";
 
-        document.getElementById("login").style.display="none";
-        document.getElementById("app").style.display="block";
+    document.getElementById("pin")
+      .value = "";
 
-        document.getElementById("flash")
-            .classList.add("active");
-
-        setTimeout(()=>{
-            document.getElementById("flash")
-                .classList.remove("active");
-        },300);
-
-    }else{
-
-        error.textContent="رمز خاطئ";
-
-        document.getElementById("pin").value="";
-
-        document.getElementById("flash")
-            .classList.add("active");
-
-        setTimeout(()=>{
-            document.getElementById("flash")
-                .classList.remove("active");
-        },300);
-
-        if(navigator.vibrate){
-            navigator.vibrate([100,60,100]);
-        }
-    }
-}
-
-
-/* فحص اليوزر */
-
-function searchUser(){
-
-    let username =
-        document.getElementById("username").value.trim();
-
-    username=username.replace(/^@/,"");
-
-    if(!username){
-        alert("اكتب اليوزر أولاً");
-        return;
+    if(navigator.vibrate){
+      navigator.vibrate(
+        [100,50,100]
+      );
     }
 
-    /*
-      هنا تعرض بيانات الحساب العامة
-      من مصدر رسمي/مصرح به.
-      لا يتم استخراج معلومات خاصة.
-    */
+  }
 
-    document.getElementById("info").style.display="block";
-
-    document.getElementById("name").textContent=
-        "الحساب: "+username;
-
-    document.getElementById("handle").textContent=
-        "@"+username;
-
-    document.getElementById("bio").textContent=
-        "المعلومات العامة ستظهر هنا عند ربط مصدر بيانات مصرح به.";
-
-    document.getElementById("followers").textContent="—";
-    document.getElementById("following").textContent="—";
-    document.getElementById("likes").textContent="—";
-
-    document.getElementById("avatar").src=
-        "https://placehold.co/150x150/080307/ff1744?text=RwL";
 }
 
 
 /* Enter */
 
-document.getElementById("pin")
-.addEventListener("keydown",function(e){
+document
+  .getElementById("pin")
+  .addEventListener(
+    "keydown",
+    function(e){
 
-    if(e.key==="Enter"){
+      if(e.key === "Enter"){
         unlock();
-    }
+      }
 
-});
+    }
+  );
+
+
+/* =========================
+   العين تتبعك
+========================= */
+
+function moveEye(x,y){
+
+  const dx =
+    (x / window.innerWidth - .5)
+    * 30;
+
+  const dy =
+    (y / window.innerHeight - .22)
+    * 20;
+
+  document
+    .getElementById("iris")
+    .style.transform =
+      `translate(
+        calc(-50% + ${dx}px),
+        calc(-50% + ${dy}px)
+      )`;
+
+}
+
+
+/* كمبيوتر */
+
+document.addEventListener(
+  "mousemove",
+  function(e){
+
+    moveEye(
+      e.clientX,
+      e.clientY
+    );
+
+  }
+);
+
+
+/* جوال */
+
+document.addEventListener(
+  "touchmove",
+  function(e){
+
+    if(!e.touches[0]) return;
+
+    moveEye(
+      e.touches[0].clientX,
+      e.touches[0].clientY
+    );
+
+  },
+  {passive:true}
+);
+
+
+/* =========================
+   البحث
+========================= */
+
+function searchUser(){
+
+  let username =
+    document
+      .getElementById("username")
+      .value
+      .trim()
+      .replace(/^@/,"");
+
+  if(!username){
+    alert("اكتب اليوزر أولاً");
+    return;
+  }
+
+  currentUser =
+    username;
+
+  document
+    .getElementById("result")
+    .style.display = "none";
+
+  document
+    .getElementById("loading")
+    .style.display = "block";
+
+
+  /*
+    هنا يمكن ربط مصدر بيانات رسمي
+    لعرض المعلومات العامة للحساب.
+  */
+
+  setTimeout(function(){
+
+    document
+      .getElementById("loading")
+      .style.display = "none";
+
+    document
+      .getElementById("result")
+      .style.display = "block";
+
+    document
+      .getElementById("name")
+      .textContent =
+        username;
+
+    document
+      .getElementById("handle")
+      .textContent =
+        "@" + username;
+
+    document
+      .getElementById("bio")
+      .textContent =
+        "المعلومات العامة ستظهر هنا عند ربط مصدر بيانات مصرح به.";
+
+    document
+      .getElementById("followers")
+      .textContent = "—";
+
+    document
+      .getElementById("following")
+      .textContent = "—";
+
+    document
+      .getElementById("likes")
+      .textContent = "—";
+
+  },250);
+
+}
+
+
+/* =========================
+   فتح الحساب
+========================= */
+
+function openProfile(){
+
+  if(!currentUser)
+    return;
+
+  window.open(
+    "https://www.tiktok.com/@" +
+    encodeURIComponent(currentUser),
+    "_blank"
+  );
+
+}
+
+
+/* =========================
+   نسخ النتائج
+========================= */
+
+function copyInfo(){
+
+  const text =
+`RwL
+اليوزر: @${currentUser}
+الاسم: ${document.getElementById("name").textContent}
+المتابعون: ${document.getElementById("followers").textContent}
+يتابع: ${document.getElementById("following").textContent}
+الإعجابات: ${document.getElementById("likes").textContent}`;
+
+  navigator.clipboard
+    ?.writeText(text);
+
+}
 
 </script>
 
