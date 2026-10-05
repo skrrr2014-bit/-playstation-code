@@ -1,274 +1,588 @@
-using UnityEngine;
-using UnityEngine.EventSystems;
-using UnityEngine.UI;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>محلل المعلومات العامة</title>
 
-public class MobileGameController : MonoBehaviour
-{
-    [Header("الشخصية")]
-    public CharacterController player;
-    public Transform husband;
+<style>
+*{box-sizing:border-box}
 
-    [Header("الكاميرا")]
-    public Camera gameCamera;
-    public Transform cameraTarget;
-
-    [Header("الحركة")]
-    public float moveSpeed = 2.5f;
-    public float rotationSpeed = 8f;
-
-    [Header("الزوج")]
-    public float husbandSpeed = 1.8f;
-    public float followDistance = 2.5f;
-
-    [Header("واجهة الجوال")]
-    public Joystick movementJoystick;
-    public Text messageText;
-
-    [Header("الكاميرا اللمسية")]
-    public float cameraSensitivity = 0.15f;
-
-    private float yaw = 0f;
-    private float pitch = 10f;
-    private Vector2 lastTouch;
-    private bool rotatingCamera;
-
-    void Start()
-    {
-        if (messageText != null)
-            messageText.text = "";
-
-        yaw = cameraTarget.eulerAngles.y;
-    }
-
-    void Update()
-    {
-        MovePlayer();
-        MoveHusband();
-        TouchCamera();
-        UpdateCamera();
-    }
-
-    // =========================
-    // حركة الشخصية بالجويستك
-    // =========================
-
-    void MovePlayer()
-    {
-        if (movementJoystick == null)
-            return;
-
-        float horizontal = movementJoystick.Horizontal;
-        float vertical = movementJoystick.Vertical;
-
-        Vector3 forward = gameCamera.transform.forward;
-        Vector3 right = gameCamera.transform.right;
-
-        forward.y = 0;
-        right.y = 0;
-
-        forward.Normalize();
-        right.Normalize();
-
-        Vector3 movement =
-            forward * vertical +
-            right * horizontal;
-
-        if (movement.magnitude > 1f)
-            movement.Normalize();
-
-        player.SimpleMove(
-            movement * moveSpeed
-        );
-
-        if (movement.magnitude > 0.1f)
-        {
-            Quaternion targetRotation =
-                Quaternion.LookRotation(movement);
-
-            player.transform.rotation =
-                Quaternion.Slerp(
-                    player.transform.rotation,
-                    targetRotation,
-                    rotationSpeed * Time.deltaTime
-                );
-        }
-    }
-
-    // =========================
-    // الزوج
-    // =========================
-
-    void MoveHusband()
-    {
-        if (husband == null)
-            return;
-
-        Vector3 direction =
-            player.transform.position -
-            husband.position;
-
-        direction.y = 0;
-
-        float distance =
-            direction.magnitude;
-
-        if (distance > followDistance)
-        {
-            Vector3 movement =
-                direction.normalized *
-                husbandSpeed *
-                Time.deltaTime;
-
-            husband.position += movement;
-
-            if (movement.sqrMagnitude > 0.001f)
-            {
-                Quaternion targetRotation =
-                    Quaternion.LookRotation(movement);
-
-                husband.rotation =
-                    Quaternion.Slerp(
-                        husband.rotation,
-                        targetRotation,
-                        8f * Time.deltaTime
-                    );
-            }
-        }
-    }
-
-    // =========================
-    // تحريك الكاميرا بالإصبع
-    // =========================
-
-    void TouchCamera()
-    {
-        if (Input.touchCount == 0)
-            return;
-
-        Touch touch = Input.GetTouch(0);
-
-        // لا تحرك الكاميرا إذا كان الإصبع على زر/جويستك
-        if (EventSystem.current != null &&
-            EventSystem.current.IsPointerOverGameObject(touch.fingerId))
-        {
-            return;
-        }
-
-        if (touch.phase == TouchPhase.Began)
-        {
-            lastTouch = touch.position;
-            rotatingCamera = true;
-        }
-
-        if (touch.phase == TouchPhase.Moved &&
-            rotatingCamera)
-        {
-            Vector2 delta =
-                touch.position - lastTouch;
-
-            yaw += delta.x * cameraSensitivity;
-            pitch -= delta.y * cameraSensitivity;
-
-            pitch = Mathf.Clamp(
-                pitch,
-                -10f,
-                45f
-            );
-
-            lastTouch = touch.position;
-        }
-
-        if (touch.phase == TouchPhase.Ended ||
-            touch.phase == TouchPhase.Canceled)
-        {
-            rotatingCamera = false;
-        }
-    }
-
-    // =========================
-    // الكاميرا
-    // =========================
-
-    void UpdateCamera()
-    {
-        if (gameCamera == null ||
-            cameraTarget == null)
-            return;
-
-        Quaternion rotation =
-            Quaternion.Euler(
-                pitch,
-                yaw,
-                0
-            );
-
-        Vector3 offset =
-            rotation *
-            new Vector3(
-                0f,
-                1.6f,
-                -4f
-            );
-
-        Vector3 wantedPosition =
-            cameraTarget.position +
-            offset;
-
-        gameCamera.transform.position =
-            Vector3.Lerp(
-                gameCamera.transform.position,
-                wantedPosition,
-                12f * Time.deltaTime
-            );
-
-        gameCamera.transform.LookAt(
-            cameraTarget.position +
-            Vector3.up * 1.1f
-        );
-    }
-
-    // =========================
-    // الأزرار
-    // =========================
-
-    public void Talk()
-    {
-        ShowMessage("💬 تحدثتما معًا.");
-    }
-
-    public void Hug()
-    {
-        ShowMessage("🤗 عناق لطيف.");
-    }
-
-    public void Dance()
-    {
-        ShowMessage("💃 رقصتما معًا.");
-    }
-
-    public void Sit()
-    {
-        ShowMessage("🛋️ جلستما معًا.");
-    }
-
-    void ShowMessage(string text)
-    {
-        if (messageText == null)
-            return;
-
-        messageText.text = text;
-
-        CancelInvoke(nameof(ClearMessage));
-
-        Invoke(
-            nameof(ClearMessage),
-            2f
-        );
-    }
-
-    void ClearMessage()
-    {
-        if (messageText != null)
-            messageText.text = "";
-    }
+body{
+    margin:0;
+    background:#080b12;
+    color:#fff;
+    font-family:Arial,sans-serif;
+    padding:20px;
 }
+
+.container{
+    max-width:800px;
+    margin:auto;
+}
+
+.box{
+    background:#111724;
+    border:1px solid #293449;
+    border-radius:24px;
+    padding:20px;
+}
+
+h1{
+    margin-top:0;
+}
+
+.description{
+    color:#aeb8c8;
+    line-height:1.7;
+}
+
+.search{
+    display:flex;
+    gap:10px;
+    margin:20px 0;
+}
+
+input{
+    flex:1;
+    padding:16px;
+    border:0;
+    border-radius:14px;
+    font-size:16px;
+    outline:none;
+}
+
+button{
+    border:0;
+    border-radius:14px;
+    padding:0 20px;
+    font-weight:bold;
+    cursor:pointer;
+}
+
+#search{
+    background:white;
+    color:#111;
+}
+
+.filters{
+    display:flex;
+    gap:8px;
+    overflow:auto;
+    margin-bottom:15px;
+}
+
+.filter{
+    background:#1b2535;
+    color:white;
+    padding:10px 14px;
+    white-space:nowrap;
+}
+
+.filter.active{
+    background:white;
+    color:#111;
+}
+
+#status{
+    color:#aeb8c8;
+    margin:15px 0;
+}
+
+.profile{
+    background:#182131;
+    border:1px solid #2b3850;
+    border-radius:18px;
+    padding:17px;
+    margin-bottom:12px;
+}
+
+.profile h2{
+    margin-top:0;
+}
+
+.tags{
+    display:flex;
+    flex-wrap:wrap;
+    gap:7px;
+}
+
+.tag{
+    background:#263348;
+    padding:7px 10px;
+    border-radius:20px;
+    font-size:12px;
+}
+
+.results{
+    display:grid;
+    gap:10px;
+}
+
+.card{
+    background:#182131;
+    border:1px solid #29364b;
+    border-radius:17px;
+    padding:16px;
+}
+
+.card h3{
+    margin:0 0 8px;
+}
+
+.card p{
+    color:#aeb8c8;
+    line-height:1.7;
+    font-size:14px;
+}
+
+.card a{
+    color:#7edcff;
+    text-decoration:none;
+    font-weight:bold;
+}
+
+.empty{
+    text-align:center;
+    color:#909bad;
+    padding:25px;
+}
+
+.note{
+    margin-top:20px;
+    color:#8995a8;
+    font-size:12px;
+    line-height:1.8;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<div class="box">
+
+<h1>🔎 محلل المعلومات العامة</h1>
+
+<div class="description">
+اكتب اسم الشخص للحصول على لوحة منظمة للبحث عن المعلومات المنشورة للعامة.
+</div>
+
+<div class="search">
+
+<input
+id="name"
+type="text"
+placeholder="اكتب اسم الشخص..."
+autocomplete="off"
+>
+
+<button id="search">
+بحث
+</button>
+
+</div>
+
+<div class="filters">
+
+<button class="filter active" data-filter="all">
+الكل
+</button>
+
+<button class="filter" data-filter="profile">
+النبذة
+</button>
+
+<button class="filter" data-filter="social">
+الحسابات العامة
+</button>
+
+<button class="filter" data-filter="news">
+الأخبار
+</button>
+
+<button class="filter" data-filter="work">
+الأعمال
+</button>
+
+</div>
+
+<div id="status"></div>
+
+<div id="profile" class="profile" style="display:none"></div>
+
+<div id="results" class="results">
+
+<div class="empty">
+اكتب اسمًا ثم اضغط بحث.
+</div>
+
+</div>
+
+<div class="note">
+الأداة تعتمد على المعلومات والمصادر المنشورة للعامة فقط.
+لا تجمع كلمات مرور أو أرقامًا خاصة أو عناوين أو مواقع أو بيانات مسرّبة.
+كما أن تشابه الأسماء قد يؤدي إلى نتائج تخص أشخاصًا مختلفين.
+</div>
+
+</div>
+
+</div>
+
+<script>
+
+const nameInput =
+document.getElementById("name");
+
+const searchButton =
+document.getElementById("search");
+
+const status =
+document.getElementById("status");
+
+const profile =
+document.getElementById("profile");
+
+const results =
+document.getElementById("results");
+
+let currentFilter = "all";
+
+let data = [];
+
+
+/* إنشاء رابط بحث */
+
+function encode(text){
+
+    return encodeURIComponent(text);
+
+}
+
+
+/* إنشاء البيانات */
+
+function createData(name){
+
+    return [
+
+        {
+            type:"profile",
+            title:"🔎 بحث شامل",
+            text:"البحث عن الاسم في صفحات الويب العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode('"' + name + '"')
+        },
+
+        {
+            type:"profile",
+            title:"📚 المراجع",
+            text:"البحث عن صفحات ومراجع عامة مرتبطة بالاسم.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:wikipedia.org "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"social",
+            title:"🎵 TikTok",
+            text:"البحث عن صفحات TikTok العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:tiktok.com "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"social",
+            title:"📷 Instagram",
+            text:"البحث عن صفحات Instagram العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:instagram.com "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"social",
+            title:"𝕏 X / Twitter",
+            text:"البحث عن صفحات X العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:x.com "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"social",
+            title:"💼 LinkedIn",
+            text:"البحث عن الملفات المهنية العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:linkedin.com/in "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"social",
+            title:"💬 Reddit",
+            text:"البحث عن الصفحات والمنشورات العامة.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                'site:reddit.com "' +
+                name +
+                '"'
+            )
+        },
+
+        {
+            type:"news",
+            title:"📰 الأخبار",
+            text:"البحث عن الأخبار والمقالات المرتبطة بالاسم.",
+            url:
+            "https://news.google.com/search?q="
+            + encode(name)
+        },
+
+        {
+            type:"work",
+            title:"🎥 YouTube",
+            text:"البحث عن المقابلات والفيديوهات العامة.",
+            url:
+            "https://www.youtube.com/results?search_query="
+            + encode(name)
+        },
+
+        {
+            type:"work",
+            title:"💻 الأعمال والمشاريع",
+            text:"البحث عن المشاريع والأعمال والمواقع العامة المرتبطة بالاسم.",
+            url:
+            "https://www.google.com/search?q="
+            + encode(
+                '"' +
+                name +
+                '" project OR portfolio OR work'
+            )
+        }
+
+    ];
+
+}
+
+
+/* عرض النتائج */
+
+function render(){
+
+    results.innerHTML = "";
+
+    const filtered =
+        data.filter(item => {
+
+            return currentFilter === "all"
+                || item.type === currentFilter;
+
+        });
+
+
+    if(filtered.length === 0){
+
+        results.innerHTML =
+        '<div class="empty">لا توجد نتائج.</div>';
+
+        return;
+
+    }
+
+
+    filtered.forEach(item => {
+
+        const card =
+        document.createElement("div");
+
+        card.className = "card";
+
+        card.innerHTML = `
+
+            <h3>${item.title}</h3>
+
+            <p>
+                ${item.text}
+            </p>
+
+            <a
+                href="${item.url}"
+                target="_blank"
+                rel="noopener noreferrer"
+            >
+                فتح المصدر ↗
+            </a>
+
+        `;
+
+        results.appendChild(card);
+
+    });
+
+}
+
+
+/* البحث */
+
+function searchPerson(){
+
+    const name =
+        nameInput.value.trim();
+
+
+    if(!name){
+
+        status.textContent =
+        "⚠️ اكتب اسم الشخص أولًا.";
+
+        return;
+
+    }
+
+
+    data =
+    createData(name);
+
+    currentFilter =
+    "all";
+
+
+    document
+    .querySelectorAll(".filter")
+    .forEach(button => {
+
+        button.classList.toggle(
+            "active",
+            button.dataset.filter === "all"
+        );
+
+    });
+
+
+    profile.style.display =
+    "block";
+
+
+    profile.innerHTML = `
+
+        <h2>👤 ${name}</h2>
+
+        <div class="tags">
+
+            <span class="tag">
+                معلومات عامة
+            </span>
+
+            <span class="tag">
+                حسابات عامة
+            </span>
+
+            <span class="tag">
+                أخبار
+            </span>
+
+            <span class="tag">
+                أعمال
+            </span>
+
+        </div>
+
+    `;
+
+
+    status.textContent =
+    "✅ تم تجهيز نتائج البحث العامة عن: "
+    + name;
+
+
+    render();
+
+}
+
+
+/* زر البحث */
+
+searchButton.addEventListener(
+    "click",
+    searchPerson
+);
+
+
+/* زر Enter */
+
+nameInput.addEventListener(
+    "keydown",
+    function(event){
+
+        if(event.key === "Enter"){
+
+            searchPerson();
+
+        }
+
+    }
+);
+
+
+/* الفلاتر */
+
+document
+.querySelectorAll(".filter")
+.forEach(button => {
+
+    button.addEventListener(
+        "click",
+        function(){
+
+            currentFilter =
+            this.dataset.filter;
+
+
+            document
+            .querySelectorAll(".filter")
+            .forEach(btn => {
+
+                btn.classList.toggle(
+                    "active",
+                    btn === this
+                );
+
+            });
+
+
+            render();
+
+        }
+    );
+
+});
+
+</script>
+
+</body>
+</html>
