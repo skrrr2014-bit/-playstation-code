@@ -2,903 +2,464 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>RwL — Dark Watcher</title>
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>UNKNOWN AI</title>
 
 <style>
 *{
   box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+  margin:0;
+  padding:0;
 }
 
 html,body{
-  margin:0;
-  min-height:100%;
-  background:#000;
-  color:#fff;
-  font-family:Arial,Tahoma,sans-serif;
-}
-
-body{
+  width:100%;
+  height:100%;
   overflow:hidden;
+  background:#020202;
+  color:#eee;
+  font-family:Arial,sans-serif;
 }
 
-/* الخلفية */
 body{
-  background:
-    radial-gradient(
-      ellipse at center,
-      #280006 0%,
-      #090103 28%,
-      #010001 65%,
-      #000 100%
-    );
+  position:relative;
 }
 
-body:before{
+/* ===== الخلفية ===== */
+
+body::before{
   content:"";
   position:fixed;
-  inset:0;
-  pointer-events:none;
-  z-index:1;
-
+  inset:-50%;
   background:
+    radial-gradient(circle at 20% 30%,rgba(100,0,0,.12),transparent 20%),
+    radial-gradient(circle at 80% 70%,rgba(70,0,0,.12),transparent 25%),
     repeating-linear-gradient(
       0deg,
-      transparent 0 4px,
-      rgba(255,0,40,.025) 5px
+      rgba(255,255,255,.018) 0px,
+      rgba(255,255,255,.018) 1px,
+      transparent 1px,
+      transparent 4px
     );
-
-  animation:scan 5s linear infinite;
-}
-
-@keyframes scan{
-  from{transform:translateY(-30px)}
-  to{transform:translateY(30px)}
-}
-
-/* الضباب */
-.fog{
-  position:fixed;
-  width:70vw;
-  height:70vw;
-  border-radius:50%;
-  filter:blur(100px);
-  background:#8b001c;
-  opacity:.14;
+  animation:backgroundMove 14s linear infinite;
   pointer-events:none;
-  z-index:0;
-  animation:fog 9s ease-in-out infinite alternate;
 }
 
-.fog1{
-  top:-30%;
-  left:-25%;
+@keyframes backgroundMove{
+  from{transform:translate(0,0)}
+  50%{transform:translate(30px,-20px)}
+  to{transform:translate(0,0)}
 }
 
-.fog2{
-  bottom:-35%;
-  right:-25%;
-  animation-delay:-4s;
+/* تشويش */
+
+.noise{
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  opacity:.08;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
+  animation:noise .2s steps(2) infinite;
 }
 
-@keyframes fog{
-  from{
-    transform:translate(0,0) scale(1);
-  }
-
-  to{
-    transform:translate(100px,-70px) scale(1.4);
-  }
+@keyframes noise{
+  0%{transform:translate(0,0)}
+  25%{transform:translate(2px,-1px)}
+  50%{transform:translate(-1px,2px)}
+  75%{transform:translate(1px,1px)}
+  100%{transform:translate(0,0)}
 }
 
-/* =========================
-   العين
-========================= */
+/* ===== شاشة الدخول ===== */
+
+#login{
+  position:fixed;
+  inset:0;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  padding:20px;
+  z-index:20;
+  background:
+    radial-gradient(circle,rgba(80,0,0,.13),transparent 45%),
+    #020202;
+}
+
+.loginBox{
+  width:min(390px,100%);
+  padding:35px 25px;
+  text-align:center;
+  background:rgba(8,8,8,.88);
+  border:1px solid #292929;
+  border-radius:20px;
+  box-shadow:
+    0 0 80px rgba(0,0,0,.9),
+    inset 0 0 40px rgba(255,255,255,.015);
+  backdrop-filter:blur(15px);
+}
 
 .eye{
-  position:fixed;
-  z-index:3;
-  left:50%;
-  top:22%;
-  width:330px;
-  max-width:80vw;
-  height:170px;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-}
-
-/*
-  طبقة العين الواقعية بصرياً:
-  يمكن استبدال الخلفية بصورة عين حقيقية
-  إذا أردت استخدام صورة تملك حقوقها.
-*/
-
-.eyeSocket{
-  position:absolute;
-  inset:0;
-
-  border-radius:
-    52% 48% 50% 50% /
-    55% 55% 45% 45%;
-
-  background:
-    radial-gradient(
-      ellipse at center,
-      rgba(130,0,15,.35),
-      rgba(0,0,0,.9) 65%,
-      #000 100%
-    );
-
-  box-shadow:
-    0 0 35px rgba(255,0,40,.15),
-    inset 0 0 50px #000;
-}
-
-.eyeball{
-  position:absolute;
-  left:50%;
-  top:50%;
-  width:250px;
-  height:115px;
-
-  transform:
-    translate(-50%,-50%);
-
-  border-radius:
-    50%;
-
-  background:
-    radial-gradient(
-      circle at 50% 50%,
-      #050505 0 9%,
-      #3b0208 10% 17%,
-      #870015 18% 29%,
-      #250007 30% 45%,
-      #090909 46% 100%
-    );
-
-  box-shadow:
-    0 0 25px rgba(255,0,40,.18),
-    inset 0 0 30px #000;
-}
-
-.iris{
-  position:absolute;
-  left:50%;
-  top:50%;
-
-  width:76px;
-  height:76px;
-
-  transform:
-    translate(-50%,-50%);
-
+  width:75px;
+  height:75px;
+  margin:0 auto 20px;
+  border:1px solid #333;
   border-radius:50%;
-
-  background:
-    radial-gradient(
-      circle,
-      #000 0 20%,
-      #ff173f 21% 31%,
-      #58000c 32% 55%,
-      #160004 56% 100%
-    );
-
-  box-shadow:
-    0 0 18px #ff1744,
-    0 0 55px rgba(255,0,40,.55);
-
-  transition:
-    transform .12s ease-out;
-}
-
-.pupil{
-  position:absolute;
-  left:50%;
-  top:50%;
-
-  width:25px;
-  height:50px;
-
-  transform:
-    translate(-50%,-50%);
-
-  border-radius:50%;
-
-  background:#000;
-
-  box-shadow:
-    0 0 12px #000,
-    0 0 30px rgba(255,0,0,.5);
-}
-
-.eyeLight{
-  position:absolute;
-  width:10px;
-  height:14px;
-
-  left:30%;
-  top:25%;
-
-  border-radius:50%;
-
-  background:#fff;
-
-  box-shadow:
-    0 0 12px #fff;
-
-  opacity:.8;
-}
-
-/* =========================
-   LOGIN
-========================= */
-
-.screen{
-  position:relative;
-  z-index:5;
-
-  min-height:100vh;
-
   display:flex;
-  justify-content:center;
   align-items:center;
-
-  padding:20px;
+  justify-content:center;
+  font-size:30px;
+  box-shadow:0 0 35px rgba(150,0,0,.15);
+  animation:pulse 3s infinite;
 }
 
-.login{
-  width:min(420px,100%);
-
-  padding:32px 24px;
-
-  text-align:center;
-
-  border-radius:24px;
-
-  background:
-    rgba(2,1,3,.84);
-
-  border:
-    1px solid rgba(255,20,60,.3);
-
-  backdrop-filter:blur(18px);
-
-  box-shadow:
-    0 0 50px rgba(255,0,40,.12),
-    inset 0 0 40px rgba(255,0,40,.025);
-}
-
-.logo{
-  font-size:64px;
-  font-weight:900;
-
-  letter-spacing:10px;
-
-  text-shadow:
-    0 0 8px #fff,
-    0 0 25px #ff1744,
-    0 0 65px #ff003c;
-
-  animation:glitch 4s infinite;
-}
-
-@keyframes glitch{
-
-  0%,91%,100%{
-    transform:none;
-  }
-
-  92%{
-    transform:
-      translateX(-7px)
-      skewX(8deg);
-  }
-
-  93%{
-    transform:
-      translateX(7px);
-  }
-
-  94%{
-    transform:none;
+@keyframes pulse{
+  50%{
+    box-shadow:0 0 60px rgba(150,0,0,.25);
   }
 }
 
-.subtitle{
-  color:#666;
-  font-size:10px;
-  letter-spacing:5px;
-}
-
-.title{
-  margin-top:25px;
+.loginBox h1{
   font-size:24px;
-  font-weight:bold;
+  letter-spacing:4px;
+  margin-bottom:8px;
 }
 
-.description{
-  margin:8px 0 22px;
-  color:#777;
+.loginBox p{
+  color:#666;
   font-size:12px;
+  margin-bottom:25px;
 }
 
-.pin{
+.code{
   width:100%;
-  height:58px;
-
-  border:
-    1px solid #3b101c;
-
-  border-radius:14px;
-
-  background:#020102;
-  color:#fff;
-
+  height:52px;
+  border:1px solid #292929;
   outline:none;
-
+  border-radius:12px;
+  background:#050505;
+  color:#fff;
   text-align:center;
-
-  font-size:27px;
-
-  letter-spacing:15px;
-
-  direction:ltr;
+  font-size:22px;
+  letter-spacing:10px;
 }
 
-.pin:focus{
-  border-color:#ff1744;
-
-  box-shadow:
-    0 0 20px rgba(255,0,50,.2);
+.code:focus{
+  border-color:#555;
 }
 
-button{
+.unlock{
   width:100%;
-  height:55px;
-
-  margin-top:14px;
-
+  height:50px;
+  margin-top:12px;
   border:0;
-  border-radius:14px;
-
-  background:
-    linear-gradient(
-      135deg,
-      #ff1744,
-      #62000f
-    );
-
-  color:white;
-
-  font-size:16px;
+  border-radius:12px;
+  background:#eee;
+  color:#050505;
   font-weight:bold;
-
-  box-shadow:
-    0 0 25px rgba(255,0,50,.2);
-
   cursor:pointer;
-}
-
-button:active{
-  transform:scale(.97);
 }
 
 .error{
   height:20px;
-
-  margin-top:10px;
-
-  color:#ff5270;
-
+  margin-top:12px;
+  color:#777;
   font-size:12px;
 }
 
-/* =========================
-   APP
-========================= */
+/* ===== التطبيق ===== */
 
 #app{
   display:none;
-
+  height:100vh;
   position:relative;
-  z-index:5;
-
-  min-height:100vh;
-
-  padding:20px;
-
-  overflow:auto;
 }
 
-.container{
-  width:min(850px,100%);
-  margin:auto;
-}
-
-.header{
+header{
+  height:72px;
   display:flex;
-
-  justify-content:space-between;
   align-items:center;
-
-  margin-bottom:18px;
+  justify-content:space-between;
+  padding:0 18px;
+  border-bottom:1px solid #1b1b1b;
+  background:rgba(3,3,3,.86);
+  backdrop-filter:blur(15px);
 }
 
-.brand{
-  font-size:32px;
-  font-weight:900;
-
-  letter-spacing:5px;
-
-  text-shadow:
-    0 0 25px #ff1744;
+.logo{
+  font-size:18px;
+  font-weight:bold;
+  letter-spacing:3px;
 }
 
 .status{
-  color:#ff5270;
-
-  font-size:10px;
-
-  padding:8px 12px;
-
-  border:
-    1px solid #35101a;
-
-  border-radius:30px;
-
-  background:#070307;
+  font-size:11px;
+  color:#666;
 }
 
-.panel{
-  padding:22px;
-
-  border-radius:22px;
-
-  background:
-    rgba(3,2,4,.88);
-
-  border:
-    1px solid rgba(255,20,60,.2);
-
-  backdrop-filter:blur(18px);
-}
-
-.label{
-  color:#888;
-  font-size:12px;
-}
-
-.search{
-  display:flex;
-  gap:10px;
-
-  margin-top:9px;
-}
-
-.search input{
-  flex:1;
-
-  height:54px;
-
-  border:
-    1px solid #35101a;
-
-  border-radius:13px;
-
-  background:#020102;
-
-  color:#fff;
-
-  outline:none;
-
-  padding:0 15px;
-
-  font-size:16px;
-
-  direction:ltr;
-
-  letter-spacing:0;
-}
-
-.search button{
-  width:110px;
-  margin:0;
-}
-
-.loading{
-  display:none;
-
-  text-align:center;
-
-  color:#ff5270;
-
-  padding:28px;
-}
-
-.loader{
-  width:34px;
-  height:34px;
-
-  margin:
-    auto
-    auto
-    10px;
-
-  border:
-    3px solid #320914;
-
-  border-top-color:#ff1744;
-
+.status span{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  margin-left:5px;
   border-radius:50%;
-
-  animation:
-    spin .7s linear infinite;
+  background:#aaa;
+  box-shadow:0 0 10px #aaa;
 }
 
-@keyframes spin{
+/* ===== المحادثة ===== */
+
+.chat{
+  height:calc(100vh - 142px);
+  overflow-y:auto;
+  padding:22px 14px 30px;
+}
+
+.chat::-webkit-scrollbar{
+  width:3px;
+}
+
+.chat::-webkit-scrollbar-thumb{
+  background:#333;
+}
+
+.message{
+  max-width:88%;
+  margin-bottom:15px;
+  padding:14px 16px;
+  border-radius:16px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+  animation:appear .3s ease;
+}
+
+@keyframes appear{
+  from{
+    opacity:0;
+    transform:translateY(8px);
+  }
   to{
-    transform:rotate(360deg);
+    opacity:1;
+    transform:translateY(0);
   }
 }
 
-.result{
-  display:none;
-  margin-top:20px;
+.user{
+  margin-right:auto;
+  background:#1b1b1b;
+  border:1px solid #292929;
 }
 
-.profile{
+.ai{
+  margin-left:auto;
+  background:#080808;
+  border:1px solid #202020;
+  box-shadow:0 5px 30px rgba(0,0,0,.4);
+}
+
+/* ===== الكتابة ===== */
+
+.bottom{
+  position:fixed;
+  bottom:0;
+  left:0;
+  right:0;
+  height:70px;
+  padding:8px 12px;
+  background:linear-gradient(transparent,#020202 35%);
+}
+
+.inputBox{
+  max-width:850px;
+  height:54px;
+  margin:auto;
   display:flex;
-
-  align-items:center;
-
-  gap:15px;
-
-  padding:18px;
-
-  border-radius:18px;
-
-  background:#080609;
-
-  border:
-    1px solid #211018;
+  gap:8px;
+  padding:5px;
+  border:1px solid #252525;
+  border-radius:17px;
+  background:#090909;
 }
 
-.avatar{
-  width:75px;
-  height:75px;
-
-  border-radius:50%;
-
-  object-fit:cover;
-
-  background:#100307;
-
-  border:
-    2px solid #ff1744;
-
-  box-shadow:
-    0 0 20px rgba(255,0,50,.3);
+textarea{
+  flex:1;
+  resize:none;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:white;
+  padding:11px;
+  font-size:15px;
+  font-family:Arial;
 }
 
-.name{
-  font-size:20px;
-  font-weight:bold;
-}
-
-.handle{
-  direction:ltr;
-
-  color:#ff5270;
-
-  margin-top:5px;
-}
-
-.bio{
-  color:#888;
-
-  font-size:12px;
-
-  margin-top:7px;
-}
-
-.stats{
-  display:grid;
-
-  grid-template-columns:
-    repeat(3,1fr);
-
-  gap:10px;
-
-  margin-top:12px;
-}
-
-.stat{
-  padding:15px 5px;
-
-  text-align:center;
-
+.send{
+  width:44px;
+  border:0;
   border-radius:13px;
-
-  background:#080609;
-
-  border:
-    1px solid #211018;
+  background:#eee;
+  color:#050505;
+  font-size:20px;
+  cursor:pointer;
 }
 
-.stat b{
-  display:block;
-
-  font-size:19px;
-}
-
-.stat span{
-  color:#666;
-  font-size:10px;
-}
+/* ===== أزرار ===== */
 
 .actions{
-  display:grid;
-
-  grid-template-columns:
-    1fr 1fr;
-
-  gap:10px;
-
-  margin-top:12px;
+  position:fixed;
+  top:82px;
+  left:15px;
+  display:flex;
+  gap:6px;
 }
 
-.actions button{
-  margin:0;
-}
-
-.secondary{
-  background:#080609;
-
-  border:
-    1px solid #35101a;
-}
-
-.note{
-  margin-top:15px;
-
-  color:#666;
-
+.action{
+  background:#090909;
+  border:1px solid #222;
+  color:#777;
+  border-radius:8px;
+  padding:7px 10px;
   font-size:10px;
-
-  line-height:1.7;
-
-  text-align:center;
 }
 
-/* جوال */
+/* ===== الكتابة ===== */
 
-@media(max-width:520px){
+.typing{
+  display:flex;
+  gap:5px;
+}
 
-  .logo{
-    font-size:53px;
-  }
+.dot{
+  width:5px;
+  height:5px;
+  border-radius:50%;
+  background:#777;
+  animation:typing 1s infinite;
+}
 
-  .search{
-    flex-direction:column;
-  }
+.dot:nth-child(2){animation-delay:.15s}
+.dot:nth-child(3){animation-delay:.3s}
 
-  .search button{
-    width:100%;
-  }
+@keyframes typing{
+  50%{transform:translateY(-5px);opacity:.3}
+}
 
-  .eye{
-    top:18%;
-    transform:
-      translate(-50%,-50%)
-      scale(.78);
-  }
+/* ===== وميض الشاشة ===== */
+
+.flash{
+  position:fixed;
+  inset:0;
+  background:#fff;
+  opacity:0;
+  pointer-events:none;
+  z-index:50;
+}
+
+.glitch{
+  animation:glitch .18s linear;
+}
+
+@keyframes glitch{
+  0%{transform:translate(0)}
+  30%{transform:translate(3px,-2px)}
+  60%{transform:translate(-2px,2px)}
+  100%{transform:translate(0)}
 }
 </style>
 </head>
 
 <body>
 
-<!-- الخلفية -->
-<div class="fog fog1"></div>
-<div class="fog fog2"></div>
+<div class="noise"></div>
+<div class="flash" id="flash"></div>
 
-<!-- العين -->
-<div class="eye" id="eye">
+<!-- ===== شاشة الدخول ===== -->
 
-  <div class="eyeSocket"></div>
+<section id="login">
 
-  <div class="eyeball">
+  <div class="loginBox">
 
-    <div class="iris" id="iris">
+    <div class="eye">◉</div>
 
-      <div class="pupil"></div>
+    <h1>UNKNOWN AI</h1>
 
-      <div class="eyeLight"></div>
-
-    </div>
-
-  </div>
-
-</div>
-
-
-<!-- LOGIN -->
-
-<section
-  class="screen"
-  id="login"
->
-
-  <div class="login">
-
-    <div class="logo">
-      RwL
-    </div>
-
-    <div class="subtitle">
-      DARK WATCHER
-    </div>
-
-    <div class="title">
-      فك الشفرة
-    </div>
-
-    <div class="description">
-      النظام يراقب... أدخل رمز الوصول
-    </div>
+    <p>النظام مقفل — أدخل رمز الوصول</p>
 
     <input
-      id="pin"
-      class="pin"
+      id="code"
+      class="code"
       type="password"
-      maxlength="4"
       inputmode="numeric"
+      maxlength="4"
       placeholder="••••"
     >
 
-    <button onclick="unlock()">
-      الدخول إلى RwL
+    <button class="unlock" onclick="unlock()">
+      فك الشفرة
     </button>
 
-    <div
-      class="error"
-      id="error"
-    ></div>
+    <div id="error" class="error"></div>
 
   </div>
 
 </section>
 
 
-<!-- APP -->
+<!-- ===== التطبيق ===== -->
 
 <section id="app">
 
-  <div class="container">
+  <header>
 
-    <div class="header">
-
-      <div class="brand">
-        RwL
-      </div>
-
-      <div class="status">
-        ● WATCHER ONLINE
-      </div>
-
+    <div class="logo">
+      UNKNOWN AI
     </div>
 
-    <div class="panel">
+    <div class="status">
+      <span></span>
+      ONLINE
+    </div>
 
-      <div class="label">
-        ابحث عن حساب TikTok
-      </div>
+  </header>
 
-      <div class="search">
+  <div class="actions">
 
-        <input
-          id="username"
-          placeholder="@username"
-          autocomplete="off"
-        >
+    <button class="action" onclick="clearChat()">
+      مسح
+    </button>
 
-        <button onclick="searchUser()">
-          فحص
-        </button>
+    <button class="action" onclick="systemMessage()">
+      SYSTEM
+    </button>
 
-      </div>
+  </div>
 
-      <div
-        class="loading"
-        id="loading"
-      >
+  <main class="chat" id="chat">
 
-        <div class="loader"></div>
+    <div class="message ai">
+      تم فتح النظام.
 
-        جاري فحص البيانات العامة...
+      مرحباً.
 
-      </div>
+      أنا UNKNOWN AI.
+      اكتب رسالتك...
+    </div>
 
-      <div
-        class="result"
-        id="result"
-      >
+  </main>
 
-        <div class="profile">
+  <div class="bottom">
 
-          <div class="avatar">
-          </div>
+    <div class="inputBox">
 
-          <div>
+      <textarea
+        id="input"
+        placeholder="تحدث مع النظام..."
+        onkeydown="keyDown(event)"
+      ></textarea>
 
-            <div
-              class="name"
-              id="name"
-            >
-              —
-            </div>
-
-            <div
-              class="handle"
-              id="handle"
-            >
-              —
-            </div>
-
-            <div
-              class="bio"
-              id="bio"
-            >
-              —
-            </div>
-
-          </div>
-
-        </div>
-
-        <div class="stats">
-
-          <div class="stat">
-            <b id="followers">—</b>
-            <span>المتابعون</span>
-          </div>
-
-          <div class="stat">
-            <b id="following">—</b>
-            <span>يتابع</span>
-          </div>
-
-          <div class="stat">
-            <b id="likes">—</b>
-            <span>الإعجابات</span>
-          </div>
-
-        </div>
-
-        <div class="actions">
-
-          <button onclick="openProfile()">
-            فتح الحساب
-          </button>
-
-          <button
-            class="secondary"
-            onclick="copyInfo()"
-          >
-            نسخ النتائج
-          </button>
-
-        </div>
-
-        <div class="note">
-          يعرض المعلومات العامة المتاحة فقط.
-          لا يحاول استخراج كلمات مرور أو رسائل
-          أو أرقام هاتف أو بريد أو موقع أو بيانات خاصة.
-        </div>
-
-      </div>
+      <button class="send" onclick="send()">
+        ↑
+      </button>
 
     </div>
 
@@ -910,13 +471,17 @@ button:active{
 <script>
 
 /* =========================
-   الرمز
+   إعدادات النظام
 ========================= */
 
-const ACCESS =
-  ["7","4","9","2"].join("");
+const ACCESS_CODE = "3523";
 
-let currentUser = "";
+const login = document.getElementById("login");
+const app = document.getElementById("app");
+const code = document.getElementById("code");
+const error = document.getElementById("error");
+const input = document.getElementById("input");
+const chat = document.getElementById("chat");
 
 
 /* =========================
@@ -925,230 +490,264 @@ let currentUser = "";
 
 function unlock(){
 
-  const pin =
-    document.getElementById("pin").value;
+  if(code.value === ACCESS_CODE){
 
-  const error =
-    document.getElementById("error");
+    login.style.display = "none";
+    app.style.display = "block";
 
-  if(pin === ACCESS){
+    playGlitch();
 
-    document.getElementById("login")
-      .style.display = "none";
-
-    document.getElementById("app")
-      .style.display = "block";
-
-    if(navigator.vibrate){
-      navigator.vibrate(80);
-    }
+    setTimeout(()=>{
+      input.focus();
+    },500);
 
   }else{
 
-    error.textContent =
-      "الشفرة خاطئة... العين تراقبك.";
+    error.textContent = "الرمز غير صحيح.";
 
-    document.getElementById("pin")
-      .value = "";
+    code.value = "";
 
-    if(navigator.vibrate){
-      navigator.vibrate(
-        [100,50,100]
-      );
-    }
+    login.querySelector(".loginBox").classList.add("glitch");
+
+    setTimeout(()=>{
+      login.querySelector(".loginBox").classList.remove("glitch");
+    },200);
 
   }
-
 }
 
 
-/* Enter */
+/* Enter للدخول */
 
-document
-  .getElementById("pin")
-  .addEventListener(
-    "keydown",
-    function(e){
+code.addEventListener("keydown",function(e){
 
-      if(e.key === "Enter"){
-        unlock();
-      }
+  if(e.key === "Enter"){
+    unlock();
+  }
 
-    }
-  );
+});
 
 
 /* =========================
-   العين تتبعك
+   إرسال
 ========================= */
 
-function moveEye(x,y){
+function send(){
 
-  const dx =
-    (x / window.innerWidth - .5)
-    * 30;
+  const text = input.value.trim();
 
-  const dy =
-    (y / window.innerHeight - .22)
-    * 20;
+  if(!text) return;
 
-  document
-    .getElementById("iris")
-    .style.transform =
-      `translate(
-        calc(-50% + ${dx}px),
-        calc(-50% + ${dy}px)
-      )`;
+  addMessage(text,"user");
 
-}
+  input.value = "";
 
+  showTyping();
 
-/* كمبيوتر */
+  setTimeout(()=>{
 
-document.addEventListener(
-  "mousemove",
-  function(e){
+    removeTyping();
 
-    moveEye(
-      e.clientX,
-      e.clientY
-    );
+    const answer = intelligentReply(text);
 
-  }
-);
+    addMessage(answer,"ai");
 
-
-/* جوال */
-
-document.addEventListener(
-  "touchmove",
-  function(e){
-
-    if(!e.touches[0]) return;
-
-    moveEye(
-      e.touches[0].clientX,
-      e.touches[0].clientY
-    );
-
-  },
-  {passive:true}
-);
-
-
-/* =========================
-   البحث
-========================= */
-
-function searchUser(){
-
-  let username =
-    document
-      .getElementById("username")
-      .value
-      .trim()
-      .replace(/^@/,"");
-
-  if(!username){
-    alert("اكتب اليوزر أولاً");
-    return;
-  }
-
-  currentUser =
-    username;
-
-  document
-    .getElementById("result")
-    .style.display = "none";
-
-  document
-    .getElementById("loading")
-    .style.display = "block";
-
-
-  /*
-    هنا يمكن ربط مصدر بيانات رسمي
-    لعرض المعلومات العامة للحساب.
-  */
-
-  setTimeout(function(){
-
-    document
-      .getElementById("loading")
-      .style.display = "none";
-
-    document
-      .getElementById("result")
-      .style.display = "block";
-
-    document
-      .getElementById("name")
-      .textContent =
-        username;
-
-    document
-      .getElementById("handle")
-      .textContent =
-        "@" + username;
-
-    document
-      .getElementById("bio")
-      .textContent =
-        "المعلومات العامة ستظهر هنا عند ربط مصدر بيانات مصرح به.";
-
-    document
-      .getElementById("followers")
-      .textContent = "—";
-
-    document
-      .getElementById("following")
-      .textContent = "—";
-
-    document
-      .getElementById("likes")
-      .textContent = "—";
-
-  },250);
+  },900);
 
 }
 
 
 /* =========================
-   فتح الحساب
+   إضافة رسالة
 ========================= */
 
-function openProfile(){
+function addMessage(text,type){
 
-  if(!currentUser)
-    return;
+  const div = document.createElement("div");
 
-  window.open(
-    "https://www.tiktok.com/@" +
-    encodeURIComponent(currentUser),
-    "_blank"
+  div.className = "message " + type;
+
+  div.textContent = text;
+
+  chat.appendChild(div);
+
+  chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+/* =========================
+   مؤشر الكتابة
+========================= */
+
+function showTyping(){
+
+  const div = document.createElement("div");
+
+  div.className = "message ai";
+  div.id = "typing";
+
+  div.innerHTML = `
+    <div class="typing">
+      <span class="dot"></span>
+      <span class="dot"></span>
+      <span class="dot"></span>
+    </div>
+  `;
+
+  chat.appendChild(div);
+
+  chat.scrollTop = chat.scrollHeight;
+
+}
+
+
+function removeTyping(){
+
+  const t = document.getElementById("typing");
+
+  if(t) t.remove();
+
+}
+
+
+/* =========================
+   ردود ذكية تجريبية
+========================= */
+
+function intelligentReply(text){
+
+  const t = text.toLowerCase();
+
+  if(t.includes("مرحبا") || t.includes("هلا") || t.includes("السلام")){
+
+    return "مرحباً.\n\nأنا أستمع إليك. ماذا تريد أن تعرف؟";
+
+  }
+
+  if(t.includes("من انت") || t.includes("اسمك")){
+
+    return "أنا UNKNOWN AI.\n\nهذه الواجهة مصممة كمساعد محادثة تجريبي. النسخة الحالية لا تتصل بنموذج ذكاء اصطناعي خارجي.";
+
+  }
+
+  if(t.includes("خوف") || t.includes("رعب")){
+
+    return "الخوف لا يحتاج دائماً إلى شيء يظهر أمامك.\n\nأحياناً يكفي أن تشعر بأن هناك شيئاً لا تستطيع تفسيره.";
+
+  }
+
+  if(t.includes("سر") || t.includes("اسرار")){
+
+    return "بعض الأشياء ليست أسراراً لأنها مخفية...\nبل لأنها لم تُكتشف بعد.";
+
+  }
+
+  if(t.includes("كيف حالك")){
+
+    return "النظام يعمل بشكل طبيعي.\n\nعلى الأقل... هذا ما تقوله الإشارات.";
+
+  }
+
+  return "استلمت رسالتك:\n\n\"" + text + "\"\n\nأنا حالياً في الوضع التجريبي. لردود AI حقيقية ومتقدمة جداً، يجب ربط هذه الواجهة بنموذج ذكاء اصطناعي عبر خادم آمن.";
+
+}
+
+
+/* =========================
+   SYSTEM
+========================= */
+
+function systemMessage(){
+
+  addMessage(
+`SYSTEM STATUS
+
+CORE: ONLINE
+SECURITY: ACTIVE
+INTERFACE: DARK
+CONNECTION: LOCAL
+AI ENGINE: DEMO
+
+ملاحظة:
+هذه الواجهة لا تحتوي على نموذج AI حقيقي بداخلها بعد.`,
+    "ai"
   );
 
 }
 
 
 /* =========================
-   نسخ النتائج
+   مسح
 ========================= */
 
-function copyInfo(){
+function clearChat(){
 
-  const text =
-`RwL
-اليوزر: @${currentUser}
-الاسم: ${document.getElementById("name").textContent}
-المتابعون: ${document.getElementById("followers").textContent}
-يتابع: ${document.getElementById("following").textContent}
-الإعجابات: ${document.getElementById("likes").textContent}`;
+  chat.innerHTML = "";
 
-  navigator.clipboard
-    ?.writeText(text);
+  addMessage(
+    "تم مسح سجل المحادثة.\n\nابدأ من جديد.",
+    "ai"
+  );
 
 }
+
+
+/* =========================
+   Enter
+========================= */
+
+function keyDown(e){
+
+  if(e.key === "Enter" && !e.shiftKey){
+
+    e.preventDefault();
+
+    send();
+
+  }
+
+}
+
+
+/* =========================
+   تأثير التشويش
+========================= */
+
+function playGlitch(){
+
+  document.body.classList.add("glitch");
+
+  setTimeout(()=>{
+    document.body.classList.remove("glitch");
+  },180);
+
+}
+
+
+/* =========================
+   رسالة سرية عشوائية
+========================= */
+
+setInterval(()=>{
+
+  if(app.style.display === "block" && Math.random() < .15){
+
+    const messages = [
+      "النظام يراقب الاتصال...",
+      "لا توجد أخطاء حرجة.",
+      "الاتصال مستقر.",
+      "تم فحص النظام.",
+      "كل شيء طبيعي."
+    ];
+
+    console.log(
+      messages[Math.floor(Math.random()*messages.length)]
+    );
+
+  }
+
+},7000);
 
 </script>
 
