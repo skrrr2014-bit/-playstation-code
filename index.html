@@ -2,8 +2,8 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>UNKNOWN AI</title>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<title>UNKNOWN CODE AI</title>
 
 <style>
 *{
@@ -12,347 +12,68 @@
   padding:0;
 }
 
+:root{
+  --bg:#030303;
+  --panel:#090909;
+  --panel2:#0d0d0d;
+  --line:#222;
+  --text:#eee;
+  --muted:#777;
+  --danger:#8d2020;
+  --accent:#ddd;
+}
+
 html,body{
   width:100%;
   height:100%;
   overflow:hidden;
-  background:#020202;
-  color:#eee;
+  background:var(--bg);
+  color:var(--text);
   font-family:Arial,sans-serif;
 }
 
-body{
-  position:relative;
+button,input,textarea,select{
+  font:inherit;
 }
 
-/* ===== الخلفية ===== */
-
-body::before{
-  content:"";
-  position:fixed;
-  inset:-50%;
-  background:
-    radial-gradient(circle at 20% 30%,rgba(100,0,0,.12),transparent 20%),
-    radial-gradient(circle at 80% 70%,rgba(70,0,0,.12),transparent 25%),
-    repeating-linear-gradient(
-      0deg,
-      rgba(255,255,255,.018) 0px,
-      rgba(255,255,255,.018) 1px,
-      transparent 1px,
-      transparent 4px
-    );
-  animation:backgroundMove 14s linear infinite;
-  pointer-events:none;
+button{
+  cursor:pointer;
 }
 
-@keyframes backgroundMove{
-  from{transform:translate(0,0)}
-  50%{transform:translate(30px,-20px)}
-  to{transform:translate(0,0)}
-}
-
-/* تشويش */
+/* =========================
+   NOISE / BACKGROUND
+========================= */
 
 .noise{
   position:fixed;
-  inset:0;
+  inset:-50%;
+  z-index:100;
   pointer-events:none;
-  opacity:.08;
-  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.7'/%3E%3C/svg%3E");
-  animation:noise .2s steps(2) infinite;
+  opacity:.055;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  animation:noiseMove .15s steps(2) infinite;
 }
 
-@keyframes noise{
+@keyframes noiseMove{
   0%{transform:translate(0,0)}
-  25%{transform:translate(2px,-1px)}
-  50%{transform:translate(-1px,2px)}
-  75%{transform:translate(1px,1px)}
+  25%{transform:translate(2px,-2px)}
+  50%{transform:translate(-2px,2px)}
+  75%{transform:translate(1px,2px)}
   100%{transform:translate(0,0)}
 }
 
-/* ===== شاشة الدخول ===== */
-
-#login{
+.scanlines{
   position:fixed;
   inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  padding:20px;
-  z-index:20;
-  background:
-    radial-gradient(circle,rgba(80,0,0,.13),transparent 45%),
-    #020202;
-}
-
-.loginBox{
-  width:min(390px,100%);
-  padding:35px 25px;
-  text-align:center;
-  background:rgba(8,8,8,.88);
-  border:1px solid #292929;
-  border-radius:20px;
-  box-shadow:
-    0 0 80px rgba(0,0,0,.9),
-    inset 0 0 40px rgba(255,255,255,.015);
-  backdrop-filter:blur(15px);
-}
-
-.eye{
-  width:75px;
-  height:75px;
-  margin:0 auto 20px;
-  border:1px solid #333;
-  border-radius:50%;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  font-size:30px;
-  box-shadow:0 0 35px rgba(150,0,0,.15);
-  animation:pulse 3s infinite;
-}
-
-@keyframes pulse{
-  50%{
-    box-shadow:0 0 60px rgba(150,0,0,.25);
-  }
-}
-
-.loginBox h1{
-  font-size:24px;
-  letter-spacing:4px;
-  margin-bottom:8px;
-}
-
-.loginBox p{
-  color:#666;
-  font-size:12px;
-  margin-bottom:25px;
-}
-
-.code{
-  width:100%;
-  height:52px;
-  border:1px solid #292929;
-  outline:none;
-  border-radius:12px;
-  background:#050505;
-  color:#fff;
-  text-align:center;
-  font-size:22px;
-  letter-spacing:10px;
-}
-
-.code:focus{
-  border-color:#555;
-}
-
-.unlock{
-  width:100%;
-  height:50px;
-  margin-top:12px;
-  border:0;
-  border-radius:12px;
-  background:#eee;
-  color:#050505;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-.error{
-  height:20px;
-  margin-top:12px;
-  color:#777;
-  font-size:12px;
-}
-
-/* ===== التطبيق ===== */
-
-#app{
-  display:none;
-  height:100vh;
-  position:relative;
-}
-
-header{
-  height:72px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  padding:0 18px;
-  border-bottom:1px solid #1b1b1b;
-  background:rgba(3,3,3,.86);
-  backdrop-filter:blur(15px);
-}
-
-.logo{
-  font-size:18px;
-  font-weight:bold;
-  letter-spacing:3px;
-}
-
-.status{
-  font-size:11px;
-  color:#666;
-}
-
-.status span{
-  display:inline-block;
-  width:6px;
-  height:6px;
-  margin-left:5px;
-  border-radius:50%;
-  background:#aaa;
-  box-shadow:0 0 10px #aaa;
-}
-
-/* ===== المحادثة ===== */
-
-.chat{
-  height:calc(100vh - 142px);
-  overflow-y:auto;
-  padding:22px 14px 30px;
-}
-
-.chat::-webkit-scrollbar{
-  width:3px;
-}
-
-.chat::-webkit-scrollbar-thumb{
-  background:#333;
-}
-
-.message{
-  max-width:88%;
-  margin-bottom:15px;
-  padding:14px 16px;
-  border-radius:16px;
-  line-height:1.7;
-  white-space:pre-wrap;
-  word-break:break-word;
-  animation:appear .3s ease;
-}
-
-@keyframes appear{
-  from{
-    opacity:0;
-    transform:translateY(8px);
-  }
-  to{
-    opacity:1;
-    transform:translateY(0);
-  }
-}
-
-.user{
-  margin-right:auto;
-  background:#1b1b1b;
-  border:1px solid #292929;
-}
-
-.ai{
-  margin-left:auto;
-  background:#080808;
-  border:1px solid #202020;
-  box-shadow:0 5px 30px rgba(0,0,0,.4);
-}
-
-/* ===== الكتابة ===== */
-
-.bottom{
-  position:fixed;
-  bottom:0;
-  left:0;
-  right:0;
-  height:70px;
-  padding:8px 12px;
-  background:linear-gradient(transparent,#020202 35%);
-}
-
-.inputBox{
-  max-width:850px;
-  height:54px;
-  margin:auto;
-  display:flex;
-  gap:8px;
-  padding:5px;
-  border:1px solid #252525;
-  border-radius:17px;
-  background:#090909;
-}
-
-textarea{
-  flex:1;
-  resize:none;
-  border:0;
-  outline:none;
-  background:transparent;
-  color:white;
-  padding:11px;
-  font-size:15px;
-  font-family:Arial;
-}
-
-.send{
-  width:44px;
-  border:0;
-  border-radius:13px;
-  background:#eee;
-  color:#050505;
-  font-size:20px;
-  cursor:pointer;
-}
-
-/* ===== أزرار ===== */
-
-.actions{
-  position:fixed;
-  top:82px;
-  left:15px;
-  display:flex;
-  gap:6px;
-}
-
-.action{
-  background:#090909;
-  border:1px solid #222;
-  color:#777;
-  border-radius:8px;
-  padding:7px 10px;
-  font-size:10px;
-}
-
-/* ===== الكتابة ===== */
-
-.typing{
-  display:flex;
-  gap:5px;
-}
-
-.dot{
-  width:5px;
-  height:5px;
-  border-radius:50%;
-  background:#777;
-  animation:typing 1s infinite;
-}
-
-.dot:nth-child(2){animation-delay:.15s}
-.dot:nth-child(3){animation-delay:.3s}
-
-@keyframes typing{
-  50%{transform:translateY(-5px);opacity:.3}
-}
-
-/* ===== وميض الشاشة ===== */
-
-.flash{
-  position:fixed;
-  inset:0;
-  background:#fff;
-  opacity:0;
   pointer-events:none;
-  z-index:50;
+  z-index:99;
+  opacity:.035;
+  background:repeating-linear-gradient(
+    to bottom,
+    transparent 0,
+    transparent 3px,
+    #fff 4px
+  );
 }
 
 .glitch{
@@ -361,9 +82,553 @@ textarea{
 
 @keyframes glitch{
   0%{transform:translate(0)}
-  30%{transform:translate(3px,-2px)}
-  60%{transform:translate(-2px,2px)}
+  20%{transform:translate(-4px,2px)}
+  40%{transform:translate(4px,-2px)}
+  60%{transform:translate(-2px,-1px)}
+  80%{transform:translate(2px,1px)}
   100%{transform:translate(0)}
+}
+
+/* =========================
+   LOGIN
+========================= */
+
+#loginScreen{
+  position:fixed;
+  inset:0;
+  z-index:50;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:
+    radial-gradient(circle at center,rgba(100,0,0,.12),transparent 38%),
+    #020202;
+}
+
+.login{
+  width:min(420px,100%);
+  padding:35px 25px;
+  text-align:center;
+  border:1px solid #292929;
+  border-radius:22px;
+  background:rgba(7,7,7,.92);
+  box-shadow:
+    0 0 100px rgba(0,0,0,.9),
+    inset 0 0 50px rgba(255,255,255,.015);
+  backdrop-filter:blur(18px);
+}
+
+.eye{
+  width:88px;
+  height:88px;
+  margin:auto;
+  margin-bottom:20px;
+  border:1px solid #333;
+  border-radius:50%;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  font-size:34px;
+  box-shadow:0 0 45px rgba(130,0,0,.18);
+  animation:eyePulse 3s infinite;
+}
+
+@keyframes eyePulse{
+  50%{
+    transform:scale(1.04);
+    box-shadow:0 0 80px rgba(130,0,0,.25);
+  }
+}
+
+.login h1{
+  font-size:25px;
+  letter-spacing:5px;
+  margin-bottom:8px;
+}
+
+.login .sub{
+  color:#666;
+  font-size:12px;
+  margin-bottom:26px;
+}
+
+#accessCode{
+  width:100%;
+  height:55px;
+  border:1px solid #292929;
+  outline:none;
+  background:#030303;
+  color:#fff;
+  border-radius:13px;
+  text-align:center;
+  font-size:22px;
+  letter-spacing:12px;
+}
+
+#accessCode:focus{
+  border-color:#555;
+}
+
+#unlock{
+  width:100%;
+  height:52px;
+  margin-top:12px;
+  border:0;
+  border-radius:13px;
+  background:#eee;
+  color:#050505;
+  font-weight:bold;
+}
+
+#loginError{
+  min-height:20px;
+  margin-top:12px;
+  color:#777;
+  font-size:12px;
+}
+
+/* =========================
+   APP
+========================= */
+
+#app{
+  display:none;
+  width:100%;
+  height:100%;
+}
+
+.layout{
+  display:grid;
+  grid-template-columns:235px 1fr;
+  height:100%;
+}
+
+/* SIDEBAR */
+
+.sidebar{
+  border-left:1px solid var(--line);
+  background:#050505;
+  padding:15px;
+  overflow:auto;
+}
+
+.brand{
+  padding:10px;
+  margin-bottom:15px;
+  border-bottom:1px solid #1c1c1c;
+}
+
+.brand strong{
+  display:block;
+  letter-spacing:3px;
+  font-size:15px;
+}
+
+.brand small{
+  color:#555;
+  display:block;
+  margin-top:5px;
+}
+
+.sideTitle{
+  color:#555;
+  font-size:10px;
+  margin:15px 5px 8px;
+}
+
+.sideBtn{
+  width:100%;
+  text-align:right;
+  padding:11px;
+  margin-bottom:6px;
+  border:1px solid transparent;
+  border-radius:9px;
+  background:transparent;
+  color:#999;
+}
+
+.sideBtn:hover{
+  border-color:#252525;
+  background:#0d0d0d;
+  color:#fff;
+}
+
+.projects{
+  display:flex;
+  flex-direction:column;
+  gap:5px;
+}
+
+.project{
+  padding:9px;
+  border-radius:8px;
+  background:#0b0b0b;
+  border:1px solid #181818;
+  color:#888;
+  font-size:12px;
+  overflow:hidden;
+  text-overflow:ellipsis;
+  white-space:nowrap;
+}
+
+/* MAIN */
+
+.main{
+  min-width:0;
+  display:flex;
+  flex-direction:column;
+}
+
+.topbar{
+  height:62px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 14px;
+  border-bottom:1px solid var(--line);
+  background:#050505;
+}
+
+.topTitle{
+  font-size:14px;
+  letter-spacing:2px;
+}
+
+.status{
+  font-size:10px;
+  color:#666;
+}
+
+.status i{
+  display:inline-block;
+  width:6px;
+  height:6px;
+  border-radius:50%;
+  background:#aaa;
+  box-shadow:0 0 10px #aaa;
+  margin-left:5px;
+}
+
+/* WORKSPACE */
+
+.workspace{
+  flex:1;
+  min-height:0;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+}
+
+.editorPanel,
+.chatPanel{
+  min-width:0;
+  min-height:0;
+}
+
+.editorPanel{
+  border-left:1px solid var(--line);
+  display:flex;
+  flex-direction:column;
+}
+
+.panelHead{
+  height:44px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  padding:0 10px;
+  background:#080808;
+  border-bottom:1px solid #1c1c1c;
+}
+
+.panelName{
+  font-size:11px;
+  color:#999;
+}
+
+.tools{
+  display:flex;
+  gap:5px;
+}
+
+.tool{
+  border:1px solid #222;
+  background:#0c0c0c;
+  color:#888;
+  border-radius:7px;
+  padding:6px 9px;
+  font-size:10px;
+}
+
+.tool:hover{
+  color:#fff;
+  border-color:#444;
+}
+
+/* CODE EDITOR */
+
+.editor{
+  flex:1;
+  min-height:0;
+  position:relative;
+  display:flex;
+  background:#020202;
+}
+
+.lineNumbers{
+  width:42px;
+  flex-shrink:0;
+  padding:14px 8px;
+  color:#3f3f3f;
+  font-family:monospace;
+  font-size:13px;
+  line-height:1.6;
+  text-align:right;
+  overflow:hidden;
+  border-left:1px solid #111;
+  user-select:none;
+}
+
+#codeEditor{
+  flex:1;
+  min-width:0;
+  min-height:0;
+  resize:none;
+  border:0;
+  outline:none;
+  padding:14px;
+  background:#020202;
+  color:#ddd;
+  font-family:monospace;
+  font-size:13px;
+  line-height:1.6;
+  direction:ltr;
+  text-align:left;
+  tab-size:2;
+}
+
+.bottomTools{
+  display:flex;
+  gap:6px;
+  padding:8px;
+  border-top:1px solid #1b1b1b;
+  background:#070707;
+}
+
+.select{
+  border:1px solid #222;
+  border-radius:7px;
+  background:#0b0b0b;
+  color:#aaa;
+  padding:6px 8px;
+  outline:none;
+}
+
+/* CHAT */
+
+.chatPanel{
+  display:flex;
+  flex-direction:column;
+}
+
+.messages{
+  flex:1;
+  overflow:auto;
+  padding:15px;
+}
+
+.messages::-webkit-scrollbar{
+  width:3px;
+}
+
+.messages::-webkit-scrollbar-thumb{
+  background:#333;
+}
+
+.msg{
+  max-width:92%;
+  margin-bottom:12px;
+  padding:12px 14px;
+  border:1px solid #1e1e1e;
+  border-radius:14px;
+  line-height:1.7;
+  white-space:pre-wrap;
+  word-break:break-word;
+  font-size:13px;
+}
+
+.msg.ai{
+  margin-left:auto;
+  background:#080808;
+}
+
+.msg.user{
+  margin-right:auto;
+  background:#151515;
+}
+
+.msg.system{
+  max-width:100%;
+  background:#050505;
+  color:#666;
+  font-family:monospace;
+  font-size:11px;
+}
+
+.chatInput{
+  padding:9px;
+  border-top:1px solid #1c1c1c;
+  background:#070707;
+}
+
+.chatBox{
+  display:flex;
+  gap:6px;
+  border:1px solid #252525;
+  border-radius:13px;
+  padding:5px;
+  background:#0a0a0a;
+}
+
+#chatInput{
+  flex:1;
+  resize:none;
+  height:43px;
+  border:0;
+  outline:none;
+  background:transparent;
+  color:white;
+  padding:10px;
+}
+
+#send{
+  width:43px;
+  border:0;
+  border-radius:9px;
+  background:#eee;
+  color:#000;
+  font-size:18px;
+}
+
+/* =========================
+   CONSOLE
+========================= */
+
+.console{
+  position:fixed;
+  left:0;
+  right:0;
+  bottom:0;
+  height:0;
+  overflow:hidden;
+  z-index:30;
+  background:#030303;
+  border-top:1px solid #292929;
+  transition:.25s;
+}
+
+.console.open{
+  height:180px;
+}
+
+.consoleHead{
+  height:38px;
+  padding:0 12px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  border-bottom:1px solid #191919;
+  color:#888;
+  font-size:11px;
+}
+
+#consoleOutput{
+  height:140px;
+  overflow:auto;
+  padding:10px;
+  font-family:monospace;
+  font-size:11px;
+  color:#777;
+  direction:ltr;
+  text-align:left;
+}
+
+/* =========================
+   MODAL
+========================= */
+
+.modal{
+  position:fixed;
+  inset:0;
+  z-index:40;
+  display:none;
+  justify-content:center;
+  align-items:center;
+  padding:20px;
+  background:rgba(0,0,0,.75);
+  backdrop-filter:blur(8px);
+}
+
+.modalBox{
+  width:min(650px,100%);
+  max-height:85vh;
+  overflow:auto;
+  padding:20px;
+  background:#080808;
+  border:1px solid #292929;
+  border-radius:15px;
+}
+
+.modalHead{
+  display:flex;
+  justify-content:space-between;
+  margin-bottom:15px;
+}
+
+.close{
+  border:0;
+  background:none;
+  color:#777;
+}
+
+.template{
+  width:100%;
+  padding:12px;
+  margin-bottom:7px;
+  border:1px solid #222;
+  border-radius:9px;
+  background:#0c0c0c;
+  color:#aaa;
+  text-align:right;
+}
+
+/* MOBILE */
+
+@media(max-width:800px){
+
+  .layout{
+    grid-template-columns:1fr;
+  }
+
+  .sidebar{
+    display:none;
+  }
+
+  .workspace{
+    grid-template-columns:1fr;
+  }
+
+  .editorPanel{
+    display:none;
+  }
+
+  .topbar{
+    height:55px;
+  }
+
+  .msg{
+    max-width:96%;
+  }
 }
 </style>
 </head>
@@ -371,97 +636,305 @@ textarea{
 <body>
 
 <div class="noise"></div>
-<div class="flash" id="flash"></div>
+<div class="scanlines"></div>
 
-<!-- ===== شاشة الدخول ===== -->
 
-<section id="login">
+<!-- =========================
+     LOGIN
+========================= -->
 
-  <div class="loginBox">
+<section id="loginScreen">
+
+  <div class="login">
 
     <div class="eye">◉</div>
 
-    <h1>UNKNOWN AI</h1>
+    <h1>UNKNOWN</h1>
 
-    <p>النظام مقفل — أدخل رمز الوصول</p>
+    <div class="sub">
+      CODE INTELLIGENCE SYSTEM
+    </div>
 
     <input
-      id="code"
-      class="code"
+      id="accessCode"
       type="password"
-      inputmode="numeric"
       maxlength="4"
+      inputmode="numeric"
       placeholder="••••"
     >
 
-    <button class="unlock" onclick="unlock()">
+    <button id="unlock">
       فك الشفرة
     </button>
 
-    <div id="error" class="error"></div>
+    <div id="loginError"></div>
 
   </div>
 
 </section>
 
 
-<!-- ===== التطبيق ===== -->
+<!-- =========================
+     APP
+========================= -->
 
 <section id="app">
 
-  <header>
+  <div class="layout">
 
-    <div class="logo">
-      UNKNOWN AI
-    </div>
+    <!-- SIDEBAR -->
 
-    <div class="status">
-      <span></span>
-      ONLINE
-    </div>
+    <aside class="sidebar">
 
-  </header>
+      <div class="brand">
+        <strong>UNKNOWN AI</strong>
+        <small>CODE ENGINE</small>
+      </div>
 
-  <div class="actions">
+      <button class="sideBtn" onclick="newProject()">
+        ＋ مشروع جديد
+      </button>
 
-    <button class="action" onclick="clearChat()">
-      مسح
-    </button>
+      <button class="sideBtn" onclick="saveProject()">
+        💾 حفظ المشروع
+      </button>
 
-    <button class="action" onclick="systemMessage()">
-      SYSTEM
+      <button class="sideBtn" onclick="loadProject()">
+        📂 تحميل المشروع
+      </button>
+
+      <button class="sideBtn" onclick="showTemplates()">
+        🧩 القوالب
+      </button>
+
+      <button class="sideBtn" onclick="toggleConsole()">
+        >_ Console
+      </button>
+
+      <div class="sideTitle">
+        PROJECTS
+      </div>
+
+      <div id="projectList" class="projects"></div>
+
+    </aside>
+
+
+    <!-- MAIN -->
+
+    <main class="main">
+
+      <header class="topbar">
+
+        <div class="topTitle">
+          UNKNOWN / CODE LAB
+        </div>
+
+        <div class="status">
+          <i></i>
+          SYSTEM ONLINE
+        </div>
+
+      </header>
+
+
+      <section class="workspace">
+
+        <!-- EDITOR -->
+
+        <div class="editorPanel">
+
+          <div class="panelHead">
+
+            <div class="panelName">
+              CODE EDITOR
+            </div>
+
+            <div class="tools">
+
+              <button class="tool" onclick="runCode()">
+                ▶ تشغيل
+              </button>
+
+              <button class="tool" onclick="copyCode()">
+                نسخ
+              </button>
+
+              <button class="tool" onclick="clearEditor()">
+                مسح
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div class="editor">
+
+            <div id="lineNumbers" class="lineNumbers">
+              1
+            </div>
+
+            <textarea
+              id="codeEditor"
+              spellcheck="false"
+              oninput="updateLines()"
+              onscroll="syncLines()"
+              onkeydown="editorKeys(event)"
+            ></textarea>
+
+          </div>
+
+
+          <div class="bottomTools">
+
+            <select id="language" class="select">
+              <option value="html">HTML</option>
+              <option value="javascript">JavaScript</option>
+              <option value="css">CSS</option>
+              <option value="python">Python</option>
+              <option value="lua">Lua</option>
+            </select>
+
+            <button class="tool" onclick="explainCode()">
+              شرح
+            </button>
+
+            <button class="tool" onclick="improveCode()">
+              تحسين
+            </button>
+
+            <button class="tool" onclick="fixCode()">
+              إصلاح
+            </button>
+
+          </div>
+
+        </div>
+
+
+        <!-- CHAT -->
+
+        <div class="chatPanel">
+
+          <div class="panelHead">
+
+            <div class="panelName">
+              AI ASSISTANT
+            </div>
+
+            <div class="tools">
+
+              <button class="tool" onclick="clearChat()">
+                مسح
+              </button>
+
+            </div>
+
+          </div>
+
+
+          <div id="messages" class="messages">
+
+            <div class="msg ai">
+مرحباً.
+
+أنا UNKNOWN CODE AI.
+
+اكتب لي مثلاً:
+"اصنع لي صفحة تسجيل دخول فخمة"
+
+أو:
+"عدّل الكود وخلي الخلفية متحركة"
+
+وسأجهز لك كوداً أو أشرح لك الفكرة.
+            </div>
+
+          </div>
+
+
+          <div class="chatInput">
+
+            <div class="chatBox">
+
+              <textarea
+                id="chatInput"
+                placeholder="اطلب إنشاء أو تعديل كود..."
+              ></textarea>
+
+              <button id="send">
+                ↑
+              </button>
+
+            </div>
+
+          </div>
+
+        </div>
+
+      </section>
+
+    </main>
+
+  </div>
+
+</section>
+
+
+<!-- CONSOLE -->
+
+<section id="console" class="console">
+
+  <div class="consoleHead">
+
+    <span>CONSOLE</span>
+
+    <button class="close" onclick="toggleConsole()">
+      إغلاق
     </button>
 
   </div>
 
-  <main class="chat" id="chat">
+  <div id="consoleOutput"></div>
 
-    <div class="message ai">
-      تم فتح النظام.
+</section>
 
-      مرحباً.
 
-      أنا UNKNOWN AI.
-      اكتب رسالتك...
-    </div>
+<!-- TEMPLATES -->
 
-  </main>
+<section id="templateModal" class="modal">
 
-  <div class="bottom">
+  <div class="modalBox">
 
-    <div class="inputBox">
+    <div class="modalHead">
 
-      <textarea
-        id="input"
-        placeholder="تحدث مع النظام..."
-        onkeydown="keyDown(event)"
-      ></textarea>
+      <strong>قوالب جاهزة</strong>
 
-      <button class="send" onclick="send()">
-        ↑
+      <button class="close" onclick="closeTemplates()">
+        ✕
       </button>
 
     </div>
+
+    <button class="template" onclick="template('website')">
+      🌐 موقع ويب كامل
+    </button>
+
+    <button class="template" onclick="template('login')">
+      🔐 صفحة تسجيل دخول
+    </button>
+
+    <button class="template" onclick="template('dashboard')">
+      📊 لوحة تحكم
+    </button>
+
+    <button class="template" onclick="template('game')">
+      🎮 لعبة JavaScript بسيطة
+    </button>
+
+    <button class="template" onclick="template('portfolio')">
+      💼 Portfolio
+    </button>
 
   </div>
 
@@ -470,251 +943,79 @@ textarea{
 
 <script>
 
-/* =========================
-   إعدادات النظام
-========================= */
+/* ==========================================
+   CONFIG
+========================================== */
 
 const ACCESS_CODE = "3523";
 
-const login = document.getElementById("login");
+let currentProject = "مشروعي الأول";
+
+let projects = JSON.parse(
+  localStorage.getItem("unknown_projects") || "{}"
+);
+
+
+/* ==========================================
+   ELEMENTS
+========================================== */
+
+const loginScreen = document.getElementById("loginScreen");
 const app = document.getElementById("app");
-const code = document.getElementById("code");
-const error = document.getElementById("error");
-const input = document.getElementById("input");
-const chat = document.getElementById("chat");
+const accessCode = document.getElementById("accessCode");
+const loginError = document.getElementById("loginError");
+
+const editor = document.getElementById("codeEditor");
+const lines = document.getElementById("lineNumbers");
+
+const chatInput = document.getElementById("chatInput");
+const messages = document.getElementById("messages");
+
+const consoleBox = document.getElementById("console");
+const consoleOutput = document.getElementById("consoleOutput");
 
 
-/* =========================
-   فك الشفرة
-========================= */
+/* ==========================================
+   LOGIN
+========================================== */
+
+document.getElementById("unlock").onclick = unlock;
+
+accessCode.addEventListener("keydown",e=>{
+  if(e.key==="Enter") unlock();
+});
 
 function unlock(){
 
-  if(code.value === ACCESS_CODE){
+  if(accessCode.value === ACCESS_CODE){
 
-    login.style.display = "none";
-    app.style.display = "block";
+    loginScreen.style.display="none";
+    app.style.display="block";
 
-    playGlitch();
+    glitch();
 
-    setTimeout(()=>{
-      input.focus();
-    },500);
+    log("SYSTEM ACCESS GRANTED");
+
+    loadSavedProjects();
 
   }else{
 
-    error.textContent = "الرمز غير صحيح.";
+    loginError.textContent="الرمز غير صحيح.";
 
-    code.value = "";
+    accessCode.value="";
 
-    login.querySelector(".loginBox").classList.add("glitch");
-
-    setTimeout(()=>{
-      login.querySelector(".loginBox").classList.remove("glitch");
-    },200);
-
-  }
-}
-
-
-/* Enter للدخول */
-
-code.addEventListener("keydown",function(e){
-
-  if(e.key === "Enter"){
-    unlock();
-  }
-
-});
-
-
-/* =========================
-   إرسال
-========================= */
-
-function send(){
-
-  const text = input.value.trim();
-
-  if(!text) return;
-
-  addMessage(text,"user");
-
-  input.value = "";
-
-  showTyping();
-
-  setTimeout(()=>{
-
-    removeTyping();
-
-    const answer = intelligentReply(text);
-
-    addMessage(answer,"ai");
-
-  },900);
-
-}
-
-
-/* =========================
-   إضافة رسالة
-========================= */
-
-function addMessage(text,type){
-
-  const div = document.createElement("div");
-
-  div.className = "message " + type;
-
-  div.textContent = text;
-
-  chat.appendChild(div);
-
-  chat.scrollTop = chat.scrollHeight;
-
-}
-
-
-/* =========================
-   مؤشر الكتابة
-========================= */
-
-function showTyping(){
-
-  const div = document.createElement("div");
-
-  div.className = "message ai";
-  div.id = "typing";
-
-  div.innerHTML = `
-    <div class="typing">
-      <span class="dot"></span>
-      <span class="dot"></span>
-      <span class="dot"></span>
-    </div>
-  `;
-
-  chat.appendChild(div);
-
-  chat.scrollTop = chat.scrollHeight;
-
-}
-
-
-function removeTyping(){
-
-  const t = document.getElementById("typing");
-
-  if(t) t.remove();
-
-}
-
-
-/* =========================
-   ردود ذكية تجريبية
-========================= */
-
-function intelligentReply(text){
-
-  const t = text.toLowerCase();
-
-  if(t.includes("مرحبا") || t.includes("هلا") || t.includes("السلام")){
-
-    return "مرحباً.\n\nأنا أستمع إليك. ماذا تريد أن تعرف؟";
+    glitch();
 
   }
 
-  if(t.includes("من انت") || t.includes("اسمك")){
-
-    return "أنا UNKNOWN AI.\n\nهذه الواجهة مصممة كمساعد محادثة تجريبي. النسخة الحالية لا تتصل بنموذج ذكاء اصطناعي خارجي.";
-
-  }
-
-  if(t.includes("خوف") || t.includes("رعب")){
-
-    return "الخوف لا يحتاج دائماً إلى شيء يظهر أمامك.\n\nأحياناً يكفي أن تشعر بأن هناك شيئاً لا تستطيع تفسيره.";
-
-  }
-
-  if(t.includes("سر") || t.includes("اسرار")){
-
-    return "بعض الأشياء ليست أسراراً لأنها مخفية...\nبل لأنها لم تُكتشف بعد.";
-
-  }
-
-  if(t.includes("كيف حالك")){
-
-    return "النظام يعمل بشكل طبيعي.\n\nعلى الأقل... هذا ما تقوله الإشارات.";
-
-  }
-
-  return "استلمت رسالتك:\n\n\"" + text + "\"\n\nأنا حالياً في الوضع التجريبي. لردود AI حقيقية ومتقدمة جداً، يجب ربط هذه الواجهة بنموذج ذكاء اصطناعي عبر خادم آمن.";
-
 }
 
 
-/* =========================
-   SYSTEM
-========================= */
+/* ==========================================
+   GLITCH
+========================================== */
 
-function systemMessage(){
-
-  addMessage(
-`SYSTEM STATUS
-
-CORE: ONLINE
-SECURITY: ACTIVE
-INTERFACE: DARK
-CONNECTION: LOCAL
-AI ENGINE: DEMO
-
-ملاحظة:
-هذه الواجهة لا تحتوي على نموذج AI حقيقي بداخلها بعد.`,
-    "ai"
-  );
-
-}
-
-
-/* =========================
-   مسح
-========================= */
-
-function clearChat(){
-
-  chat.innerHTML = "";
-
-  addMessage(
-    "تم مسح سجل المحادثة.\n\nابدأ من جديد.",
-    "ai"
-  );
-
-}
-
-
-/* =========================
-   Enter
-========================= */
-
-function keyDown(e){
-
-  if(e.key === "Enter" && !e.shiftKey){
-
-    e.preventDefault();
-
-    send();
-
-  }
-
-}
-
-
-/* =========================
-   تأثير التشويش
-========================= */
-
-function playGlitch(){
+function glitch(){
 
   document.body.classList.add("glitch");
 
@@ -725,29 +1026,991 @@ function playGlitch(){
 }
 
 
-/* =========================
-   رسالة سرية عشوائية
-========================= */
+/* ==========================================
+   EDITOR
+========================================== */
 
-setInterval(()=>{
+function updateLines(){
 
-  if(app.style.display === "block" && Math.random() < .15){
+  const count =
+    editor.value.split("\n").length;
 
-    const messages = [
-      "النظام يراقب الاتصال...",
-      "لا توجد أخطاء حرجة.",
-      "الاتصال مستقر.",
-      "تم فحص النظام.",
-      "كل شيء طبيعي."
-    ];
+  let output="";
 
-    console.log(
-      messages[Math.floor(Math.random()*messages.length)]
-    );
+  for(let i=1;i<=count;i++){
+    output+=i+"\n";
+  }
+
+  lines.textContent=output;
+
+}
+
+function syncLines(){
+
+  lines.scrollTop=editor.scrollTop;
+
+}
+
+function editorKeys(e){
+
+  if(e.key==="Tab"){
+
+    e.preventDefault();
+
+    const start=editor.selectionStart;
+    const end=editor.selectionEnd;
+
+    editor.value =
+      editor.value.substring(0,start) +
+      "  " +
+      editor.value.substring(end);
+
+    editor.selectionStart=
+      editor.selectionEnd=start+2;
+
+    updateLines();
 
   }
 
-},7000);
+}
+
+
+/* ==========================================
+   CHAT
+========================================== */
+
+document.getElementById("send").onclick=sendMessage;
+
+chatInput.addEventListener("keydown",e=>{
+
+  if(e.key==="Enter" && !e.shiftKey){
+
+    e.preventDefault();
+
+    sendMessage();
+
+  }
+
+});
+
+
+function addMessage(text,type="ai"){
+
+  const div=document.createElement("div");
+
+  div.className="msg "+type;
+
+  div.textContent=text;
+
+  messages.appendChild(div);
+
+  messages.scrollTop=messages.scrollHeight;
+
+}
+
+
+function sendMessage(){
+
+  const text=chatInput.value.trim();
+
+  if(!text) return;
+
+  addMessage(text,"user");
+
+  chatInput.value="";
+
+  showTyping();
+
+  setTimeout(()=>{
+
+    removeTyping();
+
+    processAI(text);
+
+  },600);
+
+}
+
+
+function showTyping(){
+
+  const div=document.createElement("div");
+
+  div.id="typing";
+  div.className="msg ai";
+
+  div.innerHTML="جاري التفكير...";
+
+  messages.appendChild(div);
+
+  messages.scrollTop=messages.scrollHeight;
+
+}
+
+
+function removeTyping(){
+
+  const t=document.getElementById("typing");
+
+  if(t)t.remove();
+
+}
+
+
+/* ==========================================
+   LOCAL CODE AI ENGINE
+========================================== */
+
+function processAI(text){
+
+  const t=text.toLowerCase();
+
+  /*
+    هذا محرك محلي تجريبي.
+    عند ربط Backend يمكن استبداله
+    بنموذج AI حقيقي.
+  */
+
+  if(
+    t.includes("اصنع") ||
+    t.includes("سوي") ||
+    t.includes("انشئ") ||
+    t.includes("أنشئ") ||
+    t.includes("كود")
+  ){
+
+    generateCodeFromRequest(text);
+    return;
+
+  }
+
+  if(
+    t.includes("اشرح") ||
+    t.includes("شرح")
+  ){
+
+    explainCode();
+    return;
+
+  }
+
+  if(
+    t.includes("حسن") ||
+    t.includes("طور") ||
+    t.includes("طوّر")
+  ){
+
+    improveCode();
+    return;
+
+  }
+
+  if(
+    t.includes("اصلح") ||
+    t.includes("إصلاح") ||
+    t.includes("خطأ")
+  ){
+
+    fixCode();
+    return;
+
+  }
+
+  addMessage(
+`فهمت طلبك:
+
+${text}
+
+أستطيع مساعدتك في:
+• إنشاء كود
+• تعديل الكود
+• شرح الكود
+• اكتشاف الأخطاء
+• تحسين التصميم
+• بناء صفحات ويب
+• JavaScript
+• CSS
+• HTML
+• Python
+• Lua
+
+حالياً المحرك محلي. للحصول على AI مولّد للكود فعلياً نحتاج ربط Backend بنموذج ذكاء اصطناعي.`,
+    "ai"
+  );
+
+}
+
+
+/* ==========================================
+   CODE GENERATOR
+========================================== */
+
+function generateCodeFromRequest(request){
+
+  if(
+    request.toLowerCase().includes("موقع") ||
+    request.toLowerCase().includes("ويب")
+  ){
+
+    editor.value=`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+
+<title>My Website</title>
+
+<style>
+body{
+  margin:0;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:#050505;
+  color:white;
+  font-family:Arial;
+}
+
+.card{
+  width:min(500px,90%);
+  padding:40px;
+  text-align:center;
+  background:#101010;
+  border:1px solid #292929;
+  border-radius:20px;
+}
+
+button{
+  padding:12px 20px;
+  border:0;
+  border-radius:10px;
+  cursor:pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="card">
+
+<h1>مرحباً 👋</h1>
+
+<p>تم إنشاء هذا الموقع بواسطة UNKNOWN AI.</p>
+
+<button onclick="hello()">
+اضغط هنا
+</button>
+
+</div>
+
+<script>
+function hello(){
+  alert("أهلاً بك!");
+}
+<\\/script>
+
+</body>
+</html>`;
+
+    updateLines();
+
+    addMessage(
+      "تم إنشاء قالب موقع ويب داخل المحرر. يمكنك تعديله مباشرة.",
+      "ai"
+    );
+
+    log("HTML TEMPLATE GENERATED");
+
+    return;
+
+  }
+
+
+  editor.value=`// UNKNOWN AI
+// Request:
+// ${request}
+
+function main(){
+
+  console.log("تم إنشاء المشروع.");
+
+}
+
+main();`;
+
+  updateLines();
+
+  addMessage(
+    "تم إنشاء بداية للكود بناءً على طلبك. عدّلها أو اطلب مني تطويرها.",
+    "ai"
+  );
+
+}
+
+
+/* ==========================================
+   EXPLAIN
+========================================== */
+
+function explainCode(){
+
+  const code=editor.value.trim();
+
+  if(!code){
+
+    addMessage("المحرر فارغ. اكتب كوداً أولاً.","ai");
+
+    return;
+
+  }
+
+  addMessage(
+`تحليل الكود:
+
+1. تم قراءة الكود الموجود في المحرر.
+2. سيتم تقسيمه إلى عناصر ووظائف عند ربط AI الحقيقي.
+3. يمكنك الآن طلب:
+   • شرح سطر معين
+   • شرح المشروع كاملاً
+   • شرح الأخطاء
+   • تبسيط الكود
+
+ملاحظة:
+المحلل الحالي تجريبي ولا يدّعي فهم كل الكود مثل نموذج AI حقيقي.`,
+    "ai"
+  );
+
+}
+
+
+/* ==========================================
+   IMPROVE
+========================================== */
+
+function improveCode(){
+
+  if(!editor.value.trim()){
+
+    addMessage("اكتب الكود أولاً حتى أستطيع تحسينه.","ai");
+
+    return;
+
+  }
+
+  addMessage(
+`تم تشغيل وضع التحسين.
+
+اقتراحات عامة:
+• تقسيم الكود إلى وظائف أصغر.
+• إزالة التكرار.
+• تحسين أسماء المتغيرات.
+• إضافة معالجة للأخطاء.
+• تحسين قابلية القراءة.
+• فصل الواجهة عن المنطق.
+• تجنب وضع الأسرار داخل JavaScript في الواجهة.
+
+عند ربط AI الحقيقي، يمكن للنظام تعديل الكود نفسه وإرجاع النسخة المحسنة.`,
+    "ai"
+  );
+
+}
+
+
+/* ==========================================
+   FIX
+========================================== */
+
+function fixCode(){
+
+  if(!editor.value.trim()){
+
+    addMessage("المحرر فارغ.","ai");
+
+    return;
+
+  }
+
+  let code=editor.value;
+
+  /*
+    إصلاحات بسيطة محلية.
+  */
+
+  code=code.replace(/\r\n/g,"\n");
+
+  editor.value=code;
+
+  updateLines();
+
+  addMessage(
+`تم فحص الكود محلياً.
+
+لم يتم العثور على إصلاح تلقائي مؤكد.
+
+لفحص الأخطاء فعلياً، شغّل المشروع وافتح Console.`,
+    "ai"
+  );
+
+  log("CODE CHECK COMPLETED");
+
+}
+
+
+/* ==========================================
+   RUN HTML
+========================================== */
+
+function runCode(){
+
+  const language=
+    document.getElementById("language").value;
+
+  if(language!=="html"){
+
+    addMessage(
+      "التشغيل المباشر داخل الصفحة متاح حالياً لـ HTML.",
+      "ai"
+    );
+
+    return;
+
+  }
+
+  const code=editor.value;
+
+  if(!code.trim()){
+
+    addMessage("لا يوجد كود للتشغيل.","ai");
+
+    return;
+
+  }
+
+  const blob=new Blob(
+    [code],
+    {type:"text/html"}
+  );
+
+  const url=URL.createObjectURL(blob);
+
+  window.open(url,"_blank");
+
+  log("HTML EXECUTED");
+
+}
+
+
+/* ==========================================
+   COPY
+========================================== */
+
+async function copyCode(){
+
+  try{
+
+    await navigator.clipboard.writeText(
+      editor.value
+    );
+
+    addMessage("تم نسخ الكود.","ai");
+
+  }catch{
+
+    addMessage("تعذر النسخ من المتصفح.","ai");
+
+  }
+
+}
+
+
+/* ==========================================
+   CLEAR
+========================================== */
+
+function clearEditor(){
+
+  if(confirm("مسح الكود؟")){
+
+    editor.value="";
+
+    updateLines();
+
+    log("EDITOR CLEARED");
+
+  }
+
+}
+
+
+/* ==========================================
+   PROJECTS
+========================================== */
+
+function newProject(){
+
+  const name=
+    prompt("اسم المشروع:");
+
+  if(!name)return;
+
+  currentProject=name;
+
+  editor.value="";
+
+  updateLines();
+
+  renderProjects();
+
+  addMessage(
+    "تم إنشاء المشروع: "+name,
+    "system"
+  );
+
+}
+
+
+function saveProject(){
+
+  projects[currentProject]={
+    code:editor.value,
+    language:document.getElementById("language").value,
+    date:new Date().toISOString()
+  };
+
+  localStorage.setItem(
+    "unknown_projects",
+    JSON.stringify(projects)
+  );
+
+  renderProjects();
+
+  addMessage(
+    "تم حفظ المشروع محلياً على الجهاز.",
+    "ai"
+  );
+
+  log("PROJECT SAVED: "+currentProject);
+
+}
+
+
+function loadProject(){
+
+  const data=projects[currentProject];
+
+  if(!data){
+
+    addMessage(
+      "لا يوجد مشروع محفوظ بهذا الاسم.",
+      "ai"
+    );
+
+    return;
+
+  }
+
+  editor.value=data.code;
+
+  document.getElementById("language").value=
+    data.language || "html";
+
+  updateLines();
+
+  addMessage(
+    "تم تحميل: "+currentProject,
+    "ai"
+  );
+
+}
+
+
+function loadSavedProjects(){
+
+  renderProjects();
+
+  if(projects[currentProject]){
+
+    editor.value=
+      projects[currentProject].code || "";
+
+    updateLines();
+
+  }
+
+}
+
+
+function renderProjects(){
+
+  const list=
+    document.getElementById("projectList");
+
+  list.innerHTML="";
+
+  const names=
+    Object.keys(projects);
+
+  if(names.length===0){
+
+    list.innerHTML=
+      `<div class="project">
+        لا توجد مشاريع محفوظة
+      </div>`;
+
+    return;
+
+  }
+
+  names.forEach(name=>{
+
+    const div=
+      document.createElement("div");
+
+    div.className="project";
+
+    div.textContent=name;
+
+    div.onclick=()=>{
+
+      currentProject=name;
+
+      loadProject();
+
+    };
+
+    list.appendChild(div);
+
+  });
+
+}
+
+
+/* ==========================================
+   TEMPLATES
+========================================== */
+
+function showTemplates(){
+
+  document.getElementById(
+    "templateModal"
+  ).style.display="flex";
+
+}
+
+function closeTemplates(){
+
+  document.getElementById(
+    "templateModal"
+  ).style.display="none";
+
+}
+
+
+function template(type){
+
+  closeTemplates();
+
+  if(type==="website"){
+
+    editor.value=`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport"
+content="width=device-width,initial-scale=1">
+<title>Website</title>
+<style>
+*{box-sizing:border-box}
+body{
+margin:0;
+min-height:100vh;
+background:#050505;
+color:white;
+font-family:Arial;
+display:grid;
+place-items:center;
+}
+.card{
+padding:40px;
+border:1px solid #333;
+border-radius:20px;
+text-align:center;
+}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>موقعي</h1>
+<p>أهلاً بك.</p>
+</div>
+</body>
+</html>`;
+
+  }
+
+
+  if(type==="login"){
+
+    editor.value=`<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>Login</title>
+<style>
+body{
+margin:0;
+min-height:100vh;
+display:grid;
+place-items:center;
+background:#050505;
+color:white;
+font-family:Arial;
+}
+.box{
+width:320px;
+padding:30px;
+background:#111;
+border-radius:18px;
+}
+input,button{
+width:100%;
+padding:12px;
+margin-top:10px;
+}
+</style>
+</head>
+<body>
+<div class="box">
+<h2>تسجيل الدخول</h2>
+<input placeholder="اسم المستخدم">
+<input type="password"
+placeholder="كلمة المرور">
+<button onclick="login()">
+دخول
+</button>
+</div>
+<script>
+function login(){
+alert("تم الضغط على دخول");
+}
+<\\/script>
+</body>
+</html>`;
+
+  }
+
+
+  if(type==="dashboard"){
+
+    editor.value=`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Dashboard</title>
+<style>
+body{
+margin:0;
+background:#050505;
+color:white;
+font-family:Arial;
+padding:20px;
+}
+.grid{
+display:grid;
+grid-template-columns:
+repeat(auto-fit,minmax(180px,1fr));
+gap:15px;
+}
+.card{
+padding:25px;
+background:#111;
+border:1px solid #292929;
+border-radius:15px;
+}
+</style>
+</head>
+<body>
+<h1>لوحة التحكم</h1>
+<div class="grid">
+<div class="card">المستخدمون<br><b>120</b></div>
+<div class="card">المشاريع<br><b>24</b></div>
+<div class="card">الحالة<br><b>ONLINE</b></div>
+</div>
+</body>
+</html>`;
+
+  }
+
+
+  if(type==="game"){
+
+    editor.value=`<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Game</title>
+<style>
+body{
+margin:0;
+overflow:hidden;
+background:#050505;
+}
+.player{
+position:absolute;
+width:50px;
+height:50px;
+background:white;
+border-radius:50%;
+}
+</style>
+</head>
+<body>
+<div class="player" id="player"></div>
+
+<script>
+const p=
+document.getElementById("player");
+
+let x=100;
+let y=100;
+
+document.addEventListener("keydown",e=>{
+
+if(e.key==="ArrowRight")x+=10;
+if(e.key==="ArrowLeft")x-=10;
+if(e.key==="ArrowUp")y-=10;
+if(e.key==="ArrowDown")y+=10;
+
+p.style.left=x+"px";
+p.style.top=y+"px";
+
+});
+<\\/script>
+</body>
+</html>`;
+
+  }
+
+
+  if(type==="portfolio"){
+
+    editor.value=`<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<title>Portfolio</title>
+<style>
+body{
+margin:0;
+background:#050505;
+color:white;
+font-family:Arial;
+padding:30px;
+}
+.hero{
+max-width:700px;
+margin:100px auto;
+}
+h1{
+font-size:50px;
+}
+span{
+color:#888;
+}
+</style>
+</head>
+<body>
+<section class="hero">
+<span>PORTFOLIO</span>
+<h1>مشروعي</h1>
+<p>
+أهلاً بك في موقعي الشخصي.
+</p>
+</section>
+</body>
+</html>`;
+
+  }
+
+  updateLines();
+
+  log("TEMPLATE LOADED: "+type);
+
+}
+
+
+/* ==========================================
+   CONSOLE
+========================================== */
+
+function toggleConsole(){
+
+  consoleBox.classList.toggle("open");
+
+}
+
+
+function log(text){
+
+  const line=
+    document.createElement("div");
+
+  const time=
+    new Date().toLocaleTimeString();
+
+  line.textContent=
+    "["+time+"] "+text;
+
+  consoleOutput.appendChild(line);
+
+  consoleOutput.scrollTop=
+    consoleOutput.scrollHeight;
+
+}
+
+
+/* ==========================================
+   CHAT CLEAR
+========================================== */
+
+function clearChat(){
+
+  messages.innerHTML="";
+
+  addMessage(
+`تم تنظيف المحادثة.
+
+UNKNOWN CODE AI
+جاهز.`,
+    "system"
+  );
+
+}
+
+
+/* ==========================================
+   INITIAL
+========================================== */
+
+editor.value=`<!DOCTYPE html>
+<html lang="ar">
+<head>
+<meta charset="UTF-8">
+<title>UNKNOWN</title>
+</head>
+
+<body>
+
+<h1>ابدأ مشروعك هنا</h1>
+
+</body>
+</html>`;
+
+updateLines();
+
+log("UNKNOWN CODE AI INITIALIZED");
 
 </script>
 
