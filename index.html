@@ -1,4 +1,227 @@
-const productId = “EP0102-NPEB00342_00-AVRESIDENT000007”;
-const url = “https://store.playstation.com/”;
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>PS Product</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
+  body {
+    background: #000;
+    background-image: radial-gradient(circle at 50% 0%, rgba(0,112,209,0.3), transparent 60%);
+    color: #fff;
+    font-family: -apple-system, Tahoma, sans-serif;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
+  .container { max-width: 400px; width: 100%; }
+  .header {
+    text-align: center;
+    margin-bottom: 24px;
+  }
+  .logo {
+    font-size: 28px;
+    font-weight: 900;
+    background: linear-gradient(135deg, #0070D1, #00A8FF, #fff);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    margin-bottom: 4px;
+  }
+  .subtitle { color: #666; font-size: 12px; }
+  
+  .product-card {
+    background: rgba(15,15,22,0.95);
+    border: 1.5px solid rgba(0,112,209,0.3);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    text-align: center;
+  }
+  
+  .product-img {
+    width: 100px;
+    height: 100px;
+    margin: 0 auto 14px;
+    border-radius: 16px;
+    background: linear-gradient(135deg, #1a1a24, #2a2a3a);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 52px;
+    border: 1px solid rgba(0,112,209,0.3);
+  }
+  
+  .product-name {
+    font-size: 18px;
+    font-weight: 800;
+    margin-bottom: 6px;
+  }
+  
+  .product-id {
+    font-size: 10px;
+    color: #666;
+    font-family: monospace;
+    word-break: break-all;
+    margin-bottom: 12px;
+  }
+  
+  .badge-free {
+    display: inline-block;
+    padding: 4px 12px;
+    background: linear-gradient(135deg, #00A8FF, #0070D1);
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+  }
+  
+  .actions {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .btn {
+    display: block;
+    width: 100%;
+    padding: 16px;
+    border: none;
+    border-radius: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    -webkit-appearance: none;
+    transition: all 0.15s;
+    text-decoration: none;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .btn:active { transform: scale(0.97); }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #0070D1, #00A8FF);
+    box-shadow: 0 4px 20px rgba(0,112,209,0.4);
+  }
+  
+  .btn-store {
+    background: linear-gradient(135deg, #FF0066, #FF3388);
+    box-shadow: 0 4px 20px rgba(255,0,102,0.3);
+  }
+  
+  .btn-copy {
+    background: rgba(0,112,209,0.15);
+    color: #00A8FF;
+    border: 1px solid rgba(0,112,209,0.3);
+  }
+  
+  .btn-app {
+    background: #1a1a24;
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #ccc;
+  }
+  
+  .toast {
+    position: fixed;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%) translateY(120px);
+    background: #1a1a24;
+    padding: 14px 22px;
+    border-radius: 12px;
+    font-size: 13px;
+    border: 1px solid #0070D1;
+    transition: transform 0.3s;
+    z-index: 1000;
+    max-width: 90%;
+    text-align: center;
+  }
+  
+  .toast.show { transform: translateX(-50%) translateY(0); }
+  
+  .hint {
+    text-align: center;
+    font-size: 11px;
+    color: #555;
+    margin-top: 14px;
+    line-height: 1.7;
+  }
+</style>
+</head>
+<body>
 
-window.location.href = url;
+<div class="container">
+  <div class="header">
+    <div class="logo">PS Store</div>
+    <div class="subtitle">فتح مباشر للأفاتار</div>
+  </div>
+
+  <div class="product-card">
+    <div class="product-img">🧟</div>
+    <div class="product-name">Resident Evil Avatar 7</div>
+    <div class="product-id">EP0102-NPEB00342_00-AVRESIDENT000007</div>
+    <span class="badge-free">مجاني</span>
+  </div>
+
+  <div class="actions">
+    <button class="btn btn-store" id="storeBtn">
+      🛒 فتح PS Store الرسمي
+    </button>
+    <button class="btn btn-primary" id="appBtn">
+      🎮 فتح PS App
+    </button>
+    <button class="btn btn-copy" id="copyBtn">
+      📋 نسخ Product ID
+    </button>
+    <button class="btn btn-app" id="webBtn">
+      🌐 فتح PS Store EU
+    </button>
+  </div>
+
+  <div class="hint">
+    بعد ما تفتح PS Store → سجّل دخول → اضغط "Add to Cart" → يظهر تلقائياً في PS App
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+const PRODUCT_ID = 'EP0102-NPEB00342_00-AVRESIDENT000007';
+const PRODUCT_NAME = 'Resident Evil Avatar 7';
+
+// ============ Toast ============
+function toast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(t._timeout);
+  t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ============ فتح PS Store ============
+document.getElementById('storeBtn').addEventListener('click', () => {
+  const url = `https://store.playstation.com/ar-sa/product/${PRODUCT_ID}`;
+  toast('🛒 فتح PS Store...');
+  window.open(url, '_blank');
+});
+
+// ============ فتح PS Store EU ============
+document.getElementById('webBtn').addEventListener('click', () => {
+  const url = `https://store.playstation.com/en-gb/product/${PRODUCT_ID}`;
+  toast('🌐 فتح PS Store EU...');
+  window.open(url, '_blank');
+});
+
+// ============ فتح PS App ============
+document.getElementById('appBtn').addEventListener('click', () => {
+  const ua = navigator.userAgent;
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+  const isAndroid = /Android/i.test(ua);
+
+  toast('🎮 فتح PS App...');
+
+  if (isIOS) {
+    // iOS — نحاول deep link
