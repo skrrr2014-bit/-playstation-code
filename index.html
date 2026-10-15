@@ -1,227 +1,402 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>PS Product</title>
-<style>
-  * { box-sizing: border-box; margin: 0; padding: 0; -webkit-tap-highlight-color: transparent; }
-  body {
-    background: #000;
-    background-image: radial-gradient(circle at 50% 0%, rgba(0,112,209,0.3), transparent 60%);
-    color: #fff;
-    font-family: -apple-system, Tahoma, sans-serif;
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-  }
-  .container { max-width: 400px; width: 100%; }
-  .header {
-    text-align: center;
-    margin-bottom: 24px;
-  }
-  .logo {
-    font-size: 28px;
-    font-weight: 900;
-    background: linear-gradient(135deg, #0070D1, #00A8FF, #fff);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    margin-bottom: 4px;
-  }
-  .subtitle { color: #666; font-size: 12px; }
-  
-  .product-card {
-    background: rgba(15,15,22,0.95);
-    border: 1.5px solid rgba(0,112,209,0.3);
-    border-radius: 18px;
-    padding: 20px;
-    margin-bottom: 16px;
-    text-align: center;
-  }
-  
-  .product-img {
-    width: 100px;
-    height: 100px;
-    margin: 0 auto 14px;
-    border-radius: 16px;
-    background: linear-gradient(135deg, #1a1a24, #2a2a3a);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 52px;
-    border: 1px solid rgba(0,112,209,0.3);
-  }
-  
-  .product-name {
-    font-size: 18px;
-    font-weight: 800;
-    margin-bottom: 6px;
-  }
-  
-  .product-id {
-    font-size: 10px;
-    color: #666;
-    font-family: monospace;
-    word-break: break-all;
-    margin-bottom: 12px;
-  }
-  
-  .badge-free {
-    display: inline-block;
-    padding: 4px 12px;
-    background: linear-gradient(135deg, #00A8FF, #0070D1);
-    border-radius: 20px;
-    font-size: 11px;
-    font-weight: 700;
-  }
-  
-  .actions {
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .btn {
-    display: block;
-    width: 100%;
-    padding: 16px;
-    border: none;
-    border-radius: 14px;
-    font-size: 15px;
-    font-weight: 700;
-    cursor: pointer;
-    font-family: inherit;
-    -webkit-appearance: none;
-    transition: all 0.15s;
-    text-decoration: none;
-    text-align: center;
-    color: #fff;
-  }
-  
-  .btn:active { transform: scale(0.97); }
-  
-  .btn-primary {
-    background: linear-gradient(135deg, #0070D1, #00A8FF);
-    box-shadow: 0 4px 20px rgba(0,112,209,0.4);
-  }
-  
-  .btn-store {
-    background: linear-gradient(135deg, #FF0066, #FF3388);
-    box-shadow: 0 4px 20px rgba(255,0,102,0.3);
-  }
-  
-  .btn-copy {
-    background: rgba(0,112,209,0.15);
-    color: #00A8FF;
-    border: 1px solid rgba(0,112,209,0.3);
-  }
-  
-  .btn-app {
-    background: #1a1a24;
-    border: 1px solid rgba(255,255,255,0.1);
-    color: #ccc;
-  }
-  
-  .toast {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%) translateY(120px);
-    background: #1a1a24;
-    padding: 14px 22px;
-    border-radius: 12px;
-    font-size: 13px;
-    border: 1px solid #0070D1;
-    transition: transform 0.3s;
-    z-index: 1000;
-    max-width: 90%;
-    text-align: center;
-  }
-  
-  .toast.show { transform: translateX(-50%) translateY(0); }
-  
-  .hint {
-    text-align: center;
-    font-size: 11px;
-    color: #555;
-    margin-top: 14px;
-    line-height: 1.7;
-  }
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>محاكي ويندوز - Web OS</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body, html {
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
+            background-size: cover;
+        }
+
+        /* سطح المكتب والأيقونات */
+        #desktop {
+            width: 100%;
+            height: calc(100vh - 48px);
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, 90px);
+            grid-auto-rows: 90px;
+            gap: 15px;
+        }
+
+        .desktop-icon {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            cursor: pointer;
+            border-radius: 6px;
+            transition: background 0.2s;
+        }
+
+        .desktop-icon:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .desktop-icon img {
+            width: 42px;
+            height: 42px;
+            margin-bottom: 5px;
+        }
+
+        .desktop-icon span {
+            font-size: 12px;
+            text-align: center;
+        }
+
+        /* شريط المهام السفلي */
+        #taskbar {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 48px;
+            background: rgba(20, 20, 20, 0.75);
+            backdrop-filter: blur(20px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .taskbar-center {
+            display: flex;
+            gap: 6px;
+            align-items: center;
+        }
+
+        .taskbar-btn {
+            background: transparent;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 6px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: background 0.2s;
+        }
+
+        .taskbar-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+        }
+
+        .taskbar-btn img {
+            width: 24px;
+            height: 24px;
+        }
+
+        /* الساعة والنظام */
+        .system-tray {
+            position: absolute;
+            right: 15px;
+            color: white;
+            font-size: 12px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            padding: 5px 10px;
+            border-radius: 4px;
+        }
+
+        .system-tray:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+
+        /* النافذة (Window) */
+        .window {
+            position: absolute;
+            top: 100px;
+            left: 150px;
+            width: 600px;
+            height: 400px;
+            background: #1e1e1e;
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            display: none;
+            flex-direction: column;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.1);
+            z-index: 1000;
+        }
+
+        .window-header {
+            height: 35px;
+            background: #2d2d2d;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 10px;
+            cursor: move;
+        }
+
+        .window-title {
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .window-controls {
+            display: flex;
+        }
+
+        .window-controls button {
+            background: transparent;
+            border: none;
+            color: white;
+            width: 35px;
+            height: 35px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        .window-controls button:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .window-controls .close-btn:hover {
+            background: #e81123;
+        }
+
+        .window-body {
+            flex: 1;
+            padding: 15px;
+            background: #121212;
+            overflow-y: auto;
+        }
+
+        /* قائمة ابدأ (Start Menu) */
+        #start-menu {
+            position: fixed;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%) scale(0.9);
+            width: 450px;
+            height: 450px;
+            background: rgba(30, 30, 30, 0.85);
+            backdrop-filter: blur(30px);
+            border-radius: 12px;
+            border: 1px solid rgba(255,255,255,0.15);
+            display: none;
+            flex-direction: column;
+            padding: 25px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
+            z-index: 10001;
+            opacity: 0;
+            transition: all 0.2s ease;
+        }
+
+        #start-menu.active {
+            display: flex;
+            transform: translateX(-50%) scale(1);
+            opacity: 1;
+        }
+
+        .start-menu-title {
+            font-size: 14px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 15px;
+        }
+
+        .start-apps {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+        }
+
+        .start-app-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 10px;
+            border-radius: 6px;
+            cursor: pointer;
+            color: white;
+            font-size: 11px;
+        }
+
+        .start-app-item:hover {
+            background: rgba(255,255,255,0.1);
+        }
+
+        .start-app-item img {
+            width: 32px;
+            height: 32px;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
 
-<div class="container">
-  <div class="header">
-    <div class="logo">PS Store</div>
-    <div class="subtitle">فتح مباشر للأفاتار</div>
-  </div>
+    <!-- سطح المكتب -->
+    <div id="desktop">
+        <div class="desktop-icon" onclick="openWindow('BrowserWindow')">
+            <img src="https://img.icons8.com/color/96/internet.png" alt="Browser">
+            <span>المتصفح</span>
+        </div>
+        <div class="desktop-icon" onclick="openWindow('NotepadWindow')">
+            <img src="https://img.icons8.com/color/96/notepad.png" alt="Notepad">
+            <span>المفكرة</span>
+        </div>
+    </div>
 
-  <div class="product-card">
-    <div class="product-img">🧟</div>
-    <div class="product-name">Resident Evil Avatar 7</div>
-    <div class="product-id">EP0102-NPEB00342_00-AVRESIDENT000007</div>
-    <span class="badge-free">مجاني</span>
-  </div>
+    <!-- شريط المهام -->
+    <div id="taskbar">
+        <div class="taskbar-center">
+            <button class="taskbar-btn" onclick="toggleStartMenu()">
+                <img src="https://img.icons8.com/fluency/48/windows-11.png" alt="Start">
+            </button>
+            <button class="taskbar-btn" onclick="openWindow('BrowserWindow')">
+                <img src="https://img.icons8.com/color/48/internet.png" alt="Browser">
+            </button>
+            <button class="taskbar-btn" onclick="openWindow('NotepadWindow')">
+                <img src="https://img.icons8.com/color/48/notepad.png" alt="Notepad">
+            </button>
+        </div>
+        <div class="system-tray">
+            <span id="clock">00:00</span>
+        </div>
+    </div>
 
-  <div class="actions">
-    <button class="btn btn-store" id="storeBtn">
-      🛒 فتح PS Store الرسمي
-    </button>
-    <button class="btn btn-primary" id="appBtn">
-      🎮 فتح PS App
-    </button>
-    <button class="btn btn-copy" id="copyBtn">
-      📋 نسخ Product ID
-    </button>
-    <button class="btn btn-app" id="webBtn">
-      🌐 فتح PS Store EU
-    </button>
-  </div>
+    <!-- قائمة ابدأ -->
+    <div id="start-menu">
+        <div class="start-menu-title">المثبتة</div>
+        <div class="start-apps">
+            <div class="start-app-item" onclick="openWindow('BrowserWindow'); toggleStartMenu();">
+                <img src="https://img.icons8.com/color/48/internet.png" alt="Browser">
+                <span>المتصفح</span>
+            </div>
+            <div class="start-app-item" onclick="openWindow('NotepadWindow'); toggleStartMenu();">
+                <img src="https://img.icons8.com/color/48/notepad.png" alt="Notepad">
+                <span>المفكرة</span>
+            </div>
+        </div>
+    </div>
 
-  <div class="hint">
-    بعد ما تفتح PS Store → سجّل دخول → اضغط "Add to Cart" → يظهر تلقائياً في PS App
-  </div>
-</div>
+    <!-- نافذة المتصفح -->
+    <div class="window" id="BrowserWindow">
+        <div class="window-header" onmousedown="dragWindow(event, 'BrowserWindow')">
+            <div class="window-title">
+                <img src="https://img.icons8.com/color/24/internet.png" style="width:16px;height:16px;"> المتصفح الإلكتروني
+            </div>
+            <div class="window-controls">
+                <button onclick="minimizeWindow('BrowserWindow')">🗕</button>
+                <button class="close-btn" onclick="closeWindow('BrowserWindow')">✕</button>
+            </div>
+        </div>
+        <div class="window-body">
+            <iframe src="https://www.wikipedia.org" style="width:100%; height:100%; border:none; background:white; border-radius:4px;"></iframe>
+        </div>
+    </div>
 
-<div class="toast" id="toast"></div>
+    <!-- نافذة المفكرة -->
+    <div class="window" id="NotepadWindow">
+        <div class="window-header" onmousedown="dragWindow(event, 'NotepadWindow')">
+            <div class="window-title">
+                <img src="https://img.icons8.com/color/24/notepad.png" style="width:16px;height:16px;"> المفكرة
+            </div>
+            <div class="window-controls">
+                <button onclick="minimizeWindow('NotepadWindow')">🗕</button>
+                <button class="close-btn" onclick="closeWindow('NotepadWindow')">✕</button>
+            </div>
+        </div>
+        <div class="window-body">
+            <textarea style="width:100%; height:100%; background:#1e1e1e; color:white; border:none; resize:none; outline:none; font-size:14px;" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+        </div>
+    </div>
 
-<script>
-const PRODUCT_ID = 'EP0102-NPEB00342_00-AVRESIDENT000007';
-const PRODUCT_NAME = 'Resident Evil Avatar 7';
+    <script>
+        // تحديث الساعة
+        function updateClock() {
+            const now = new Date();
+            let hours = now.getHours();
+            let minutes = now.getMinutes();
+            hours = hours < 10 ? '0' + hours : hours;
+            minutes = minutes < 10 ? '0' + minutes : minutes;
+            document.getElementById('clock').innerText = `${hours}:${minutes}`;
+        }
+        setInterval(updateClock, 1000);
+        updateClock();
 
-// ============ Toast ============
-function toast(msg) {
-  const t = document.getElementById('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  clearTimeout(t._timeout);
-  t._timeout = setTimeout(() => t.classList.remove('show'), 2500);
-}
+        // إظهار وإخفاء قائمة ابدأ
+        function toggleStartMenu() {
+            const menu = document.getElementById('start-menu');
+            menu.classList.toggle('active');
+        }
 
-// ============ فتح PS Store ============
-document.getElementById('storeBtn').addEventListener('click', () => {
-  const url = `https://store.playstation.com/ar-sa/product/${PRODUCT_ID}`;
-  toast('🛒 فتح PS Store...');
-  window.open(url, '_blank');
-});
+        // فتح النوافذ
+        function openWindow(id) {
+            const win = document.getElementById(id);
+            win.style.display = 'flex';
+            win.style.zIndex = ++zIndexCounter;
+        }
 
-// ============ فتح PS Store EU ============
-document.getElementById('webBtn').addEventListener('click', () => {
-  const url = `https://store.playstation.com/en-gb/product/${PRODUCT_ID}`;
-  toast('🌐 فتح PS Store EU...');
-  window.open(url, '_blank');
-});
+        // إغلاق النوافذ
+        function closeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
 
-// ============ فتح PS App ============
-document.getElementById('appBtn').addEventListener('click', () => {
-  const ua = navigator.userAgent;
-  const isIOS = /iPhone|iPad|iPod/i.test(ua);
-  const isAndroid = /Android/i.test(ua);
+        // تصغير النافذة
+        function minimizeWindow(id) {
+            document.getElementById(id).style.display = 'none';
+        }
 
-  toast('🎮 فتح PS App...');
+        let zIndexCounter = 1000;
 
-  if (isIOS) {
-    // iOS — نحاول deep link
+        // إمكانية سحب النوافذ (Drag & Drop)
+        function dragWindow(event, id) {
+            const win = document.getElementById(id);
+            win.style.zIndex = ++zIndexCounter;
+            
+            let shiftX = event.clientX - win.getBoundingClientRect().left;
+            let shiftY = event.clientY - win.getBoundingClientRect().top;
+
+            function moveAt(pageX, pageY) {
+                win.style.left = pageX - shiftX + 'px';
+                win.style.top = pageY - shiftY + 'px';
+            }
+
+            function onMouseMove(event) {
+                moveAt(event.pageX, event.pageY);
+            }
+
+            document.addEventListener('mousemove', onMouseMove);
+
+            win.onmouseup = function() {
+                document.removeEventListener('mousemove', onMouseMove);
+                win.onmouseup = null;
+            };
+        }
+
+        // إغلاق قائمة ابدأ عند النقر خارجها
+        window.onclick = function(event) {
+            const menu = document.getElementById('start-menu');
+            const startBtn = document.querySelector('.taskbar-btn');
+            if (!menu.contains(event.target) && !startBtn.contains(event.target) && menu.classList.contains('active')) {
+                menu.classList.remove('active');
+            }
+        }
+    </script>
+</body>
+</html>
