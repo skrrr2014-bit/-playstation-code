@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Windows 11 Web Simulator</title>
+    <title>Windows 11 Web OS</title>
     <style>
         * {
             box-sizing: border-box;
@@ -21,7 +21,6 @@
             background-size: cover;
         }
 
-        /* Desktop Grid & Icons */
         #desktop {
             position: relative;
             width: 100%;
@@ -66,7 +65,6 @@
             text-overflow: ellipsis;
         }
 
-        /* Taskbar */
         #taskbar {
             position: fixed;
             bottom: 0;
@@ -122,7 +120,6 @@
             pointer-events: none;
         }
 
-        /* System Tray */
         .system-tray {
             position: absolute;
             right: 10px;
@@ -141,7 +138,6 @@
             background: rgba(255, 255, 255, 0.1);
         }
 
-        /* Start Menu */
         #start-menu {
             position: fixed;
             bottom: 60px;
@@ -204,7 +200,6 @@
             margin-bottom: 8px;
         }
 
-        /* Windows */
         .window {
             position: absolute;
             top: 50px;
@@ -290,7 +285,6 @@
             position: relative;
         }
 
-        /* Chrome App Specifics */
         .chrome-toolbar {
             height: 40px;
             background: #353535;
@@ -324,26 +318,21 @@
 </head>
 <body>
 
-    <!-- Desktop -->
     <div id="desktop">
-        <!-- Chrome Icon -->
         <div class="desktop-icon" style="top: 20px; left: 20px;" onmousedown="initDragIcon(event, this)" ondblclick="openWindow('chromeWin')">
             <img src="https://img.icons8.com/color/96/google-chrome--v2.png" alt="Chrome">
             <span>Google Chrome</span>
         </div>
-        <!-- Notepad Icon -->
         <div class="desktop-icon" style="top: 120px; left: 20px;" onmousedown="initDragIcon(event, this)" ondblclick="openWindow('notepadWin')">
             <img src="https://img.icons8.com/color/96/notepad.png" alt="Notepad">
             <span>Notepad</span>
         </div>
-        <!-- CMD Icon -->
         <div class="desktop-icon" style="top: 220px; left: 20px;" onmousedown="initDragIcon(event, this)" ondblclick="openWindow('cmdWin')">
             <img src="https://img.icons8.com/color/96/cmd.png" alt="Terminal">
             <span>Command Prompt</span>
         </div>
     </div>
 
-    <!-- Taskbar -->
     <div id="taskbar">
         <div class="taskbar-center">
             <button class="taskbar-btn" onclick="toggleStartMenu()" title="Start">
@@ -364,7 +353,6 @@
         </div>
     </div>
 
-    <!-- Start Menu -->
     <div id="start-menu">
         <div class="start-menu-title">Pinned Apps</div>
         <div class="start-apps-grid">
@@ -383,7 +371,6 @@
         </div>
     </div>
 
-    <!-- Chrome Window -->
     <div class="window" id="chromeWin">
         <div class="window-header" onmousedown="initDragWindow(event, this)">
             <div class="window-title">
@@ -397,8 +384,6 @@
         </div>
         <div class="window-body">
             <div class="chrome-toolbar">
-                <button onclick="navigateChrome('back')">⬅</button>
-                <button onclick="navigateChrome('forward')">➡</button>
                 <button onclick="navigateChrome('reload')">🔄</button>
                 <input type="text" id="chromeUrlInput" value="https://www.wikipedia.org" onkeydown="if(event.key==='Enter') loadUrl(this.value)">
             </div>
@@ -406,7 +391,6 @@
         </div>
     </div>
 
-    <!-- Notepad Window -->
     <div class="window" id="notepadWin">
         <div class="window-header" onmousedown="initDragWindow(event, this)">
             <div class="window-title">
@@ -423,7 +407,6 @@
         </div>
     </div>
 
-    <!-- CMD Window -->
     <div class="window" id="cmdWin">
         <div class="window-header" onmousedown="initDragWindow(event, this)">
             <div class="window-title">
@@ -436,7 +419,7 @@
             </div>
         </div>
         <div class="window-body" style="background:black; color:#00ff00; padding:10px; font-family:monospace; font-size:13px;">
-            <div style="margin-bottom:5px;">Microsoft Windows [Version 10.0.22631.3810]</div>
+            <div style="margin-bottom:5px;">Microsoft Windows [Version 10.0.22631]</div>
             <div style="margin-bottom:10px;">(c) Microsoft Corporation. All rights reserved.</div>
             <div id="cmd-output"></div>
             <div style="display:flex;">
@@ -447,13 +430,11 @@
     </div>
 
     <script>
-        // Clock Update
         setInterval(() => {
             const now = new Date();
             document.getElementById('clock').innerText = now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
         }, 1000);
 
-        // Desktop Icons Free Dragging System
         function initDragIcon(e, elm) {
             if (e.button !== 0) return;
             let startX = e.clientX;
@@ -478,7 +459,6 @@
             e.stopPropagation();
         }
 
-        // Window Management
         let zIndexCounter = 1000;
 
         function bringToFront(winId) {
@@ -513,7 +493,6 @@
                 openWindow(winId);
             } else {
                 minimizeWindow(winId);
-                updateTaskbarIndicator(winId, true);
             }
         }
 
@@ -530,7 +509,6 @@
             }
         }
 
-        // Window Dragging Mechanics
         function initDragWindow(e, headerElm) {
             if (e.button !== 0) return;
             const win = headerElm.parentElement;
@@ -558,7 +536,6 @@
             window.addEventListener('mouseup', onMouseUp);
         }
 
-        // Start Menu Toggle
         function toggleStartMenu() {
             const menu = document.getElementById('start-menu');
             menu.classList.toggle('active');
@@ -572,18 +549,17 @@
             }
         });
 
-        // Chrome Browser Logic
         function loadUrl(url) {
             if(!url.startsWith('http')) url = 'https://' + url;
             document.getElementById('chromeFrame').src = url;
             document.getElementById('chromeUrlInput').value = url;
         }
+
         function navigateChrome(action) {
             const frame = document.getElementById('chromeFrame');
             if(action === 'reload') frame.src = frame.src;
         }
 
-        // CMD Logic
         function handleCmd(e) {
             if(e.key === 'Enter') {
                 const input = document.getElementById('cmdInput');
