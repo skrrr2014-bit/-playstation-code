@@ -1,34 +1,24 @@
 <!DOCTYPE html>
-<html lang="ar" dir="rtl">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>محاكي ويندوز - Web OS</title>
+    <title>Windows 11 Web Edition</title>
     <style>
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        body, html {
-            width: 100%;
-            height: 100%;
-            overflow: hidden;
-            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=1920&auto=format&fit=crop') no-repeat center center fixed;
-            background-size: cover;
-        }
-
-        /* سطح المكتب والأيقونات */
+        * { box-sizing: border-box; margin: 0; padding: 0; user-select: none; font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+        body, html { width: 100%; height: 100%; overflow: hidden; background: #000; }
+        
         #desktop {
             width: 100%;
-            height: calc(100vh - 48px);
-            padding: 20px;
+            height: calc(100% - 48px);
+            background: url('https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?q=80&w=2560&auto=format&fit=crop') no-repeat center center/cover;
+            position: relative;
             display: grid;
             grid-template-columns: repeat(auto-fill, 90px);
-            grid-auto-rows: 90px;
-            gap: 15px;
+            grid-template-rows: repeat(auto-fill, 90px);
+            grid-auto-flow: column;
+            padding: 10px;
+            gap: 10px;
         }
 
         .desktop-icon {
@@ -36,366 +26,234 @@
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            color: white;
-            text-shadow: 1px 1px 3px rgba(0,0,0,0.8);
+            width: 85px;
+            height: 85px;
+            border-radius: 4px;
             cursor: pointer;
-            border-radius: 6px;
+            color: white;
+            text-shadow: 0 1px 3px rgba(0,0,0,0.8);
+            text-align: center;
+            font-size: 12px;
             transition: background 0.2s;
         }
+        .desktop-icon:hover { background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); }
+        .desktop-icon img { width: 40px; height: 40px; margin-bottom: 5px; }
 
-        .desktop-icon:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .desktop-icon img {
-            width: 42px;
-            height: 42px;
-            margin-bottom: 5px;
-        }
-
-        .desktop-icon span {
-            font-size: 12px;
-            text-align: center;
-        }
-
-        /* شريط المهام السفلي */
         #taskbar {
-            position: fixed;
-            bottom: 0;
-            left: 0;
             width: 100%;
             height: 48px;
-            background: rgba(20, 20, 20, 0.75);
+            background: rgba(20, 20, 20, 0.85);
             backdrop-filter: blur(20px);
             display: flex;
             align-items: center;
             justify-content: center;
-            z-index: 10000;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            z-index: 99999;
             border-top: 1px solid rgba(255, 255, 255, 0.1);
         }
 
-        .taskbar-center {
-            display: flex;
-            gap: 6px;
-            align-items: center;
-        }
-
-        .taskbar-btn {
-            background: transparent;
-            border: none;
+        .taskbar-center { display: flex; gap: 4px; align-items: center; }
+        .tb-btn {
             width: 40px;
             height: 40px;
-            border-radius: 6px;
-            cursor: pointer;
+            border-radius: 4px;
             display: flex;
             align-items: center;
             justify-content: center;
+            background: transparent;
+            border: none;
+            cursor: pointer;
             transition: background 0.2s;
         }
+        .tb-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .tb-btn img { width: 24px; height: 24px; }
 
-        .taskbar-btn:hover {
-            background: rgba(255, 255, 255, 0.15);
-        }
-
-        .taskbar-btn img {
-            width: 24px;
-            height: 24px;
-        }
-
-        /* الساعة والنظام */
-        .system-tray {
-            position: absolute;
-            right: 15px;
-            color: white;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            cursor: pointer;
-            padding: 5px 10px;
-            border-radius: 4px;
-        }
-
-        .system-tray:hover {
-            background: rgba(255, 255, 255, 0.1);
-        }
-
-        /* النافذة (Window) */
         .window {
             position: absolute;
-            top: 100px;
-            left: 150px;
-            width: 600px;
-            height: 400px;
-            background: #1e1e1e;
+            top: 50px;
+            left: 100px;
+            width: 800px;
+            height: 500px;
+            background: #202020;
             color: white;
             border-radius: 8px;
             box-shadow: 0 10px 30px rgba(0,0,0,0.5);
-            display: none;
+            display: flex;
             flex-direction: column;
             overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.1);
-            z-index: 1000;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            resize: both;
+            z-index: 10;
         }
 
         .window-header {
             height: 35px;
-            background: #2d2d2d;
+            background: #181818;
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 10px;
-            cursor: move;
+            cursor: grab;
         }
-
-        .window-title {
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .window-controls {
-            display: flex;
-        }
-
-        .window-controls button {
+        .window-title { font-size: 13px; display: flex; align-items: center; gap: 8px; }
+        .window-title img { width: 16px; height: 16px; }
+        .window-controls { display: flex; gap: 0; }
+        .win-ctrl-btn {
+            width: 45px;
+            height: 35px;
             background: transparent;
             border: none;
             color: white;
-            width: 35px;
-            height: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
             cursor: pointer;
             font-size: 12px;
         }
+        .win-ctrl-btn:hover { background: rgba(255, 255, 255, 0.1); }
+        .win-ctrl-btn.close:hover { background: #e81123; }
 
-        .window-controls button:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .window-controls .close-btn:hover {
-            background: #e81123;
-        }
-
-        .window-body {
-            flex: 1;
-            padding: 15px;
-            background: #121212;
-            overflow-y: auto;
-        }
-
-        /* قائمة ابدأ (Start Menu) */
-        #start-menu {
-            position: fixed;
-            bottom: 60px;
-            left: 50%;
-            transform: translateX(-50%) scale(0.9);
-            width: 450px;
-            height: 450px;
-            background: rgba(30, 30, 30, 0.85);
-            backdrop-filter: blur(30px);
-            border-radius: 12px;
-            border: 1px solid rgba(255,255,255,0.15);
-            display: none;
-            flex-direction: column;
-            padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            z-index: 10001;
-            opacity: 0;
-            transition: all 0.2s ease;
-        }
-
-        #start-menu.active {
-            display: flex;
-            transform: translateX(-50%) scale(1);
-            opacity: 1;
-        }
-
-        .start-menu-title {
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            margin-bottom: 15px;
-        }
-
-        .start-apps {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 15px;
-        }
-
-        .start-app-item {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            padding: 10px;
-            border-radius: 6px;
-            cursor: pointer;
-            color: white;
-            font-size: 11px;
-        }
-
-        .start-app-item:hover {
-            background: rgba(255,255,255,0.1);
-        }
-
-        .start-app-item img {
-            width: 32px;
-            height: 32px;
-            margin-bottom: 5px;
-        }
+        .window-body { flex: 1; background: #121212; position: relative; overflow: hidden; display: flex; flex-direction: column; }
+        
+        iframe { width: 100%; height: 100%; border: none; background: white; }
+        
+        .app-internal { padding: 20px; color: #fff; height: 100%; overflow-y: auto; }
+        .app-internal h2 { margin-bottom: 15px; font-weight: 400; }
+        .specs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; font-size: 14px; background: #1a1a1a; padding: 15px; border-radius: 6px; }
     </style>
 </head>
 <body>
 
-    <!-- سطح المكتب -->
     <div id="desktop">
-        <div class="desktop-icon" onclick="openWindow('BrowserWindow')">
-            <img src="https://img.icons8.com/color/96/internet.png" alt="Browser">
-            <span>المتصفح</span>
+        <div class="desktop-icon" onclick="openApp('chrome')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%282011%29.svg" alt="Chrome">
+            <span>Google Chrome</span>
         </div>
-        <div class="desktop-icon" onclick="openWindow('NotepadWindow')">
-            <img src="https://img.icons8.com/color/96/notepad.png" alt="Notepad">
-            <span>المفكرة</span>
+        <div class="desktop-icon" onclick="openApp('settings')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Windows_Settings_app_icon_%282020–present%29.svg" alt="Settings">
+            <span>Settings</span>
+        </div>
+        <div class="desktop-icon" onclick="openApp('terminal')">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Windows_Terminal_logo.svg" alt="Terminal">
+            <span>Terminal</span>
         </div>
     </div>
 
-    <!-- شريط المهام -->
     <div id="taskbar">
         <div class="taskbar-center">
-            <button class="taskbar-btn" onclick="toggleStartMenu()">
-                <img src="https://img.icons8.com/fluency/48/windows-11.png" alt="Start">
-            </button>
-            <button class="taskbar-btn" onclick="openWindow('BrowserWindow')">
-                <img src="https://img.icons8.com/color/48/internet.png" alt="Browser">
-            </button>
-            <button class="taskbar-btn" onclick="openWindow('NotepadWindow')">
-                <img src="https://img.icons8.com/color/48/notepad.png" alt="Notepad">
-            </button>
-        </div>
-        <div class="system-tray">
-            <span id="clock">00:00</span>
+            <button class="tb-btn" onclick="openApp('start')"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e4/Windows_11_logo.svg" alt="Start"></button>
+            <button class="tb-btn" onclick="openApp('chrome')"><img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%282011%29.svg" alt="Chrome"></button>
+            <button class="tb-btn" onclick="openApp('settings')"><img src="https://upload.wikimedia.org/wikipedia/commons/a/a5/Windows_Settings_app_icon_%282020–present%29.svg" alt="Settings"></button>
+            <button class="tb-btn" onclick="openApp('terminal')"><img src="https://upload.wikimedia.org/wikipedia/commons/3/34/Windows_Terminal_logo.svg" alt="Terminal"></button>
         </div>
     </div>
 
-    <!-- قائمة ابدأ -->
-    <div id="start-menu">
-        <div class="start-menu-title">المثبتة</div>
-        <div class="start-apps">
-            <div class="start-app-item" onclick="openWindow('BrowserWindow'); toggleStartMenu();">
-                <img src="https://img.icons8.com/color/48/internet.png" alt="Browser">
-                <span>المتصفح</span>
-            </div>
-            <div class="start-app-item" onclick="openWindow('NotepadWindow'); toggleStartMenu();">
-                <img src="https://img.icons8.com/color/48/notepad.png" alt="Notepad">
-                <span>المفكرة</span>
-            </div>
-        </div>
-    </div>
-
-    <!-- نافذة المتصفح -->
-    <div class="window" id="BrowserWindow">
-        <div class="window-header" onmousedown="dragWindow(event, 'BrowserWindow')">
-            <div class="window-title">
-                <img src="https://img.icons8.com/color/24/internet.png" style="width:16px;height:16px;"> المتصفح الإلكتروني
-            </div>
-            <div class="window-controls">
-                <button onclick="minimizeWindow('BrowserWindow')">🗕</button>
-                <button class="close-btn" onclick="closeWindow('BrowserWindow')">✕</button>
-            </div>
-        </div>
-        <div class="window-body">
-            <iframe src="https://www.wikipedia.org" style="width:100%; height:100%; border:none; background:white; border-radius:4px;"></iframe>
-        </div>
-    </div>
-
-    <!-- نافذة المفكرة -->
-    <div class="window" id="NotepadWindow">
-        <div class="window-header" onmousedown="dragWindow(event, 'NotepadWindow')">
-            <div class="window-title">
-                <img src="https://img.icons8.com/color/24/notepad.png" style="width:16px;height:16px;"> المفكرة
-            </div>
-            <div class="window-controls">
-                <button onclick="minimizeWindow('NotepadWindow')">🗕</button>
-                <button class="close-btn" onclick="closeWindow('NotepadWindow')">✕</button>
-            </div>
-        </div>
-        <div class="window-body">
-            <textarea style="width:100%; height:100%; background:#1e1e1e; color:white; border:none; resize:none; outline:none; font-size:14px;" placeholder="اكتب ملاحظاتك هنا..."></textarea>
-        </div>
-    </div>
+    <div id="window-container"></div>
 
     <script>
-        // تحديث الساعة
-        function updateClock() {
-            const now = new Date();
-            let hours = now.getHours();
-            let minutes = now.getMinutes();
-            hours = hours < 10 ? '0' + hours : hours;
-            minutes = minutes < 10 ? '0' + minutes : minutes;
-            document.getElementById('clock').innerText = `${hours}:${minutes}`;
-        }
-        setInterval(updateClock, 1000);
-        updateClock();
+        let zIndexCounter = 100;
 
-        // إظهار وإخفاء قائمة ابدأ
-        function toggleStartMenu() {
-            const menu = document.getElementById('start-menu');
-            menu.classList.toggle('active');
-        }
-
-        // فتح النوافذ
-        function openWindow(id) {
-            const win = document.getElementById(id);
-            win.style.display = 'flex';
+        function openApp(appId) {
+            const container = document.getElementById('window-container');
+            const win = document.createElement('div');
+            win.className = 'window';
             win.style.zIndex = ++zIndexCounter;
-        }
+            win.style.top = `${50 + (zIndexCounter % 5) * 20}px`;
+            win.style.left = `${100 + (zIndexCounter % 5) * 20}px`;
 
-        // إغلاق النوافذ
-        function closeWindow(id) {
-            document.getElementById(id).style.display = 'none';
-        }
+            let title = '';
+            let icon = '';
+            let content = '';
 
-        // تصغير النافذة
-        function minimizeWindow(id) {
-            document.getElementById(id).style.display = 'none';
-        }
-
-        let zIndexCounter = 1000;
-
-        // إمكانية سحب النوافذ (Drag & Drop)
-        function dragWindow(event, id) {
-            const win = document.getElementById(id);
-            win.style.zIndex = ++zIndexCounter;
-            
-            let shiftX = event.clientX - win.getBoundingClientRect().left;
-            let shiftY = event.clientY - win.getBoundingClientRect().top;
-
-            function moveAt(pageX, pageY) {
-                win.style.left = pageX - shiftX + 'px';
-                win.style.top = pageY - shiftY + 'px';
+            if (appId === 'chrome') {
+                title = 'Google Chrome';
+                icon = 'https://upload.wikimedia.org/wikipedia/commons/e/e1/Google_Chrome_icon_%282011%29.svg';
+                content = `<div style="background:#35363a; padding:5px; display:flex; gap:5px; align-items:center;">
+                    <input type="text" id="url-${zIndexCounter}" value="https://www.wikipedia.org" style="flex:1; padding:6px 12px; border-radius:15px; border:none; background:#202124; color:white; outline:none;" onkeydown="if(event.key==='Enter') navigateIframe(this, ${zIndexCounter})">
+                </div><iframe id="iframe-${zIndexCounter}" src="https://www.wikipedia.org"></iframe>`;
+            } else if (appId === 'settings') {
+                title = 'Settings - System Info';
+                icon = 'https://upload.wikimedia.org/wikipedia/commons/a/a5/Windows_Settings_app_icon_%282020–present%29.svg';
+                content = `<div class="app-internal">
+                    <h2>Device specifications</h2>
+                    <div class="specs-grid">
+                        <div>Processor</div><div>Virtual Quantum i9-14900KS @ 6.20GHz</div>
+                        <div>Installed RAM</div><div>128 GB High-Speed DDR5</div>
+                        <div>System type</div><div>64-bit operating system, x64-based processor</div>
+                        <div>Graphics</div><div>NVIDIA RTX 5090 Ti (Simulated)</div>
+                        <div>Windows Edition</div><div>Windows 11 Pro Enterprise Ultimate</div>
+                    </div>
+                </div>`;
+            } else if (appId === 'terminal') {
+                title = 'Windows Terminal';
+                icon = 'https://upload.wikimedia.org/wikipedia/commons/3/34/Windows_Terminal_logo.svg';
+                content = `<div class="app-internal" style="background:#0c0c0c; font-family:Consolas, monospace;">
+                    <p>Windows PowerShell [Version 11.0.26100]</p>
+                    <p>(c) Microsoft Corporation. All rights reserved.</p><br>
+                    <p>PS C:\\Users\\Administrator> <span id="term-input" contenteditable="true" style="outline:none; color:white;"></span></p>
+                </div>`;
             }
 
-            function onMouseMove(event) {
-                moveAt(event.pageX, event.pageY);
+            win.innerHTML = `
+                <div class="window-header" onmousedown="dragWindow(event, this.parentElement)">
+                    <div class="window-title"><img src="${icon}"><span>${title}</span></div>
+                    <div class="window-controls">
+                        <button class="win-ctrl-btn" onclick="minimizeWindow(this)">&#xF090;</button>
+                        <button class="win-ctrl-btn" onclick="maximizeWindow(this)">&#xF092;</button>
+                        <button class="win-ctrl-btn close" onclick="closeWindow(this)">&#xF071;</button>
+                    </div>
+                </div>
+                <div class="window-body">${content}</div>
+            `;
+
+            win.onmousedown = () => { win.style.zIndex = ++zIndexCounter; };
+            container.appendChild(win);
+        }
+
+        function closeWindow(btn) {
+            btn.closest('.window').remove();
+        }
+
+        function maximizeWindow(btn) {
+            const win = btn.closest('.window');
+            if (!win.dataset.maximized) {
+                win.dataset.prevStyle = JSON.stringify({top: win.style.top, left: win.style.left, width: win.style.width, height: win.style.height});
+                win.style.top = '0'; win.style.left = '0'; win.style.width = '100vw'; win.style.height = 'calc(100vh - 48px)';
+                win.dataset.maximized = 'true';
+            } else {
+                const prev = JSON.parse(win.dataset.prevStyle);
+                win.style.top = prev.top; win.style.left = prev.left; win.style.width = prev.width; win.style.height = prev.height;
+                delete win.dataset.maximized;
+            }
+        }
+
+        function minimizeWindow(btn) {
+            btn.closest('.window').style.display = 'none';
+        }
+
+        function navigateIframe(input, id) {
+            let url = input.value;
+            if(!url.startsWith('http')) url = 'https://' + url;
+            document.getElementById(`iframe-${id}`).src = url;
+        }
+
+        function dragWindow(e, win) {
+            if (e.target.closest('.window-controls')) return;
+            let startX = e.clientX, startY = e.clientY;
+            let startTop = win.offsetTop, startLeft = win.offsetLeft;
+
+            function moveAt(evt) {
+                win.style.top = `${Math.max(0, startTop + evt.clientY - startY)}px`;
+                win.style.left = `${startLeft + evt.clientX - startX}px`;
             }
 
-            document.addEventListener('mousemove', onMouseMove);
-
-            win.onmouseup = function() {
-                document.removeEventListener('mousemove', onMouseMove);
-                win.onmouseup = null;
+            document.addEventListener('mousemove', moveAt);
+            document.onmouseup = () => {
+                document.removeEventListener('mousemove', moveAt);
+                document.onmouseup = null;
             };
-        }
-
-        // إغلاق قائمة ابدأ عند النقر خارجها
-        window.onclick = function(event) {
-            const menu = document.getElementById('start-menu');
-            const startBtn = document.querySelector('.taskbar-btn');
-            if (!menu.contains(event.target) && !startBtn.contains(event.target) && menu.classList.contains('active')) {
-                menu.classList.remove('active');
-            }
         }
     </script>
 </body>
